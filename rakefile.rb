@@ -39,15 +39,6 @@ TESTRESULTS = "#{REPORTS}\\TestsRan.txt"
 COVERAGERESULTS = "#{REPORTS}\\coverage.xml"
 COVERAGEREPORTS = "#{REPORTS}\\ncover"
 
-TOOLS = "C:\\buildTools"
-BuildToolShare = "rsync://build1.twu.dev/BuildTools"
-
-# The location of our svn server
-SVNServer = 'svn://webappsrv2.twu.ca'
-SVNUser = 'ccNET'
-SVNPwd = 'sQgf{K5U'
-
-
 CLEAN.include(TEMP, LOGFILE)
 # Automatically includes everything in CLEAN as well
 CLOBBER.include(ARTIFACTS,REPORTS,TESTS)
@@ -100,14 +91,14 @@ end
 
 # Creates the TESTRESULTS file by running the tests
 # Note: if there are no tests, no file will be created
-file TESTRESULTS => [LOGFILE, REPORTS, TESTS, TOOLS] do
+file TESTRESULTS => [LOGFILE, REPORTS, TESTS] do
 	message "Testing..."
 	files = Dir.glob "#{ruby_path(TESTS)}/**/*.Tests.dll"
 	message "  No tests found" if files.count == 0
 	files.each do |file|
 		message "  Running tests on #{file}"
 		basename = File.basename file
-		shell "#{TOOLS}\\nunit-console.exe /xml=#{REPORTS}\\Test#{basename}.xml #{win_path file}", true
+		shell "nunit-console.exe /xml=#{REPORTS}\\Test#{basename}.xml #{win_path file}", true
 	end
 	shell "echo done > #{TESTRESULTS}"
 end
@@ -115,14 +106,14 @@ end
 # Creates the COVERAGERESULTS file, by running ncover
 # on the test dlls in ARTIFACTS
 # As with tests, there will no file if there are no test dlls
-file COVERAGERESULTS => [LOGFILE, REPORTS, TESTS, TOOLS] do
+file COVERAGERESULTS => [LOGFILE, REPORTS, TESTS] do
 	message "Generating test coverage..."
 	files = Dir.glob "#{ruby_path(TESTS)}/**/*.Tests.dll"
 	message "  No test found" if files.count == 0
 	files.each do |file|
 		message "  Running coverage on #{file}"
 		basename = File.basename file
-		shell "ncover.console.exe //x #{COVERAGERESULTS} #{TOOLS}\\nunit-console.exe #{win_path file}", true
+		shell "ncover.console.exe //x #{COVERAGERESULTS} nunit-console.exe #{win_path file}", true
 	end
 end
 
@@ -131,10 +122,6 @@ file COVERAGEREPORTS => [LOGFILE, COVERAGERESULTS] do
 	shell "ncover.reporting.exe \"#{COVERAGERESULTS}\" //or FullCoverageReport:Html //op \"#{COVERAGEREPORTS}\""
 end
 
-file TOOLS => [LOGFILE, WORKSPACE] do
-	message "Fetching tools to #{TOOLS}..."
-	sync(BuildToolShare, TOOLS) if !File.exists?(TOOLS)
-end
 
 ###############################################
 # Helper functions

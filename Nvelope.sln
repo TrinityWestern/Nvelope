@@ -5,8 +5,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nvelope", "Nvelope\Nvelope.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nvelope.Tests", "NVelope.Tests\Nvelope.Tests.csproj", "{4F16F9CA-016C-4DBD-B090-52B2FB8DED6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nvelope.Tests.Configuration", "Nvelope.Tests.Configuration\Nvelope.Tests.Configuration.csproj", "{0BFFB93D-82DC-4BBF-9606-A0E581EBA46B}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,12 +25,6 @@ Global
 		{4F16F9CA-016C-4DBD-B090-52B2FB8DED6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F16F9CA-016C-4DBD-B090-52B2FB8DED6A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4F16F9CA-016C-4DBD-B090-52B2FB8DED6A}.Release|x86.ActiveCfg = Release|Any CPU
-		{0BFFB93D-82DC-4BBF-9606-A0E581EBA46B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0BFFB93D-82DC-4BBF-9606-A0E581EBA46B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0BFFB93D-82DC-4BBF-9606-A0E581EBA46B}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{0BFFB93D-82DC-4BBF-9606-A0E581EBA46B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0BFFB93D-82DC-4BBF-9606-A0E581EBA46B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0BFFB93D-82DC-4BBF-9606-A0E581EBA46B}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
