@@ -167,7 +167,7 @@ end
 def compile(to)
 	# Compile the C#
 	message "  Compiling C#..."
-	shell "msbuild /clp:Summary;Verbosity=minimal;ErrorsOnly /nologo /p:Configuration=Release;DebugSymbols=false /verbosity:minimal"
+	shell "msbuild /clp:Summary;Verbosity=minimal;ErrorsOnly /nologo /p:Configuration=Release;DebugSymbols=false;ReferencePath=\"#{WORKSPACE}\\lib\" /verbosity:minimal"
 
 	# If it exists, just copy from bin/Release
 	if File.exists? "bin/Release/"
