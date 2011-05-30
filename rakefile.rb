@@ -115,7 +115,7 @@ file COVERAGERESULTS => [LOGFILE, REPORTS, TESTS] do
 	files.each do |file|
 		message "  Running coverage on #{file}"
 		basename = File.basename file
-		shell "ncover.console.exe //x #{COVERAGERESULTS} nunit-console.exe /xml=#{REPORTS}\\nunit.xml #{win_path file}", true
+		shell "ncover.console.exe //x #{COVERAGERESULTS} nunit-console.exe /xml=#{TESTRESULTS} #{win_path file}", true
 	end
 end
 
