@@ -98,7 +98,7 @@ file TESTRESULTS => [LOGFILE, REPORTS, TESTS] do
 	files.each do |file|
 		message "  Running tests on #{file}"
 		basename = File.basename file
-		shell "nunit-console.exe /xml=#{REPORTS}\\Test#{basename}.xml #{win_path file}", true
+		shell "nunit-console.exe /xml=#{REPORTS}\\nunit.xml #{win_path file}", true
 	end
 	shell "echo done > #{TESTRESULTS}"
 end
@@ -113,7 +113,7 @@ file COVERAGERESULTS => [LOGFILE, REPORTS, TESTS] do
 	files.each do |file|
 		message "  Running coverage on #{file}"
 		basename = File.basename file
-		shell "ncover.console.exe //x #{COVERAGERESULTS} nunit-console.exe #{win_path file}", true
+		shell "ncover.console.exe //x #{COVERAGERESULTS} nunit-console.exe /xml=#{REPORTS}\\nunit.xml #{win_path file}", true
 	end
 end
 
