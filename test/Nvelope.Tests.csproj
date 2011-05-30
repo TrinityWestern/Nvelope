@@ -104,7 +104,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Nvelope\Nvelope.csproj">
+    <ProjectReference Include="..\src\Nvelope.csproj">
       <Project>{AC4A93B6-DDB6-4FE1-B528-665DE101052B}</Project>
       <Name>Nvelope</Name>
     </ProjectReference>
