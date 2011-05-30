@@ -35,7 +35,7 @@ TEMP = "#{WORKSPACE}\\temp"
 LOGFILE = "#{WORKSPACE}\\rakelog.txt"
 
 REPORTS = "#{WORKSPACE}\\reports"
-TESTRESULTS = "#{REPORTS}\\TestsRan.txt"
+TESTRESULTS = "#{REPORTS}\\tests.xml"
 COVERAGERESULTS = "#{REPORTS}\\coverage.xml"
 COVERAGEREPORTS = "#{REPORTS}\\ncover"
 
@@ -48,6 +48,9 @@ desc "Runs tests; puts report in #{REPORTS}"
 task :test => TESTRESULTS
 desc "Runs coverage; puts report in #{REPORTS}"
 task :coverage => COVERAGEREPORTS
+desc "Creates artifacts in #{ARTIFACTS}"
+task :build => ARTIFACTS
+task :default => ARTIFACTS
 
 # Creates the WORKSPACE directory if it doesn't exist
 file WORKSPACE do
@@ -77,8 +80,7 @@ end
 
 # Compiles the project, and sticks it in the ARTIFACTS directory
 # Most of the other tasks work on artifacts, rather than the source code
-desc "Creates artifacts in #{ARTIFACTS}"
-task :build => [LOGFILE, TEMP, CSPROJ] do
+file ARTIFACTS => [LOGFILE, TEMP, CSPROJ] do
 	message "Building..."
 	compile ARTIFACTS
 end
@@ -98,13 +100,12 @@ file TESTRESULTS => [LOGFILE, REPORTS, TESTS] do
 	files.each do |file|
 		message "  Running tests on #{file}"
 		basename = File.basename file
-		shell "nunit-console.exe /xml=#{REPORTS}\\nunit.xml #{win_path file}", true
+		shell "nunit-console.exe /xml=#{TESTRESULTS} #{win_path file}", true
 	end
-	shell "echo done > #{TESTRESULTS}"
 end
 
 # Creates the COVERAGERESULTS file, by running ncover
-# on the test dlls in ARTIFACTS
+# on the test dlls in TESTS
 # As with tests, there will no file if there are no test dlls
 file COVERAGERESULTS => [LOGFILE, REPORTS, TESTS] do
 	message "Generating test coverage..."
@@ -167,7 +168,7 @@ end
 def compile(to)
 	# Compile the C#
 	message "  Compiling C#..."
-	shell "msbuild /clp:Summary;Verbosity=minimal;ErrorsOnly /nologo /p:Configuration=Release;DebugSymbols=false;ReferencePath=\"#{WORKSPACE}\\lib\" /verbosity:minimal"
+	shell "msbuild /clp:Summary;Verbosity=minimal;ErrorsOnly /nologo /p:Configuration=Release;DebugSymbols=false;ReferencePath=\"#{WORKSPACE}\\lib;#{ARTIFACTS}\" /verbosity:minimal"
 
 	# If it exists, just copy from bin/Release
 	if File.exists? "bin/Release/"
