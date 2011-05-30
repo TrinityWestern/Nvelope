@@ -92,6 +92,21 @@ namespace Nvelope.Tests
             gap = ab.Gap(bc);
             Assert.IsNull(gap);
         }
+        
+        [Test]
+        public void Merge()
+        {
+            var ad = new Interval<DateTime>(A, D);
+            var ab = new Interval<DateTime>(A, B);
+            var ce = new Interval<DateTime>(C, E);
+
+            Assert.AreEqual(
+                "(1/1/2011 12:00:00 AM—2/2/2011 12:00:00 AM,3/3/2011 12:00:00 AM—5/5/2011 12:00:00 AM)",
+                ab.And(ce).Merge().Print());
+            Assert.AreEqual(
+                "(1/1/2011 12:00:00 AM—5/5/2011 12:00:00 AM)",
+                ad.And(ab).And(ce).Merge().Print());
+        }
 
         [Test]
         public void Overlaps()
@@ -100,8 +115,9 @@ namespace Nvelope.Tests
             var bd = new Interval<DateTime>(B, D);
             var ce = new Interval<DateTime>(C, E);
 
-            var res = ac.And(bd).And(ce).Overlaps();
-            Assert.AreEqual("(2/2/2011 12:00:00 AM—3/3/2011 12:00:00 AM,3/3/2011 12:00:00 AM—4/4/2011 12:00:00 AM)", res.Print());
+            Assert.AreEqual(
+                "(2/2/2011 12:00:00 AM—3/3/2011 12:00:00 AM,3/3/2011 12:00:00 AM—4/4/2011 12:00:00 AM)",
+                ac.And(bd).And(ce).Overlaps());
             Assert.AreEqual("()", ac.And(ce).Overlaps().Print());
         }
 
@@ -112,8 +128,8 @@ namespace Nvelope.Tests
             var cd = new Interval<DateTime>(C, D);
             var de = new Interval<DateTime>(D, E);
 
-            var res = ab.And(cd).And(de).Gaps();
-            Assert.AreEqual("(2/2/2011 12:00:00 AM—3/3/2011 12:00:00 AM)", res.Print());
+            Assert.AreEqual("(2/2/2011 12:00:00 AM—3/3/2011 12:00:00 AM)",
+                ab.And(cd).And(de).Gaps().Print());
             Assert.AreEqual("()", cd.And(de).Gaps().Print());
         }
     }
