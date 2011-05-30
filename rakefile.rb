@@ -23,11 +23,12 @@ def win_path(path)
 	path.gsub('/','\\')
 end
 
-CSPROJ = FileList["#{Rake.original_dir}/*.csproj"]
+CSPROJ = FileList["#{Rake.original_dir}/src/*.csproj"]
+TESTCSPROJ = FileList["#{Rake.original_dir}/test/*.csproj"]
 
 # Get from the WORKSPACE environment variable, if it exists, otherwise
 # use ..\\workspace
-WORKSPACE = win_path(ENV['WORKSPACE'] || File.expand_path("..\\workspace", Rake.original_dir))
+WORKSPACE = win_path(ENV['WORKSPACE'] || File.expand_path("./workspace", Rake.original_dir))
 ARTIFACTS = "#{WORKSPACE}\\artifacts"
 TESTS = "#{WORKSPACE}\\tests"
 TEMP = "#{WORKSPACE}\\temp"
@@ -82,13 +83,13 @@ end
 # Most of the other tasks work on artifacts, rather than the source code
 file ARTIFACTS => [LOGFILE, TEMP, CSPROJ] do
 	message "Building..."
-	compile ARTIFACTS
+	compile CSPROJ, ARTIFACTS
 end
 
 # Builds the test assembly and puts it in TESTS
-file TESTS => [LOGFILE, TEMP, CSPROJ] do
+file TESTS => [LOGFILE, TEMP, TESTCSPROJ, ARTIFACTS] do
 	message "Building tests..."
-	compile TESTS
+	compile TESTCSPROJ, TESTS
 end
 
 # Creates the TESTRESULTS file by running the tests
@@ -165,33 +166,10 @@ def sync(from, to)
 end
 
 # Compiles from the current directory and puts the results in "to"
-def compile(to)
+def compile(projFile, to)
 	# Compile the C#
-	message "  Compiling C#..."
-	shell "msbuild /clp:Summary;Verbosity=minimal;ErrorsOnly /nologo /p:Configuration=Release;DebugSymbols=false;ReferencePath=\"#{WORKSPACE}\\lib;#{ARTIFACTS}\" /verbosity:minimal"
-
-	# If it exists, just copy from bin/Release
-	if File.exists? "bin/Release/"
-		from = "bin/Release/"
-	else
-		message "  No bin/Release directory found, compiling as a website"
-		siteurl = ENV['SITEURL'] || raise("SITEURL environment variable was not set")
-		# Otherwise, it's a website, use the msbuild web deploy task to move it up, and asp compile it
-		# This copies just the files that the website needs to the TEMP\\compiled directory (it leaves out .cs files, and anything
-		# that isn't included in the project file
-		message "  Copying web application..."
-		shell "msbuild /clp:Summary;Verbosity=minimal;ErrorsOnly /target:_WPPCopyWebApplication /nologo /p:Configuration=Release;WebProjectOutputDir=#{TEMP}\\compiled;DebugSymbols=false /verbosity:minimal"
-		# This pre-compiles the website, so all the .aspx files are converted into actual code
-		# This catches syntax errors in our ASPX, and makes for faster websites, since ASP .NET usually does this 
-		# compilation at run-time
-		message "  Pre-compiling web application..."
-		shell "aspnet_compiler -f -v \"#{siteurl}\" -p #{TEMP}\\compiled -fixednames -nologo #{TEMP}\\asp_compiled"
-		from = "#{WORKSPACE}/temp/asp_compiled"
-	end
-		
-	# Copy our build files from wherever they are to the ARTIFACTS directory
-	message "  Copying to folder: #{to}"
-	sync from, to
+	message "  Compiling C# to folder: #{to}"
+	shell "msbuild /clp:Summary;Verbosity=minimal;ErrorsOnly /nologo /p:Configuration=Release;DebugSymbols=false;ReferencePath=\".\\lib;#{ARTIFACTS}\";OutDir=#{to}\\ /verbosity:minimal #{projFile}"
 end
 
 
