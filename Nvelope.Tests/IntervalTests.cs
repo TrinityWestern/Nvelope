@@ -92,6 +92,26 @@ namespace Nvelope.Tests
             gap = ab.Gap(bc);
             Assert.IsNull(gap);
         }
+        
+        [Test]
+        public void Merge()
+        {
+            var ad = new Interval<DateTime>(A, D);
+            var ab = new Interval<DateTime>(A, B);
+            var ce = new Interval<DateTime>(C, E);
+
+            var res = ab.And(ce).Merge();
+            Assert.AreEqual(2, res.Count());
+            Assert.AreEqual(A, res.First().Start);
+            Assert.AreEqual(B, res.First().End);
+            Assert.AreEqual(C, res.Second().Start);
+            Assert.AreEqual(E, res.Second().End);
+
+            res = ad.And(ab).And(ce).Merge();
+            Assert.AreEqual(1, res.Count());
+            Assert.AreEqual(A, res.First().Start);
+            Assert.AreEqual(E, res.First().End);
+        }
 
         [Test]
         public void Overlaps()
@@ -102,10 +122,10 @@ namespace Nvelope.Tests
 
             var res = ac.And(bd).And(ce).Overlaps();
             Assert.AreEqual(2, res.Count());
-            Assert.AreEqual(new DateTime(2011, 2, 2), res.First().Start);
-            Assert.AreEqual(new DateTime(2011, 3, 3), res.First().End);
-            Assert.AreEqual(new DateTime(2011, 3, 3), res.Second().Start);
-            Assert.AreEqual(new DateTime(2011, 4, 4), res.Second().End);
+            Assert.AreEqual(B, res.First().Start);
+            Assert.AreEqual(C, res.First().End);
+            Assert.AreEqual(C, res.Second().Start);
+            Assert.AreEqual(D, res.Second().End);
             Assert.AreEqual("()", ac.And(ce).Overlaps().Print());
         }
 
@@ -118,8 +138,8 @@ namespace Nvelope.Tests
 
             var res = ab.And(cd).And(de).Gaps();
             Assert.AreEqual(1, res.Count());
-            Assert.AreEqual(new DateTime(2011, 2, 2), res.First().Start);
-            Assert.AreEqual(new DateTime(2011, 3, 3), res.First().End);            
+            Assert.AreEqual(B, res.First().Start);
+            Assert.AreEqual(C, res.First().End);            
             Assert.AreEqual("()", cd.And(de).Gaps().Print());
         }
     }

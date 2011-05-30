@@ -16,6 +16,11 @@ namespace Nvelope
             this.Start = start;
             this.End = end;
         }
+        public Interval(Interval<T> other)
+        {
+            this.Start = other.Start;
+            this.End = other.End;
+        }
         /// <summary>
         /// String representation of the range
         /// </summary>
