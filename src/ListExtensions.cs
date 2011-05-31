@@ -277,8 +277,7 @@ namespace Nvelope
         /// Perform some function fn on each item of the list, where the first argument
         /// of the function is the index of the element
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="fn"></param>
+        [Obsolete("I can't think of any good use for this")]
         public static void For<T>(this IEnumerable<T> source, Action<int, T> fn)
         {
             var pairs = source.Zip(0.Inc(), (t, i) => new Tuple<int, T>(i, t));
@@ -379,24 +378,12 @@ namespace Nvelope
                 yield return after.Value;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
+
         public static IEnumerable<T> Sort<T>(this IEnumerable<T> source)
         {
             return source.OrderBy(s => s);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="times"></param>
-        /// <returns></returns>
         public static IEnumerable<T> Repeat<T>(this IEnumerable<T> source, int times)
         {
             return Repeat(source).Take(times);
@@ -552,10 +539,6 @@ namespace Nvelope
         /// Turns a list into a list of lists, each of size
         /// The last list may be shorter, if there are not enough elements to make a full list
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
-        /// <param name="size"></param>
-        /// <returns></returns>
         public static IEnumerable<IEnumerable<T>> Partition<T>(this IEnumerable<T> list, int size)
         {
             // Get the first partition,            
@@ -579,10 +562,6 @@ namespace Nvelope
         /// ie, [1,2,3,4].TakeNth(2) -> [2,4]
         /// </summary>
         /// <remarks>Stolen from Clojure</remarks>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
-        /// <param name="n"></param>
-        /// <returns></returns>
         public static IEnumerable<T> TakeNth<T>(this IEnumerable<T> list, int n)
         {
             int count = list.Count();
@@ -596,12 +575,6 @@ namespace Nvelope
         /// Basically, this will take up until the first point after minNumToTake where partitionFn changes values
         /// </summary>
         /// <remarks>See tests for examples</remarks>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="U"></typeparam>
-        /// <param name="list"></param>
-        /// <param name="partitionFn"></param>
-        /// <param name="minNumToTake"></param>
-        /// <returns></returns>
         public static IEnumerable<T> TakeByGroup<T, U>(this IEnumerable<T> list, Func<T, U> partitionFn, int minNumToTake)
         {
             if(!list.Any() || minNumToTake == 0)
@@ -626,11 +599,6 @@ namespace Nvelope
         /// If more than one element has the max value, only one of them will be returned (which one
         /// should not be relied on)
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="U"></typeparam>
-        /// <param name="list"></param>
-        /// <param name="selector"></param>
-        /// <returns></returns>
         public static T HavingMax<T, U>(this IEnumerable<T> list, Func<T, U> selector)
         {
             var index = list.Index(selector);
@@ -643,17 +611,12 @@ namespace Nvelope
         /// </summary>
         /// <remarks>Only realizes enough of the sequence to check its condition, then stops, so this is potentially
         /// much more efficient than calling Count on a sequence</remarks>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
-        /// <param name="count"></param>
-        /// <returns></returns>
         public static bool AtLeast<T>(this IEnumerable<T> list, int count)
         {
             var found = 0;
             foreach (var item in list)
                 if (++found >= count)
                     return true;
-
             return false;
         }
 
@@ -662,11 +625,6 @@ namespace Nvelope
         /// </summary>
         /// <remarks>Only realizes enough of the sequence to check its condition, then stops, so this is potentially
         /// much more efficient than calling Where(predicate).Count() on a sequence</remarks>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
-        /// <param name="count"></param>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
         public static bool AtLeast<T>(this IEnumerable<T> list, int count, Func<T, bool> predicate)
         {
             var found = 0;
@@ -685,10 +643,7 @@ namespace Nvelope
         /// Trys to execute an action for every item in the list; returns a mapping of all
         /// the elements that threw an exception
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
-        /// <param name="action"></param>
-        /// <returns></returns>
+        [Obsolete("Code that relies on Exception handling is bad practice")]
         public static Dictionary<T, Exception> TryEach<T>(this IEnumerable<T> list, Action<T> action)
         {
             Dictionary<T, Exception> errors = new Dictionary<T, Exception>();
@@ -711,10 +666,7 @@ namespace Nvelope
         /// <summary>
         /// Repeats the sequence forever. WARNING: Generates an infinite sequence - 
         /// use a Take() or something on it, or your program will be stuck here forever
-        /// </summary>        
-        /// <typeparam name="T"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
+        /// </summary>
         public static IEnumerable<T> Repeat<T>(this IEnumerable<T> source)
         {
             while (true)
@@ -726,10 +678,6 @@ namespace Nvelope
         /// Returns an infinite sequence of x, f(x), f(f(x)), etc
         /// </summary>
         /// <remarks>Stolen shamelessy from Clojure</remarks>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="start"></param>
-        /// <param name="f"></param>
-        /// <returns></returns>
         public static IEnumerable<T> Iterate<T>(this T start, Func<T, T> f)
         {
             var cur = start;
@@ -782,10 +730,6 @@ namespace Nvelope
         /// <summary>
         /// Adds another element to the end of a list
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="other"></param>
-        /// <returns></returns>
         public static IEnumerable<T> And<T>(this IEnumerable<T> source, T other)
         {
             foreach (var t in source)

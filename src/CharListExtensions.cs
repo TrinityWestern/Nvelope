@@ -25,8 +25,7 @@ namespace Nvelope
         /// <summary>
         /// Explicitly convert the string to IEnumerable{char}
         /// </summary>
-        /// <param name="source"></param>
-        /// <returns></returns>
+        [Obsolete("Only used in a test with and obsolete method")]
         public static IEnumerable<char> Chars(this string source)
         {
             foreach (char c in source)
@@ -38,7 +37,7 @@ namespace Nvelope
         /// </summary>
         /// <param name="start">The first "digit" to use</param>
         /// <param name="end">The last "digit" to use</param>
-        /// <returns></returns>
+        // TODO: I think the name of this method is confusing
         public static IEnumerable<string> Inc(this char start, char endOfRange)
         {
             var a = (int)start;

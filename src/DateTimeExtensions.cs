@@ -10,6 +10,7 @@ namespace Nvelope
         /// <summary>
         /// Formats the date in the form used by the Astra database
         /// </summary>
+        [Obsolete("Astra specific")]
         public static int ToJulianDate(this DateTime date)
         {
             return date.Year * 1000 + date.DayOfYear;

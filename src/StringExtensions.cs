@@ -42,6 +42,7 @@ namespace Nvelope
         /// <summary>
         /// Tries to parse the string as an integer, returning 0 if there's a problem
         /// </summary>
+        [Obsolete("This method hids errors, use ConvertTo on an int?")]
         public static int ToIntOr0(this string source)
         {
             int numericValue;
@@ -51,6 +52,7 @@ namespace Nvelope
         /// <summary>
         /// Tries to parse the string as a float, returning 0 if there's a problem
         /// </summary>
+        [Obsolete("This method hids errors, use ConvertTo on an double?")]
         public static string ToDoubleAsStringOr0(this string source)
         {
             double numericValue;
@@ -60,6 +62,7 @@ namespace Nvelope
         /// <summary>
         /// Grabs the number in parenthesis (great for autocomplete lookups), returning null if it's not formatted correctly
         /// </summary>
+        [Obsolete("This this a rather aqueduct specific function")]
         public static int? GetIntegerInParenthesis(this string source)
         {
             if (source != null)
@@ -81,6 +84,7 @@ namespace Nvelope
         /// <summary>
         /// Grabs the email in parenthesis (great for autocomplete lookups), returning null if it's not formatted correctly
         /// </summary>
+        [Obsolete("This this a rather aqueduct specific function")]
         public static string GetEmailInParenthesis(this string source)
         {
             if (source != null)
@@ -102,9 +106,7 @@ namespace Nvelope
         /// <summary>
         /// Removes all instances of the supplied victims string(s)
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="victims"></param>
-        /// <returns></returns>
+        /// <remarks>This is not the same as Trim</remarks>
         public static string Strip(this string source, params string[] victims)
         {
             foreach (string v in victims)
@@ -117,9 +119,6 @@ namespace Nvelope
         /// remove a greater number of characters than exist in source
         /// returns an empty string.
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="count"></param>
-        /// <returns></returns>
         public static string RemoveEnd(this string source, int count)
         {
             if (source.Length < count) return "";
@@ -127,24 +126,10 @@ namespace Nvelope
             return source.Substring(0, source.Length - count);
         }
         
-        public static Dictionary<string, string> ToDictionary(this string source, string keyValueSeparator, string itemSeparator)
-        {
-            Dictionary<string, string> res = new Dictionary<string, string>();
-
-            NameValueCollection collection = source.ToNameValueCollection(keyValueSeparator, itemSeparator);
-
-            foreach (string key in collection.Keys)
-                res.Add(key, collection[key]);
-
-            return res;
-        }
-        
         /// <summary>
         /// The number of continugous characters at the end of the string that are the charToCheck 
         /// </summary>
-        /// <param name="original"></param>
-        /// <param name="charToCheck"></param>
-        /// <returns></returns>
+        [Obsolete("This is only used once in Twu.Sst, I think it's too obscure to be valuable")]
         public static int NumTimesCharacterRepeatsAtEnd(this string original, char charToCheck)
         {
             var list = new List<char>();
@@ -163,22 +148,6 @@ namespace Nvelope
             }
 
             return index;            
-        }
-
-        /// <summary>
-        /// Add a string a specified number of times to the beginning of a string
-        /// </summary>
-        /// <param name="original">String to add to the beginning of</param>
-        /// <param name="stringToAdd">String to add</param>
-        /// <param name="numberOfTimes">Number of times to add the string</param>
-        /// <returns>Original string with the new one prefixed</returns>
-        public static string PrependMultipleTimes(this string original, string stringToAdd, int numberOfTimes)
-        {
-            string prefix = "";
-            for (int i = 1; i <= numberOfTimes; i++)
-                prefix += stringToAdd;
-
-            return prefix + original;
         }
 
         /// <summary>
@@ -318,6 +287,7 @@ namespace Nvelope
         /// </summary>
         /// <param name="input">The value that may or may not have a number in it.</param>
         /// <returns>The number found in the string or zero by default</returns>
+        [Obsolete("In most cases this should probably be replaced with GetIntegerInParenthesis which is aqueduct specific logic")]
         public static string FindIntInString(string input)
         {
             input = input.Trim();
@@ -341,6 +311,7 @@ namespace Nvelope
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [Obsolete("In most cases this should probably be replaced with GetIntegerInParenthesis which is aqueduct specific logic")]
         public static int RetrieveIntInString(string input)
         {
             return FindIntInString(input).ConvertTo<int>();
@@ -448,104 +419,32 @@ namespace Nvelope
         /// <summary>
         /// Remove whitespace from source, and trim off stringToRemove if source starts with it
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="stringToRemove"></param>
-        /// <returns></returns>
-        public static string ChopStart(this string source, string stringToRemove)
-        {
-            source = source.Trim();
-            stringToRemove = stringToRemove.Trim();
-            if (source.StartsWith(stringToRemove))
-                return source.Substring(stringToRemove.Length).Trim();
-            else
-                return source;
-        }
-
-        /// <summary>
-        /// Remove whitespace from source, and trim any stringsToRemove if source starts with it
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="stringsToRemove"></param>
-        /// <returns></returns>
         public static string ChopStart(this string source, params string[] stringsToRemove)
         {
-            return ChopStart(source, stringsToRemove as IEnumerable<string>);
-        }
-
-        /// <summary>
-        /// Remove whitespace from source, and trim off any stringsToRemove if source starts with it
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="stringsToRemove"></param>
-        /// <returns></returns>
-        public static string ChopStart(this string source, IEnumerable<string> stringsToRemove)
-        {
-            foreach(var str in stringsToRemove)
-                source = source.ChopStart(str);
+            foreach (var s in stringsToRemove) {
+                source = source.Trim();
+                if (source.StartsWith(s))
+                    source = source.Substring(s.Length);
+            }
             return source;
         }
 
         /// <summary>
         /// Remove whitespace from source, and trim off any stringsToRemove if source ends with it
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="stringToRemove"></param>
-        /// <returns></returns>
-        public static string ChopEnd(this string source, string stringToRemove)
-        {
-            source = source.Trim();
-            stringToRemove = stringToRemove.Trim();
-            if (source.EndsWith(stringToRemove))
-                return source.Substring(0, source.Length - stringToRemove.Length).Trim();
-            else
-                return source;
-        }
-
-        /// <summary>
-        /// Remove whitespace from source, and trim off any stringsToRemove if source ends with it
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="stringsToRemove"></param>
-        /// <returns></returns>
         public static string ChopEnd(this string source, params string[] stringsToRemove)
         {
-            return ChopEnd(source, stringsToRemove as IEnumerable<string>);
-        }
-
-        /// <summary>
-        /// Remove whitespace from source, and trim off any stringsToRemove if source ends with it
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="stringsToRemove"></param>
-        /// <returns></returns>
-        public static string ChopEnd(this string source, IEnumerable<string> stringsToRemove)
-        {
-            // Reverse this because we want to be able to remove multiple things if they've 
-            // specified it in order,
-            // ie, "abcdef".ChopEnd("d","e","f") should return "abc"; but if we don't
-            // reverse, we get "abcde"
-            foreach (var str in stringsToRemove.Reverse())
-                source = source.ChopEnd(str);
+            foreach (var s in stringsToRemove.Reverse()) {
+                source = source.Trim();
+                if (source.EndsWith(s))
+                    source = source.Substring(0, source.Length - s.Length).Trim();
+            }
             return source;
-        }
-
-        /// <summary>
-        /// Removes newline from the end of the string
-        /// </summary>
-        /// <remarks>Stolen from Perl</remarks>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public static string Chomp(this string source)
-        {
-            return source.ChopEnd(Environment.NewLine);
         }
 
         /// <summary>
         /// Joins a list of strings together into a single string
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="seperator"></param>
-        /// <returns></returns>
         public static string Join(this IEnumerable<string> source, string seperator)
         {
             return source.ToSeperatedList(seperator);
@@ -554,9 +453,6 @@ namespace Nvelope
         /// <summary>
         /// Repeat a string times times
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="times"></param>
-        /// <returns></returns>
         public static string Repeat(this string source, int times)
         {
             return new string[] { source }.Repeat(times).Join("");
@@ -565,31 +461,16 @@ namespace Nvelope
         /// <summary>
         /// Repeat a char times times
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="times"></param>
-        /// <returns></returns>
         public static string Repeat(this char source, int times)
         {
             return new string(new char[] { source }.Repeat(times).ToArray());
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="strs"></param>
-        /// <returns></returns>
         public static bool ContainsAll(this string source, params string[] strs)
         {
             return ContainsAll(source, strs as IEnumerable<string>);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="strs"></param>
-        /// <returns></returns>
         public static bool ContainsAll(this string source, IEnumerable<string> strs)
         {
             foreach (var str in strs)
@@ -599,23 +480,11 @@ namespace Nvelope
             return true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="strs"></param>
-        /// <returns></returns>
         public static bool ContainsAny(this string source, params string[] strs)
         {
             return ContainsAny(source, strs as IEnumerable<string>);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="strs"></param>
-        /// <returns></returns>
         public static bool ContainsAny(this string source, IEnumerable<string> strs)
         {
             foreach (var str in strs)
@@ -628,9 +497,6 @@ namespace Nvelope
         /// <summary>
         /// Make the string the specified length - truncating or appending spaces as necessary
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="length"></param>
-        /// <returns></returns>
         public static string ToLength(this string source, int length)
         {
             if (source == null)
@@ -639,7 +505,7 @@ namespace Nvelope
             if (source.Length >= length)
                 return source.Substring(0, length);
             else
-                return source.Chars().And(' '.Repeat(length - source.Length)).Read();
+                return source + ' '.Repeat(length - source.Length);
 
         }
     }

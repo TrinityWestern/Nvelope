@@ -21,6 +21,7 @@ namespace Nvelope
             // Decimals don't do ToString in a reasonable way
             // It's really irritating
             // So chop off the trailing .0000 if it has it
+            // TODO: Split out https://radar.twu.ca/issues/3245
             if (o is decimal)
             {
                 var parts = o.ToStringN().Split('.');
@@ -40,6 +41,7 @@ namespace Nvelope
         /// on a string. Then you would get "(a,b)" from "ab".Print(), which is silly</remarks>
         /// <param name="s"></param>
         /// <returns></returns>
+        
         public static string Print(this string s)
         {
             return s.ToStringN();
@@ -91,8 +93,6 @@ namespace Nvelope
         /// Converts a two digit year into a 4 digit one
         /// The range will be the last 8 decades, the current one, and the next
         /// </summary>
-        /// <param name="twoDigitYear"></param>
-        /// <returns></returns>
         public static int MakeFourDigitYear(int twoDigitYear)
         {
             if (twoDigitYear > 99 || twoDigitYear < 0)
@@ -119,7 +119,8 @@ namespace Nvelope
                     curCentury--;           // all the rest are in the past
             }
 
-            var targetDecade = twoDigitYear.TensPlace();
+            // get the second digit
+            var targetDecade = twoDigitYear % 100 / 10;
             return twoDigitYear + centuries[targetDecade] * 100;
         }
 
@@ -238,9 +239,7 @@ namespace Nvelope
         /// <summary>
         /// Is the string convertible to XML? If so, doc will hold the resultant document
         /// </summary>
-        /// <param name="source"></param>
         /// <param name="doc">The document, if loading was successful, else null</param>
-        /// <returns></returns>
         public static bool IsXml(this string source, out XmlDocument doc)
         {
             try {
@@ -257,6 +256,7 @@ namespace Nvelope
         /// </summary>
         /// <remarks>Throws an exception if the string isn't well-formed. If you're unsure, use
         /// IsXml to check</remarks>
+        [Obsolete("This method assumes that xmlString isn't actually valid XML, but doesn't properly escape it")]
         public static XmlDocument ToXml(this string xmlString)
         {
             var doc = new XmlDocument();

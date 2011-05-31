@@ -35,27 +35,6 @@ namespace Nvelope.Tests
         }
 
         [Test]
-        public void PrependStringZeroTimes()
-        {
-            string stateOfMind = "Bjørn".PrependMultipleTimes("Sad", 0);
-            Assert.AreEqual(stateOfMind, "Bjørn");
-        }
-
-        [Test]
-        public void PrependStringOneTime()
-        {
-            string santasList = "Kent".PrependMultipleTimes("Naughty ", 1);
-            Assert.AreEqual(santasList, "Naughty Kent");
-        }
-
-        [Test]
-        public void PrependStringTwoTimes()
-        {
-            string cheer = "Babbitt".PrependMultipleTimes("Ba-", 2);
-            Assert.AreEqual(cheer, "Ba-Ba-Babbitt");
-        }
-
-        [Test]
         public void Join()
         {
             Assert.AreEqual("a,b,cc", new string[] { "a", "b", "cc" }.Join(","));
@@ -92,14 +71,6 @@ namespace Nvelope.Tests
         {
             Assert.AreEqual("abc", "abcdef".ChopEnd("def"));
             Assert.AreEqual("abc", "abcdef".ChopEnd("d", "e", "f"));
-        }
-
-        [Test]
-        public void Chomp()
-        {
-            Assert.AreEqual("abc", "abc\n".Chomp());
-            Assert.AreEqual("abc", "abc".Chomp());
-            Assert.AreEqual("abc", "abc\n\n\n".Chomp());
         }
 
         [Test]
@@ -250,18 +221,6 @@ namespace Nvelope.Tests
         {
             string s = "The quick brown fox jumped over the lazy dog.";
             Assert.AreEqual("The quick brown ...", s.Excerpt(20));
-        }
-
-        [Test]
-        public void ToDictionary()
-        {
-            string s = "item1:1,item2:2,item3:3,item4:4";
-            Dictionary<string, string> dict = new Dictionary<string, string>();
-            dict.Add("item1", "1");
-            dict.Add("item2", "2");
-            dict.Add("item3", "3");
-            dict.Add("item4", "4");
-            Assert.AreEqual(dict, s.ToDictionary(":", ","));
         }
 
         [Test]

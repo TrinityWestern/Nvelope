@@ -62,20 +62,6 @@ namespace Nvelope.Tests
         }
 
         [Test]
-        public void Places()
-        {
-            Assert.AreEqual("(4,3,2,1)", 1234.Places().Print());
-            Assert.AreEqual(3, 1234.TensPlace());
-            Assert.AreEqual(4, 1234.OnesPlace());
-            Assert.AreEqual(1, 1234.ThousandsPlace());
-            Assert.AreEqual(2, 1234.HundredsPlace());
-
-            Assert.AreEqual(0, 1.TensPlace());
-            Assert.AreEqual(0, 1.HundredsPlace());
-            Assert.AreEqual(0, 1.ThousandsPlace());
-        }
-
-        [Test]
         public void RoundTo()
         {   
             Assert.AreEqual(0.05m, 0.0512m.RoundTo(2));

@@ -1,24 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Xml;
-using System.Text.RegularExpressions;
 using System.Security;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Xml;
 
 
 namespace Nvelope
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class XmlNodeListExtensions
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="source"></param>
-        /// <returns></returns>
         public static IEnumerable<XmlNode> ToList(this XmlNodeList source)
         {
             foreach (XmlNode node in source)
@@ -29,8 +21,6 @@ namespace Nvelope
         /// Get the document that owns the supplied node
         /// </summary>
         /// <remarks>Might be node itself if node is an XMLDocument</remarks>
-        /// <param name="node"></param>
-        /// <returns></returns>
         public static XmlDocument GetOwnerDocument(this XmlNode node)
         {
             var doc = node.OwnerDocument;
@@ -60,8 +50,6 @@ namespace Nvelope
         /// <summary>
         /// Escapes all the XML reserved characters to make this string safe to put in an XML document
         /// </summary>
-        /// <param name="source"></param>
-        /// <returns></returns>
         public static string EscapeForXml(this string source)
         {
             // If anyone knows of a better place to find an XML escaping method,
@@ -87,12 +75,7 @@ namespace Nvelope
 
         #region XPath Functions
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="node"></param>
         /// <param name="namespacePrefix">A namespace prefix to associate with the Document.NamespaceURI namespace</param>
-        /// <returns></returns>
         public static XmlNamespaceManager GetNamespaceManager(this XmlNode node, string namespacePrefix)
         {
             XmlDocument doc = GetOwnerDocument(node);
@@ -107,10 +90,6 @@ namespace Nvelope
         /// Translates a bare xpath expression to a namespaced one, using the supplied prefix,
         /// but only if the namespace manager defines that prefix
         /// </summary>
-        /// <param name="namespaceManager"></param>
-        /// <param name="xpathExpression"></param>
-        /// <param name="prefix"></param>
-        /// <returns></returns>
         public static string NamespaceXPath(this XmlNamespaceManager namespaceManager, string xpathExpression, string prefix)
         {
             if (namespaceManager.HasNamespace(prefix))

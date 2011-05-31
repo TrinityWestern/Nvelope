@@ -74,7 +74,6 @@
     <Compile Include="Exceptions\FieldNotFoundException.cs" />
     <Compile Include="FileExtensions.cs" />
     <Compile Include="GroupExtensions.cs" />
-    <Compile Include="IComparableExtensions.cs" />
     <Compile Include="IExecutionContext.cs" />
     <Compile Include="IO\ExternalProcessException.cs" />
     <Compile Include="IO\FileUtils.cs" />

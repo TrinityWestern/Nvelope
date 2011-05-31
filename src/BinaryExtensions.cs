@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 
 namespace Nvelope
 {
@@ -14,7 +11,8 @@ namespace Nvelope
         /// <returns></returns>
         public static string ToHexString(this byte[] bytes)
         {
-            char[] lookup = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };            
+            char[] lookup = new char[] { '0', '1', '2', '3', '4', '5', '6',
+                '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };            
             int curByte = 0, curChar = 0, len = bytes.Length;
             char[] res = new char[len * 2];
             byte cur;
@@ -32,8 +30,6 @@ namespace Nvelope
         /// <summary>
         /// Interpret an array of bytes as a UTF32 string
         /// </summary>
-        /// <param name="bytes"></param>
-        /// <returns></returns>
         public static string ToUTF8String(this byte[] bytes)
         {            
             return Encoding.UTF8.GetString(bytes);

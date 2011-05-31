@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Web.UI.WebControls;
 
 namespace Nvelope
@@ -16,7 +13,5 @@ namespace Nvelope
             foreach (var item in coll)
                 yield return item as ListItem;
         }
-
-
     }
 }

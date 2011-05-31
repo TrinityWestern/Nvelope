@@ -199,13 +199,17 @@ namespace Nvelope.Tests
 
         }
 
-        [Test,Ignore]
+        [Test]
         public void Age()
         {
             DateTime d = new DateTime(2011, 01, 10, 10, 10, 10);
+            var age = DateTime.Now - d;
+            // this test can't take longer than 1 second or it will fail
+            var minSpeed = new TimeSpan(0, 0, 1);
             // Warning, this may randomly fail since the call to d.Age()
             // happens separately from the Assert.AreEqual()
-            Assert.AreEqual(DateTime.Now - d, d.Age());
+            Assert.LessOrEqual(age, d.Age());
+            Assert.GreaterOrEqual(age + minSpeed, d.Age());
         }
 
         [Test]

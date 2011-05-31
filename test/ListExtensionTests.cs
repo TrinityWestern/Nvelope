@@ -135,7 +135,8 @@ namespace Nvelope.Tests
 
             // Should work for infinite sequences as well
             Assert.True(1.Inc().AtLeast(2));
-            Assert.True(1.Inc().AtLeast(2, i => i.Between(3, 7)));
+            var interval = new Interval<int>(3, 7);
+            Assert.True(1.Inc().AtLeast(2, i => interval.Contains(i)));
         }
 
         [Test]

@@ -64,7 +64,6 @@
     <Compile Include="Combinatorics\CombinatoricListExtensionTests.cs" />
     <Compile Include="DataTableExtensionTests.cs" />
     <Compile Include="FileTests.cs" />
-    <Compile Include="IComparableExtensionTests.cs" />
     <Compile Include="Data\DataProxyTests.cs" />
     <Compile Include="GroupExtensionTests.cs" />
     <Compile Include="IntervalTests.cs" />
