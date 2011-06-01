@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Nvelope
+﻿namespace Nvelope
 {
     public static class ObjectExtensions
     {
@@ -21,6 +16,14 @@ namespace Nvelope
                 return false;
 
             return obj.Equals(other);
+        }
+
+        /// <summary>
+        /// Like ToString, but it handles nulls and gives nicer results for
+        /// some objects.
+        /// </summary>
+        public static string Print(this object o) {
+                return o.ToStringN();
         }
     }
 }

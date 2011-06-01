@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Nvelope
 {
@@ -124,6 +124,20 @@ namespace Nvelope
         public static bool IsAbout(this decimal number, decimal other, decimal precision)
         {
             return Math.Abs(number - other) < precision;
+        }
+
+        public static string Print(this decimal o)
+        {
+            // Decimals don't do ToString in a reasonable way
+            // It's really irritating
+            // So chop off the trailing .0000 if it has it
+            var parts = o.ToStringN().Split('.');
+            if (parts.Count() == 1)
+                return parts.First();
+            else if (parts.Second().All(c => c == '0')) // if it's all 0s, drop the decimal part
+                return parts.First();
+            else
+                return parts.First() + "." + Regex.Replace(parts.Second(), "0*$", ""); // trim off trailing 0s
         }
     }
 }

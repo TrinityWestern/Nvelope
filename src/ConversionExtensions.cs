@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Xml;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using System.Globalization;
+using System.Xml;
 using Nvelope.Exceptions;
-using Nvelope.Reflection;
 
 namespace Nvelope
 {
@@ -16,37 +13,6 @@ namespace Nvelope
     /// </summary>
     public static class ConversionExtensions
     {
-        public static string Print(this object o)
-        {
-            // Decimals don't do ToString in a reasonable way
-            // It's really irritating
-            // So chop off the trailing .0000 if it has it
-            // TODO: Split out https://radar.twu.ca/issues/3245
-            if (o is decimal)
-            {
-                var parts = o.ToStringN().Split('.');
-                if (parts.Count() == 1)
-                    return parts.First();
-                else if (parts.Second().All(c => c == '0')) // if it's all 0s, drop the decimal part
-                    return parts.First();
-                else
-                    return parts.First() + "." + Regex.Replace(parts.Second(), "0*$", ""); // trim off trailing 0s
-
-            }
-            else
-                return o.ToStringN();
-        }
-
-        /// <remarks>This exists so that the compiler doesn't get confused and call the IEnumerable[char] version of Print
-        /// on a string. Then you would get "(a,b)" from "ab".Print(), which is silly</remarks>
-        /// <param name="s"></param>
-        /// <returns></returns>
-        
-        public static string Print(this string s)
-        {
-            return s.ToStringN();
-        }
-
         /// <summary>
         /// Is the string convertible to a bool?
         /// </summary>
