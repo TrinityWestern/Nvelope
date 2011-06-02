@@ -8,10 +8,24 @@ namespace Nvelope
     /// </remark>
     public class PhoneNumber
     {
-        public static Regex StringFormat = new Regex("^(?<countryBlock> *(?<country>[\\d]{1,4})([ \\.\\-]+))?"
+        public static Regex StringFormat = new Regex("^\\s*(?<countryBlock> *(?<country>[\\d]{1,4})([ \\.\\-]+))?"
                 + "(?<areaBlock>(?<area>[\\d]{1,4})([ \\.\\-]+))?"
                 + "(?<localBlock>(?<local>[\\d\\-\\.]{6,16}))"
-                + "(?<extensionBlock>\\s*(x|ext([\\.:]))? *(?<extension>[\\d]{1,10})? *)?$");
+                + "(?<extensionBlock>\\s*(x|ext([\\.:]))? *(?<extension>[\\d]{1,10})? *)?\\s*$");
+
+        /// <summary>
+        /// This is a safe method that tries to format a string as a phone
+        /// number but just returns the original string on failure.
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string TryFormat(string str)
+        {
+            PhoneNumber phone;
+            if (str.CanConvertTo<PhoneNumber>(out phone))
+                return phone.ToString();
+            return str;
+        }
 
         public string Country = "";
         public string Area = "";
@@ -42,5 +56,6 @@ namespace Nvelope
             if (this.Extension != "") result += "x" + this.Extension;
             return result;
         }
+
     }
 }
