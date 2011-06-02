@@ -34,6 +34,8 @@ namespace Nvelope
 
         public PhoneNumber(string str)
         {
+            // this is a bad hack for now this stuff should be in the regex
+            str = str.Replace("(", "").Replace(")", "").Replace("+", "");
             var match = PhoneNumber.StringFormat.Match(str);
             if (!match.Success)
                 throw new ArgumentOutOfRangeException(

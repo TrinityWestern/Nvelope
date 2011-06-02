@@ -31,6 +31,12 @@ namespace Nvelope.Tests
             Assert.AreEqual("878", number.Area);
             Assert.AreEqual("443-2908", number.Local);
             Assert.AreEqual("23", number.Extension);
+
+            number = new PhoneNumber("1-(878)-443-2908x23");
+            Assert.AreEqual("1", number.Country);
+            Assert.AreEqual("878", number.Area);
+            Assert.AreEqual("443-2908", number.Local);
+            Assert.AreEqual("23", number.Extension);
         }
 
         [Test]
