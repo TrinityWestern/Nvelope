@@ -83,6 +83,7 @@
     <Compile Include="NameValueCollectionExtensionTests.cs" />
     <Compile Include="NumberExtensionTests.cs" />
     <Compile Include="ObjectExtensionTests.cs" />
+    <Compile Include="PhoneNumberTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reading\ReadTests.cs" />
     <Compile Include="Reflection\ReflectionExtensionTests.cs" />

@@ -87,6 +87,7 @@
     <Compile Include="Month.cs" />
     <Compile Include="NameValueCollectionExtensions.cs" />
     <Compile Include="ObjectExtensions.cs" />
+    <Compile Include="PhoneNumber.cs" />
     <Compile Include="Reading\Read.cs" />
     <Compile Include="Reflection\ObjectReader.cs" />
     <Compile Include="DateTimeExtensions.cs" />
