@@ -14,20 +14,6 @@ namespace Nvelope
                 + "(?<localBlock>(?<local>\\d[\\s\\d\\-\\.]{4,16}\\d))"
                 + "(?<extensionBlock>\\s*(x|ext([\\.:]))?\\s*(?<extension>[\\d]{1,10})? *)?\\s*$");
 
-        /// <summary>
-        /// This is a safe method that tries to format a string as a phone
-        /// number but just returns the original string on failure.
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static string TryFormat(string str)
-        {
-            PhoneNumber phone;
-            if (str.CanConvertTo<PhoneNumber>(out phone))
-                return phone.ToString();
-            return str;
-        }
-
         public string Country = "";
         public string Area = "";
         public string Local = "";
@@ -48,7 +34,34 @@ namespace Nvelope
         /// <summary>
         /// A phone constructor where you set you own parts
         /// </summary>
-        public PhoneNumber() {}
+        public PhoneNumber() { }
+
+        /// <summary>
+        /// Makes a phone number even if it's invalid.
+        /// </summary>
+        /// <returns>Invalid numbers just have the number stuffed in the
+        /// Local portion</returns>
+        public static PhoneNumber CreateAnyway(string str)
+        {
+            if (PhoneNumber.StringFormat.Match(str).Success) {
+                return new PhoneNumber(str);
+            }
+            return new PhoneNumber() { Local = str };
+        }
+
+        /// <summary>
+        /// This is a safe method that tries to format a string as a phone
+        /// number but just returns the original string on failure.
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string TryFormat(string str)
+        {
+            PhoneNumber phone;
+            if (str.CanConvertTo<PhoneNumber>(out phone))
+                return phone.ToString();
+            return str;
+        }
 
         public override string ToString() {
             string result = this.Local;
