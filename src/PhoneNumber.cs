@@ -8,10 +8,11 @@ namespace Nvelope
     /// </remark>
     public class PhoneNumber
     {
-        public static Regex StringFormat = new Regex("^\\s*(?<countryBlock> *(?<country>[\\d]{1,4})([ \\.\\-]+))?"
-                + "(?<areaBlock>(?<area>[\\d]{1,4})([ \\.\\-]+))?"
-                + "(?<localBlock>(?<local>[\\d\\-\\.]{6,16}))"
-                + "(?<extensionBlock>\\s*(x|ext([\\.:]))? *(?<extension>[\\d]{1,10})? *)?\\s*$");
+        public static Regex StringFormat = new Regex(
+            "^\\s*(?<countryBlock>\\+?\\s?(?<country>[\\d]{1,4})([\\s\\(\\.\\-]+))?"
+                + "(?<areaBlock>\\(?(?<area>[\\d]{1,4})\\)?([\\s\\.\\-]+))?"
+                + "(?<localBlock>(?<local>\\d[\\s\\d\\-\\.]{4,16}\\d))"
+                + "(?<extensionBlock>\\s*(x|ext([\\.:]))?\\s*(?<extension>[\\d]{1,10})? *)?\\s*$");
 
         /// <summary>
         /// This is a safe method that tries to format a string as a phone
@@ -34,8 +35,6 @@ namespace Nvelope
 
         public PhoneNumber(string str)
         {
-            // this is a bad hack for now this stuff should be in the regex
-            str = str.Replace("(", "").Replace(")", "").Replace("+", "");
             var match = PhoneNumber.StringFormat.Match(str);
             if (!match.Success)
                 throw new ArgumentOutOfRangeException(

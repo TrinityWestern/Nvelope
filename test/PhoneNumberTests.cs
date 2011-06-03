@@ -37,6 +37,22 @@ namespace Nvelope.Tests
             Assert.AreEqual("878", number.Area);
             Assert.AreEqual("443-2908", number.Local);
             Assert.AreEqual("23", number.Extension);
+
+            // This is an example phone number from China
+            number = new PhoneNumber("(0755) 1234 5878");
+            Assert.AreEqual("0755", number.Area);
+            Assert.AreEqual("1234 5878", number.Local);
+            // A phone number from the Netherlands
+            number = new PhoneNumber("+ 31-77-4656767");
+            Assert.AreEqual("31", number.Country);
+            Assert.AreEqual("77", number.Area);
+            Assert.AreEqual("4656767", number.Local);
+            // testing robustness
+            number = new PhoneNumber("+ 31-774656767");
+            Assert.AreEqual("31", number.Country);
+            Assert.AreEqual("", number.Area);
+            Assert.AreEqual("774656767", number.Local);
+            
         }
 
         [Test]
