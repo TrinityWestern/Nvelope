@@ -10,9 +10,9 @@ namespace Nvelope
     {
         public static Regex StringFormat = new Regex(
             "^\\s*(?<countryBlock>\\+?\\s?(?<country>[\\d]{1,4})([\\s\\(\\.\\-]+))?"
-                + "(?<areaBlock>\\(?(?<area>[\\d]{1,4})\\)?([\\s\\.\\-]+))?"
+                + "(?<areaBlock>\\(?(?<area>[\\d]{1,4})([\\)\\s\\.\\-]+))?"
                 + "(?<localBlock>(?<local>\\d[\\s\\d\\-\\.]{4,16}\\d))"
-                + "(?<extensionBlock>\\s*(x|ext([\\.:]))?\\s*(?<extension>[\\d]{1,10})? *)?\\s*$");
+                + "(?<extensionBlock>\\s*(x|ext([\\.:]))?\\s*(?<extension>[\\d]{1,10}))?\\s*$");
 
         public string Country = "";
         public string Area = "";
@@ -43,7 +43,9 @@ namespace Nvelope
         /// Local portion</returns>
         public static PhoneNumber CreateAnyway(string str)
         {
-            if (PhoneNumber.StringFormat.Match(str).Success) {
+            if (str == null) {
+                return new PhoneNumber();
+            } else if (PhoneNumber.StringFormat.Match(str).Success) {
                 return new PhoneNumber(str);
             }
             return new PhoneNumber() { Local = str };
@@ -57,6 +59,7 @@ namespace Nvelope
         /// <returns></returns>
         public static string TryFormat(string str)
         {
+            if (str == null) return str;
             PhoneNumber phone;
             if (str.CanConvertTo<PhoneNumber>(out phone))
                 return phone.ToString();

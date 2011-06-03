@@ -52,13 +52,29 @@ namespace Nvelope.Tests
             Assert.AreEqual("31", number.Country);
             Assert.AreEqual("", number.Area);
             Assert.AreEqual("774656767", number.Local);
-            
+            // a number I found in our data
+            number = new PhoneNumber("(604)7627111");
+            Assert.AreEqual("", number.Country);
+            Assert.AreEqual("604", number.Area);
+            Assert.AreEqual("7627111", number.Local);
         }
 
         [Test]
-        public void InValidNumbers()
+        public void InvalidNumbers()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => new PhoneNumber(""));
+        }
+        [Test]
+        public void CreateAnyway()
+        {
+            string number = "002 - 379 985-";
+            Assert.Throws<ArgumentOutOfRangeException>(() => new PhoneNumber(number));
+            var phone = PhoneNumber.CreateAnyway(number);
+            Assert.AreEqual("", phone.Country);
+            Assert.AreEqual("", phone.Area);
+            Assert.AreEqual("002 - 379 985-", phone.Local);
+            Assert.AreEqual("", phone.Extension);
+            
         }
 
         [Test]
