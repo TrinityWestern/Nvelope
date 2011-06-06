@@ -22,7 +22,19 @@
         /// Like ToString, but it handles nulls and gives nicer results for
         /// some objects.
         /// </summary>
-        public static string Print(this object o) {
+        public static string Print(this object o) 
+        {
+            // This function should also work polymorphically
+            // Sometimes, we've got variables of type object, but we want them to print 
+            // nicer than ToString() for their type (ie, for decimals, ToString() works stupidly)
+            // So we do shotgun polymorphism here to take care of that, since we can't 
+            // hack into the original types to override their ToString methods
+
+            // Decimals don't do ToString in a reasonable way
+            // It's really irritating
+            if (o is decimal)
+                return ((decimal)o).Print();
+            else
                 return o.ToStringN();
         }
     }
