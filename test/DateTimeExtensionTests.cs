@@ -163,6 +163,33 @@ namespace Nvelope.Tests
         }
 
         [Test]
+        public void StartOfMonth()
+        {
+            var start = new DateTime(2011, 1, 1);
+            Assert.AreEqual(start, start.StartOfMonth());
+            Assert.AreEqual(start, start.AddDays(2).StartOfMonth());
+            Assert.AreEqual(start, start.AddDays(28).StartOfMonth());
+            Assert.AreEqual(start, new DateTime(2011, 1, 31).StartOfMonth());
+
+            Assert.AreNotEqual(start, start.AddMonths(1).StartOfMonth());
+            Assert.AreNotEqual(start, start.AddMonths(-1).StartOfMonth());
+        }
+
+        [Test]
+        public void EndOfMonth()
+        {
+            var end = new DateTime(2011, 1, 31);
+            Assert.AreEqual(end, end.AddDays(-2).EndOfMonth());
+            Assert.AreEqual(end, new DateTime(2011, 1, 1).EndOfMonth());
+            Assert.AreEqual(end, end.EndOfMonth());
+
+            Assert.AreEqual(new DateTime(2012, 2, 29), new DateTime(2012, 2, 1).EndOfMonth());
+
+            Assert.AreNotEqual(end, end.AddMonths(1).EndOfMonth());
+            Assert.AreNotEqual(end, end.AddMonths(-1).EndOfMonth());
+        }
+
+        [Test]
         public void ToPrettyTime()
         {
             DateTime d = new DateTime(2011, 01, 10, 10, 10, 10);

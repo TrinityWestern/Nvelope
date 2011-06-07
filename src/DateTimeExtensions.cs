@@ -131,6 +131,16 @@ namespace Nvelope
             return new DateTime(me.Year, me.Month, me.Day, me.Hour, me.Minute, 0);
         }
 
+        public static DateTime StartOfMonth(this DateTime me)
+        {
+            return new DateTime(me.Year, me.Month, 1);
+        }
+
+        public static DateTime EndOfMonth(this DateTime me)
+        {
+            return new DateTime(me.Year, me.Month, me.DaysInMonth());
+        }
+
         /// <summary>
         /// Determine if Date String is an actual date format = MM/DD/YYYY
         /// </summary>
