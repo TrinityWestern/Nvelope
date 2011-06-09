@@ -558,6 +558,32 @@ namespace Nvelope
         }
 
         /// <summary>
+        /// Turns the list into a list of lists, the first being of length sizes.First(), 
+        /// the second being of length sizes.Second(), and so on
+        /// </summary>
+        /// <remarks>The last list may be shorter than specified, if there are not enough
+        /// elements. If there are not enough sizes specified, they will be repeated</remarks>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="sizes"></param>
+        /// <returns></returns>
+        public static IEnumerable<IEnumerable<T>> Partition<T>(this IEnumerable<T> list, IEnumerable<int> sizes)
+        {
+            var amountsToTake = sizes.Repeat();
+            var remaining = list;            
+            var amtIterator = amountsToTake.GetEnumerator();
+            amtIterator.MoveNext(); // Move to the first element
+            
+            while (remaining.Any())
+            {
+                var res = remaining.Take(amtIterator.Current);
+                remaining = remaining.Skip(amtIterator.Current);
+                yield return res;
+                amtIterator.MoveNext();
+            }
+        }
+
+        /// <summary>
         /// Gets every nth item in the list
         /// ie, [1,2,3,4].TakeNth(2) -> [2,4]
         /// </summary>

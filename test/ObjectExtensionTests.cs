@@ -24,7 +24,7 @@ namespace Nvelope.Tests
             Assert.True(a.Eq(b));
             Assert.True(b.Eq(a));
         }
-
+               
         [Test]
         public void PrintDecimalWorksPolymorphically()
         {

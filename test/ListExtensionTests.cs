@@ -274,6 +274,16 @@ namespace Nvelope.Tests
         }
 
         [Test]
+        public void PartitionWithMultipleSizes()
+        {
+            var i = 1.Inc().Take(10);
+            var parts = i.Partition(1.Inc().Take(3));
+            Assert.AreEqual("((1),(2,3),(4,5,6),(7),(8,9),(10))", parts.Print());
+            // Make sure we can select 0-length lists
+            Assert.AreEqual("((),(1,2,3,4,5),(),(6,7,8,9,10))", i.Partition(0.And(5)).Print());
+        }
+
+        [Test]
         public void TakeNth()
         {
             var i = new int[] { 1, 2, 3, 4, 5, 6 };
