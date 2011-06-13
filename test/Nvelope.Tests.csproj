@@ -87,6 +87,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reading\ReadTests.cs" />
     <Compile Include="Reflection\ReflectionExtensionTests.cs" />
+    <Compile Include="RegexExtensionTests.cs" />
     <Compile Include="StringExtensionTests.cs" />
     <Compile Include="Tabular\CellLocTests.cs" />
     <Compile Include="TimeSpanExtensionTests.cs" />
