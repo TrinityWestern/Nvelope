@@ -110,15 +110,16 @@ namespace Nvelope
         /// <param name="original">The first DateTime you are working with</param>
         /// <param name="date">The DateTime to compare it with</param>
         /// <returns>True if they are on the same day</returns>
-        public static bool OnSameDayAs(this DateTime original, DateTime date)
+        public static bool OnSameDayAs(this DateTime original, DateTime? date)
         {
-            return original.Date == date.Date;
+            return original.Date == (date ?? DateTime.MinValue).Date;
         }
 
-        public static bool SameMinuteAs(this DateTime me, DateTime other)
+        public static bool SameMinuteAs(this DateTime me, DateTime? other)
         {
-            return me.Year == other.Year && me.Month == other.Month &&
-                me.Day == other.Day && me.Hour == other.Hour && me.Minute == other.Minute;
+            DateTime d = other ?? DateTime.MinValue;
+            return me.Year == d.Year && me.Month == d.Month &&
+                me.Day == d.Day && me.Hour == d.Hour && me.Minute == d.Minute;
         }
 
         public static bool SameMonthAs(this DateTime me, DateTime other)
