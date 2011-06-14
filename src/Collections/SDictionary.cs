@@ -12,6 +12,7 @@ namespace Nvelope.Collections
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TValue"></typeparam>
+    [Obsolete("If you're using this class for it's implicit adding behavior, use a standard dictionary with the SetVal and Val extension methods instead")]
     public class SDictionary<TKey, TValue> : IDictionary<TKey, TValue>
     {
         /// <summary>
