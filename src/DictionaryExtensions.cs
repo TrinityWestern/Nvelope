@@ -290,6 +290,25 @@ namespace Nvelope
         }
 
         /// <summary>
+        /// Set the value if it exists, otherwise add it
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="dict"></param>
+        /// <param name="key"></param>
+        /// <param name="val"></param>
+        /// <returns></returns>
+        public static Dictionary<TKey,TValue> SetVal<TKey,TValue>(this Dictionary<TKey, TValue> dict, TKey key, TValue val)
+        {
+            if (!dict.ContainsKey(key))
+                dict.Add(key, val);
+            else
+                dict[key] = val;
+
+            return dict;
+        }
+
+        /// <summary>
         /// Constructs a single object of type T from the dictionary
         /// </summary>
         /// <typeparam name="T"></typeparam>

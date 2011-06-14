@@ -53,9 +53,21 @@ namespace Nvelope.Tests
             Assert.AreEqual("z", dict.Val("2", "z"));
 
             Assert.AreEqual("a", dict.Val("1"));
-            Assert.AreEqual(null, dict.Val("2"));
-            
+            Assert.AreEqual(null, dict.Val("2"));            
         }
+
+        [Test]
+        public void SetVal()
+        {
+            var dict = new Dictionary<int, string>();
+            dict.Add(1, "1");
+
+            dict.SetVal(2, "2");
+            Assert.AreEqual("([1,1],[2,2])", dict.Print());
+            dict.SetVal(1, "3");
+            Assert.AreEqual("([1,3],[2,2])", dict.Print());
+        }
+
 
         [Test]
         public void Except()
