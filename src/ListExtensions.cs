@@ -276,8 +276,7 @@ namespace Nvelope
         /// <summary>
         /// Perform some function fn on each item of the list, where the first argument
         /// of the function is the index of the element
-        /// </summary>
-        [Obsolete("I can't think of any good use for this")]
+        /// </summary>        
         public static void For<T>(this IEnumerable<T> source, Action<int, T> fn)
         {
             var pairs = source.Zip(0.Inc(), (t, i) => new Tuple<int, T>(i, t));
