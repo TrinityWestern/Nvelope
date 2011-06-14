@@ -249,5 +249,17 @@ namespace Nvelope.Tests
             Assert.AreNotEqual(int.MinValue, time);
         }
 
+        [Test]
+        public void BenchmarkAction()
+        {
+            var sum = 0;
+            Action<int, int> fn = (i, j) => sum += i + j;
+            var someNums = 1.Inc().Take(2);
+            var data = someNums.ZipToDict(someNums);
+
+            var time = fn.Benchmark(data.Repeat(50));
+            Assert.AreNotEqual(int.MinValue, time);
+        }
+
     }
 }

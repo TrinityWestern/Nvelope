@@ -311,10 +311,11 @@ namespace Nvelope
         /// <returns></returns>
         public static int Benchmark<T, U>(this Func<T, U> fn, IEnumerable<T> testData, int numRuns = 5)
         {
-            var times = testData.Repeat().Take(numRuns).Select(t =>
+            var times = 1.To(numRuns).Select(i =>
             {
                 var start = DateTime.Now;
-                fn(t);
+                foreach(var t in testData)
+                    fn(t);
                 var end = DateTime.Now;
                 return end.Subtract(start).Milliseconds;
             });
@@ -322,5 +323,27 @@ namespace Nvelope
             return times.Sum() / numRuns;
         }
 
+        /// <summary>
+        /// Run an action a bunch of times, and return the average execution time
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="U"></typeparam>
+        /// <param name="fn"></param>
+        /// <param name="testData"></param>
+        /// <param name="numRuns"></param>
+        /// <returns></returns>
+        public static int Benchmark<T, U>(this Action<T, U> fn, IEnumerable<KeyValuePair<T, U>> testData, int numRuns = 5)
+        {
+            var times = 1.To(numRuns).Select(i => 
+            {
+                var start = DateTime.Now;
+                foreach(var kv in testData)
+                    fn(kv.Key, kv.Value);
+                var end = DateTime.Now;
+                return end.Subtract(start).Milliseconds;
+            });
+
+            return times.Sum() / numRuns;
+        }
     }
 }
