@@ -583,6 +583,26 @@ namespace Nvelope
         }
 
         /// <summary>
+        /// Similar to Aggregate, but returns all the intermediate results
+        /// </summary>
+        /// <remarks>Stolen from Scala 2.8's ScanLeft/ScanRight</remarks>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="U"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="initialValue"></param>
+        /// <param name="fn"></param>
+        /// <returns></returns>
+        public static IEnumerable<U> Scan<T, U>(this IEnumerable<T> list, U initialValue, Func<U, T, U> fn)
+        {
+            var cur = initialValue;
+            foreach (var item in list)
+            {
+                cur = fn(cur, item);
+                yield return cur;
+            }
+        }
+
+        /// <summary>
         /// Gets every nth item in the list
         /// ie, [1,2,3,4].TakeNth(2) -> [2,4]
         /// </summary>
