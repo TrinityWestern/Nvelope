@@ -58,6 +58,18 @@ namespace Nvelope.Tests
             Assert.AreEqual("604", number.Area);
             Assert.AreEqual("7627111", number.Local);
         }
+        
+        [Test,Ignore]
+        public void BrokenNumberToFix()
+        {
+            // a number I found in our data
+            // TOOD: this is currently broken
+            var number = new PhoneNumber("604 783 8072");
+            Assert.AreEqual("", number.Country);
+            Assert.AreEqual("604", number.Area);
+            Assert.AreEqual("783 8072", number.Local);
+        }
+
 
         [Test]
         public void InvalidNumbers()
