@@ -94,6 +94,9 @@ namespace Nvelope.Tests
         {
             var number = new PhoneNumber("1-878-443-2908 ext. 23");
             Assert.AreEqual("1-878-443-2908x23", number.ToString());
+
+            number = new PhoneNumber("6048537994");
+            Assert.AreEqual("6048537994", number.ToString());
         }
     }
 }
