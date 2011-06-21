@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace Nvelope.Tests
@@ -79,7 +78,7 @@ namespace Nvelope.Tests
         [Test]
         public void CreateAnyway()
         {
-            string number = "002 - 379 985-";
+            const string number = "002 - 379 985-";
             Assert.Throws<ArgumentOutOfRangeException>(() => new PhoneNumber(number));
             var phone = PhoneNumber.CreateAnyway(number);
             Assert.AreEqual("", phone.Country);
@@ -97,6 +96,9 @@ namespace Nvelope.Tests
 
             number = new PhoneNumber("6048537994");
             Assert.AreEqual("6048537994", number.ToString());
+
+            number = new PhoneNumber("-604-5527455x");
+            Assert.AreEqual("604-5527455", number.ToString());
         }
     }
 }

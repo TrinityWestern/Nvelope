@@ -10,9 +10,11 @@ namespace Nvelope
     {
         public static Regex StringFormat = new Regex(
             "^\\s*(?<countryBlock>\\+?\\s?(?<country>[\\d]{1,4})([\\s\\(\\.\\-]+))?"
+                + "[\\s\\.\\-]*" // this is incase the contry code is ommited but
+                // there's still puntuation before the rest of the phone number
                 + "(?<areaBlock>\\(?(?<area>[\\d]{1,4})([\\)\\s\\.\\-]+))?"
                 + "(?<localBlock>(?<local>\\d[\\s\\d\\-\\.]{4,16}\\d))"
-                + "(?<extensionBlock>\\s*(x|ext([\\.:]))?\\s*(?<extension>[\\d]{1,10}))?\\s*$");
+                + "\\s*(x|ext([\\.:]))?\\s*(?<extension>[\\d]{1,10})?\\s*$");
 
         public string Country = "";
         public string Area = "";
@@ -21,14 +23,14 @@ namespace Nvelope
 
         public PhoneNumber(string str)
         {
-            var match = PhoneNumber.StringFormat.Match(str);
+            var match = StringFormat.Match(str);
             if (!match.Success)
                 throw new ArgumentOutOfRangeException(
                     "'" + str + "' is not a parseable phone number.");
-            this.Country = match.Groups["country"].Value;
-            this.Area = match.Groups["area"].Value;
-            this.Local = match.Groups["local"].Value;
-            this.Extension = match.Groups["extension"].Value;
+            Country = match.Groups["country"].Value;
+            Area = match.Groups["area"].Value;
+            Local = match.Groups["local"].Value;
+            Extension = match.Groups["extension"].Value;
         }
 
         /// <summary>
@@ -45,10 +47,11 @@ namespace Nvelope
         {
             if (str == null) {
                 return new PhoneNumber();
-            } else if (PhoneNumber.StringFormat.Match(str).Success) {
+            }
+            if (StringFormat.Match(str).Success) {
                 return new PhoneNumber(str);
             }
-            return new PhoneNumber() { Local = str };
+            return new PhoneNumber { Local = str };
         }
 
         /// <summary>
@@ -61,16 +64,14 @@ namespace Nvelope
         {
             if (str == null) return str;
             PhoneNumber phone;
-            if (str.CanConvertTo<PhoneNumber>(out phone))
-                return phone.ToString();
-            return str;
+            return str.CanConvertTo(out phone) ? phone.ToString() : str;
         }
 
         public override string ToString() {
-            string result = this.Local;
-            if (this.Area != "")      result = this.Area + "-" + result;
-            if (this.Country != "")   result = this.Country + "-" + result;
-            if (this.Extension != "") result += "x" + this.Extension;
+            var result = Local;
+            if (Area != "")      result = Area + "-" + result;
+            if (Country != "")   result = Country + "-" + result;
+            if (Extension != "") result += "x" + Extension;
             return result;
         }
 
