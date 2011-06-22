@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace Nvelope.Tests
@@ -58,6 +57,18 @@ namespace Nvelope.Tests
             Assert.AreEqual("604", number.Area);
             Assert.AreEqual("7627111", number.Local);
         }
+        
+        [Test,Ignore]
+        public void BrokenNumberToFix()
+        {
+            // a number I found in our data
+            // TOOD: this is currently broken
+            var number = new PhoneNumber("604 783 8072");
+            Assert.AreEqual("", number.Country);
+            Assert.AreEqual("604", number.Area);
+            Assert.AreEqual("783 8072", number.Local);
+        }
+
 
         [Test]
         public void InvalidNumbers()
@@ -67,7 +78,7 @@ namespace Nvelope.Tests
         [Test]
         public void CreateAnyway()
         {
-            string number = "002 - 379 985-";
+            const string number = "002 - 379 985-";
             Assert.Throws<ArgumentOutOfRangeException>(() => new PhoneNumber(number));
             var phone = PhoneNumber.CreateAnyway(number);
             Assert.AreEqual("", phone.Country);
@@ -82,6 +93,12 @@ namespace Nvelope.Tests
         {
             var number = new PhoneNumber("1-878-443-2908 ext. 23");
             Assert.AreEqual("1-878-443-2908x23", number.ToString());
+
+            number = new PhoneNumber("6048537994");
+            Assert.AreEqual("6048537994", number.ToString());
+
+            number = new PhoneNumber("-604-5527455x");
+            Assert.AreEqual("604-5527455", number.ToString());
         }
     }
 }

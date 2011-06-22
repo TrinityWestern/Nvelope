@@ -284,6 +284,14 @@ namespace Nvelope.Tests
         }
 
         [Test]
+        public void Scan()
+        {
+            var data = 1.Inc().Take(3);
+            var res = data.Scan("a", (s, i) => s + i.ToString());
+            Assert.AreEqual("(a1,a12,a123)", res.Print());
+        }
+
+        [Test]
         public void TakeNth()
         {
             var i = new int[] { 1, 2, 3, 4, 5, 6 };
