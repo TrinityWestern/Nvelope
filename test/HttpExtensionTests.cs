@@ -32,14 +32,14 @@ namespace Nvelope.Tests
         {
             Assert.AreEqual("bar", mock.OptionalParam<string>("foo", ""));
             Assert.Throws(typeof(HttpException), () => mock.OptionalParam<int>("foo", 0));
-            Assert.AreEqual("", mock.OptionalParam<string>("baz", ""));
-            Assert.AreEqual(null, mock.OptionalParam<int?>("dingdong", null));
+            Assert.IsEmpty(mock.OptionalParam<string>("baz", ""));
+            Assert.IsNull(mock.OptionalParam<int?>("dingdong", null));
 
             Assert.AreEqual("on", mock.OptionalParam<string>("x", ""));
-            Assert.AreEqual(true, mock.OptionalParam<bool>("x", false));
-            Assert.AreEqual(false, mock.OptionalParam<bool>("y", false));
+            Assert.IsTrue(mock.OptionalParam<bool>("x", false));
+            Assert.IsFalse(mock.OptionalParam<bool>("y", false));
 
-            Assert.AreEqual(null, mock_date.OptionalParam<DateTime?>("birthday", null));
+            Assert.IsNull(mock_date.OptionalParam<DateTime?>("birthday", null));
             Assert.AreEqual(new DateTime(2001, 4, 23), mock_date.OptionalParam<DateTime?>("d", null));
         }
         [Test]
@@ -51,8 +51,8 @@ namespace Nvelope.Tests
         [Test]
         public void HasParamTest()
         {
-            Assert.AreEqual(true, mock.HasParam("x"));
-            Assert.AreEqual(false, mock.HasParam("dingdong"));
+            Assert.IsTrue(mock.HasParam("x"));
+            Assert.IsFalse(mock.HasParam("dingdong"));
         }
         [Test]
         public void HandleTest()
