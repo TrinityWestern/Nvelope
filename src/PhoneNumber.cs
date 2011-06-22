@@ -69,9 +69,9 @@ namespace Nvelope
 
         public override string ToString() {
             var result = Local;
-            if (Area != "")      result = Area + "-" + result;
-            if (Country != "")   result = Country + "-" + result;
-            if (Extension != "") result += "x" + Extension;
+            if (string.IsNullOrEmpty(Area))      result = Area + "-" + result;
+            if (string.IsNullOrEmpty(Country))   result = Area + "-" + result;
+            if (string.IsNullOrEmpty(Extension)) result += "x" + Extension;
             return result;
         }
 
