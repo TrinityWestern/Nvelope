@@ -84,6 +84,16 @@ namespace Nvelope
             return stringvalue.Split(",").Select(s => s.ConvertTo<T>());
         }
 
+        /// <summary>
+        /// Retrieves a boolean value for the checked status of a checkbox
+        /// </summary>
+        /// <param name="input">The HTML value of a checkbox</param>
+        /// <returns>True when the Checkbox value is found in request.Params, False otherwise.</returns>
+        public static bool CheckboxParam(this HttpRequestBase req, string name)
+        {
+            return req.Params.ContainsKey(name);
+        }
+
         #region HttpRequest compatibility
 
         public static T RequiredParam<T>(this HttpRequest req, string name)
@@ -105,6 +115,10 @@ namespace Nvelope
         public static IEnumerable<T> ParamList<T>(this HttpRequest req, string name)
         {
             return new HttpRequestWrapper(req).ParamList<T>(name);
+        }
+        public static bool CheckboxParam(this HttpRequest req, string name)
+        {
+            return new HttpRequestWrapper(req).CheckboxParam(name);
         }
 
         #endregion
@@ -131,16 +145,6 @@ namespace Nvelope
             if (input != null)
                 result.AddRange(input.Split(',').Select(s => s.Trim()));
             return result;
-        }
-
-        /// <summary>
-        /// Retrieves a boolean value for the checked status of a checkbox
-        /// </summary>
-        /// <param name="input">The HTML value of a checkbox</param>
-        /// <returns>True when the Checkbox value is found in request.Params, False otherwise.</returns>
-        public static bool SingleCheckBox(string input)
-        {
-            return input != null;
         }
     }
 }

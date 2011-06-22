@@ -11,6 +11,7 @@ namespace Nvelope.Tests
     {
         protected HttpRequest mock;
         protected HttpRequest mock_date;
+        protected HttpRequest mock_checked;
         protected HttpRequest mock_handle;
 
         [TestFixtureSetUp]
@@ -18,6 +19,7 @@ namespace Nvelope.Tests
         {
             mock = new HttpRequest("lolwat", "http://example.org", "foo=bar&x=on");
             mock_date = new HttpRequest("lolwat", "http://example.org", "birthday=1234&d=2001-04-23");
+            mock_checked = new HttpRequest("lolwat", "http://example.org", "checked=checked");
             mock_handle = new HttpRequest("lolwat", "http://example.org", "check=check&list=1,2,3");
         }
         [Test]
@@ -41,6 +43,12 @@ namespace Nvelope.Tests
             Assert.AreEqual(new DateTime(2001, 4, 23), mock_date.OptionalParam<DateTime?>("d", null));
         }
         [Test]
+        public void CheckboxParam()
+        {
+            Assert.IsTrue(mock_checked.CheckboxParam("checked"));
+            Assert.IsFalse(mock.CheckboxParam("checked"));
+        }
+        [Test]
         public void HasParamTest()
         {
             Assert.AreEqual(true, mock.HasParam("x"));
@@ -49,8 +57,6 @@ namespace Nvelope.Tests
         [Test]
         public void HandleTest()
         {
-            Assert.AreEqual(true, mock_handle.HandleParam("check", HttpRequestHandlers.SingleCheckBox));
-            
             List<string> l = new List<string>();
             l.Add("1");
             l.Add("2");
