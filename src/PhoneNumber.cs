@@ -70,7 +70,7 @@ namespace Nvelope
         public override string ToString() {
             var result = Local;
             if (!string.IsNullOrEmpty(Area))      result = Area + "-" + result;
-            if (!string.IsNullOrEmpty(Country))   result = Area + "-" + result;
+            if (!string.IsNullOrEmpty(Country))   result = Country + "-" + result;
             if (!string.IsNullOrEmpty(Extension)) result += "x" + Extension;
             return result;
         }
