@@ -11,12 +11,15 @@ namespace Nvelope
     {
         public static string MD5(this FileInfo file)
         {
-            using (var stream = file.Open(FileMode.Open, FileAccess.Read))
-            {
-                var md5 = new MD5CryptoServiceProvider();                
-                var bytes = md5.ComputeHash(stream);
-                return bytes.ToHexString();
+            using (var stream = file.Open(FileMode.Open, FileAccess.Read)) {
+                return stream.MD5();
             }
+        }
+        public static string MD5(this Stream stream)
+        {
+            var md5 = new MD5CryptoServiceProvider();
+            var bytes = md5.ComputeHash(stream);
+            return bytes.ToHexString();
         }
     }
 }
