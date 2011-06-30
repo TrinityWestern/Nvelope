@@ -27,38 +27,55 @@ namespace Nvelope.Configuration
 
         public static DeploymentLocation Location
         {
-            get {
-                // Check the machine.config for the setting
-                // that indicates whether this machine is a production machine
-
-                // TODO: Deprecated. This setting is set to true on the machine.config on the production machines
-                // Instead, we should just use the DEPLOYMENT_ENV_VAR environment variable to set it instead
-                var isProduction = ConfigurationManager.AppSettings[PRODUCTION_MACHINE_CONFIG_SETTING_NAME].ConvertTo<bool?>() ?? false;                
-
-                if (isProduction)
-                    return DeploymentLocation.Live;
-
-                var loc = Environment.GetEnvironmentVariable(DEPLOYMENT_ENV_VAR);
-                if (loc.CanConvertTo<DeploymentLocation>())
-                    return loc.ConvertTo<DeploymentLocation>();
-
-                return DeploymentLocation.Local;
+            get
+            {
+                if (_location == null)
+                    _location = _getLocation();
+                return _location.Value;
             }
+        }
+        private static DeploymentLocation? _location = null;
+        private static DeploymentLocation _getLocation()
+        {            
+            // Check the machine.config for the setting
+            // that indicates whether this machine is a production machine
+
+            // TODO: Deprecated. This setting is set to true on the machine.config on the production machines
+            // Instead, we should just use the DEPLOYMENT_ENV_VAR environment variable to set it instead
+            var isProduction = ConfigurationManager.AppSettings[PRODUCTION_MACHINE_CONFIG_SETTING_NAME].ConvertTo<bool?>() ?? false;                
+
+            if (isProduction)
+                return DeploymentLocation.Live;
+
+            var loc = Environment.GetEnvironmentVariable(DEPLOYMENT_ENV_VAR);
+            if (loc.CanConvertTo<DeploymentLocation>())
+                return loc.ConvertTo<DeploymentLocation>();
+
+            // Hack here to see if we're running on cassini
+            if (System.Environment.CommandLine.Contains("WebDev.WebServer"))
+                return DeploymentLocation.Cassini;
+
+            return DeploymentLocation.Local;
         }
 
         /// <summary>
         /// If the config file has a setting, return it, else retun the default_value
         /// </summary>
-        public static string Setting(string name, string default_value = null)
+        public static string Setting(string name, string default_value = null, bool throw_if_missing = false)
         {
             var possibleNames = _getLocationizedNames(Location, name);
 
-            return possibleNames.Select(n => ConfigurationManager.AppSettings[n])
+            var res = possibleNames.Select(n => ConfigurationManager.AppSettings[n])
                 .Where(s => s != null)
                 .FirstOr(default_value);
+
+            if (throw_if_missing && res == null)
+                throw new ConfigurationException("The setting '" + name + "' was not found in the config file!");
+
+            return res;
         }
 
-        public static string ConnectionString(string name)
+        public static string ConnectionString(string name, string default_value = null)
         {
             var possibleNames = _getLocationizedNames(Location, name);
 
@@ -69,7 +86,7 @@ namespace Nvelope.Configuration
             if (res != null)
                 return res.ConnectionString;
             else
-                return null;
+                return default_value;
         }
 
         /// <summary>
@@ -84,6 +101,12 @@ namespace Nvelope.Configuration
             if (loc == DeploymentLocation.Dev)
                 yield return name + "-dev";
             if (loc == DeploymentLocation.Local) {
+                yield return name + "-local";
+                yield return name + "-dev";
+            }
+            if (loc == DeploymentLocation.Cassini)
+            {
+                yield return name + "-cassini";
                 yield return name + "-local";
                 yield return name + "-dev";
             }
