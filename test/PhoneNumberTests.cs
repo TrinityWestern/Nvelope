@@ -99,6 +99,15 @@ namespace Nvelope.Tests
 
             number = new PhoneNumber("-604-5527455x");
             Assert.AreEqual("604-5527455", number.ToString());
+            // test for manually set values
+            number = new PhoneNumber {
+                Country = null,
+                Area = null,
+                Local = "12346",
+                Extension = null
+            };
+
+            Assert.AreEqual("12346", number.ToString());
         }
     }
 }

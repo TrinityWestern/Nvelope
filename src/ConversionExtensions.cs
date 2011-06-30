@@ -281,11 +281,12 @@ namespace Nvelope
                 }
             }
 
-            if (type == typeof(bool))
+            if (type == typeof(bool)) {
                 if (source == null)
                     throw new ConversionException("Cannot convert null into a bool - if the value might be null, check before calling ConvertTo, or call ConvertTo<bool?>() instead", typeof(bool), source);
                 else
                     return source.ToString().ToBoolFriendly();
+            }
 
             if (source is string)
             {
