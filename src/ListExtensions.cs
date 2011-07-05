@@ -274,6 +274,18 @@ namespace Nvelope
         }
 
         /// <summary>
+        /// Convert an IEnumerable into a list - handy for working with some of .NET's built-in collection types
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> ToList<T>(this System.Collections.IEnumerable source)
+        {
+            foreach (var t in source)
+                yield return (T)t;
+        }
+
+        /// <summary>
         /// Perform some function fn on each item of the list, where the first argument
         /// of the function is the index of the element
         /// </summary>        
