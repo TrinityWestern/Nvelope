@@ -52,6 +52,7 @@
     <Compile Include="BinaryExtensions.cs" />
     <Compile Include="CharListExtensions.cs" />
     <Compile Include="Collections\Delegates.cs" />
+    <Compile Include="HtmlExtensions.cs" />
     <Compile Include="Interval.cs" />
     <Compile Include="Collections\OrderedSequential.cs" />
     <Compile Include="Collections\ITreeable.cs">
