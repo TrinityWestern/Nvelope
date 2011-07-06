@@ -428,7 +428,9 @@ namespace Nvelope
         public static T? ConvertAs<T>(this object source) where T : struct
         {
             T? result = null;
-            source.CanConvertTo<T?>(out result);
+            try {
+                result = ConvertTo<T>(source);
+            } catch {}
             return result;
         }
     }
