@@ -285,6 +285,16 @@ namespace Nvelope.Tests
             Assert.AreEqual(true, t.IsBool());
             Assert.AreEqual(false, u.IsBool());
         }
+        [Test]
+        public void ConvertAs()
+        {
+            Assert.AreEqual(-1, "-1".ConvertAs<int>());
+            Assert.AreEqual(0, "0".ConvertAs<int>());
+            Assert.AreEqual(1, "1".ConvertAs<int>());
+            Assert.AreEqual(null, "b".ConvertAs<int>());
+            Assert.AreEqual(1, (1.0).ConvertAs<int>());
+            Assert.AreEqual(1, (1.1).ConvertAs<int>());
+        }
 
 
         #region Data classes

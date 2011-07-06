@@ -420,5 +420,16 @@ namespace Nvelope
                 return false;
             }
         }
+
+        /// <summary>
+        /// Like ConvertTo, but returns null on failure instead of throwing
+        /// an exception. Like the 'as' keyword.
+        /// </summary>
+        public static T? ConvertAs<T>(this object source) where T : struct
+        {
+            T? result = null;
+            source.CanConvertTo<T?>(out result);
+            return result;
+        }
     }
 }
