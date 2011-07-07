@@ -670,11 +670,10 @@ namespace Nvelope
         /// much more efficient than calling Count on a sequence</remarks>
         public static bool AtLeast<T>(this IEnumerable<T> list, int count)
         {
-            var found = 0;
-            foreach (var item in list)
-                if (++found >= count)
-                    return true;
-            return false;
+            var iter = list.GetEnumerator();
+            var spot = 0;
+            while (iter.MoveNext() && ++spot <= count) ;
+            return (spot >= count);
         }
 
         /// <summary>
