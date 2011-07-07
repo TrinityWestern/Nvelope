@@ -126,14 +126,14 @@ namespace Nvelope
         /// </summary>
         /// <param name="namespaceManager"></param>
         /// <param name="xpathExpression"></param>
-        /// <returns></returns>
-        public static Uri GetNamespace(this XmlNamespaceManager namespaceManager, string xpathExpression)
+        /// <returns>uri as string or empty string when no namespace is given</returns>
+        public static string GetNamespace(this XmlNamespaceManager namespaceManager, string xpathExpression)
         {
             var prefix = xpathExpression.FirstNodePrefix();
             if (namespaceManager.HasNamespace(prefix))
-                return new Uri(namespaceManager.LookupNamespace(prefix));
+                return namespaceManager.LookupNamespace(prefix);
             else
-                return null;
+                return string.Empty;
         }
 
         /// <summary>
@@ -515,7 +515,7 @@ namespace Nvelope
             {
                 XmlAttribute att = node.GetOwnerDocument().CreateAttribute(
                     nodeName.FirstNodeName(),
-                    namespaceManager.GetNamespace(nodeName).ToString());
+                    namespaceManager.GetNamespace(nodeName));
                 att.Value = value;
                 node.Attributes.Append(att);
 
@@ -530,7 +530,7 @@ namespace Nvelope
                 
                 XmlElement elem = node.GetOwnerDocument().CreateElement(
                     nodeName.FirstNodeName(),
-                    namespaceManager.GetNamespace(nodeName).ToString());
+                    namespaceManager.GetNamespace(nodeName));
                 elem.InnerText = value;
                 // Set the attributes
                 atts.Each(kv => elem.SetVal("/@" + kv.Key, kv.Value));
