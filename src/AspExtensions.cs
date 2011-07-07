@@ -8,9 +8,9 @@ namespace Nvelope
     /// </summary>
     public static class AspExtensions
     {
-        public static IEnumerable<ListItem> ToListItems(this ListItemCollection coll)
+        public static IEnumerable<ListItem> ToListItems(this ListItemCollection firstColumn)
         {
-            foreach (var item in coll)
+            foreach (var item in firstColumn)
                 yield return item as ListItem;
         }
     }

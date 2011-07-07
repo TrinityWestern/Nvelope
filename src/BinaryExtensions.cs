@@ -9,16 +9,16 @@ namespace Nvelope
         /// </summary>
         /// <param name="bytes"></param>
         /// <returns></returns>
-        public static string ToHexString(this byte[] bytes)
+        public static string ToHexString(this byte[] values)
         {
             char[] lookup = new char[] { '0', '1', '2', '3', '4', '5', '6',
-                '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };            
-            int curByte = 0, curChar = 0, len = bytes.Length;
+                '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+            int curByte = 0, curChar = 0, len = values.Length;
             char[] res = new char[len * 2];
             byte cur;
             while (curByte < len)
             {
-                cur = bytes[curByte++];
+                cur = values[curByte++];
                 res[curChar++] = lookup[cur / 0x10]; // Get the character for the first nibble
                 res[curChar++] = lookup[cur % 0x10]; // Get the character for the second nibble
             }
@@ -30,9 +30,9 @@ namespace Nvelope
         /// <summary>
         /// Interpret an array of bytes as a UTF32 string
         /// </summary>
-        public static string ToUTF8String(this byte[] bytes)
-        {            
-            return Encoding.UTF8.GetString(bytes);
+        public static string ToUtf8String(this byte[] values)
+        {
+            return Encoding.UTF8.GetString(values);
         }
     }
 }

@@ -335,7 +335,7 @@ namespace Nvelope
 
             // Handle parsing a byte array to a string
             if (source is byte[] && type == typeof(string))
-                return (source as byte[]).ToUTF8String();
+                return (source as byte[]).ToUtf8String();
 
 
             Exception convertException = null;

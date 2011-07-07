@@ -24,7 +24,7 @@ namespace Nvelope.Tests
         public void ToUTF8String()
         {
             var bytes = new byte[] { 0x31, 0x36, 0x38, 0x33, 0x33, 0x37, 0x3A, 0x42, 0x72, 0x69, 0x6F, 0x6E };
-            Assert.AreEqual("168337:Brion", bytes.ToUTF8String());
+            Assert.AreEqual("168337:Brion", bytes.ToUtf8String());
         }
     }
 }
