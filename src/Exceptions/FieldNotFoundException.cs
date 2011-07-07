@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Nvelope.Exceptions
 {
     /// <summary>
     /// Indicates that reflection couldn't find a field
     /// </summary>
+    [Serializable]
     public class FieldNotFoundException : Exception
     {
         /// <summary>
@@ -18,14 +16,14 @@ namespace Nvelope.Exceptions
         public FieldNotFoundException(object obj, string expectedField)
             : base("Could not find a field called " + expectedField + " on the object")
         {
-            Object = obj;
-            ExpectedField = expectedField;
+            this.Object = obj;
+            this.ExpectedField = expectedField;
         }
 
         public FieldNotFoundException(object obj, string expectedField, string message) : base(message)
         {
-            Object = obj;
-            ExpectedField = expectedField;
+            this.Object = obj;
+            this.ExpectedField = expectedField;
         }
 
         /// <summary>

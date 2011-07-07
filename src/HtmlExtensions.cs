@@ -14,7 +14,7 @@ namespace Nvelope
         // if punctuation is at the end, then don't include it
         public static Regex URL_FORMAT = new Regex(
             @"(?<!\w)((?:https?|ftp):" // protocol + :
-            + @"/*(?!/)(?:" //get any starting /'s
+            + @"/*(?!/)(?:" // get any starting /'s
             + @"[\w$\+\*@=\-/]" // reserved | unreserved
             + "|%[a-fA-F0-9]{2}" // escape
             + @"|[\?\.:\(\),;!\'](?!(?:\s|$))" // punctuation

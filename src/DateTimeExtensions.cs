@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Nvelope
 {
@@ -147,28 +148,11 @@ namespace Nvelope
         /// </summary>
         /// <param name="date"></param>
         /// <returns></returns>
+        [Obsolete("Locale specific. This should be renamed to ValidAmericanDate")]
         public static bool ValidDate(string date)
         {
-            try
-            {
-                // for US, alter to suit if splitting on hyphen, comma, etc.
-                string[] dateParts = date.Split('/');
-
-                // create new date from the parts; if this does not fail
-                // the method will return true and the date is valid
-                DateTime modelDate = new
-                    DateTime(Convert.ToInt32(dateParts[2]),
-                    Convert.ToInt32(dateParts[0]),
-                    Convert.ToInt32(dateParts[1]));
-
-                return true;
-            }
-            catch
-            {
-                // if a test date cannot be created, the
-                // method will return false
-                return false;
-            }
+            var format = new Regex(@"(\d+)/(\d+)/(\d+)");
+            return format.IsMatch(date);
         }
 
         /// <summary>
@@ -237,9 +221,9 @@ namespace Nvelope
             int monthDiff = end.Month - start.Month;
             // If the end day is less than start day, then less
             // than a full month has passed
-            if (end.Day < start.Day)
+            if (end.Day < start.Day) {
                 monthDiff -= 1;
-
+            }
             return yearDiff * 12 + monthDiff;
         }
 

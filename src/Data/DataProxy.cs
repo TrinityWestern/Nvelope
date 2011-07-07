@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Collections.Specialized;
 using Nvelope.Reflection;
+using Nvelope.Exceptions;
 
 namespace Nvelope.Data
 {
@@ -38,7 +39,7 @@ namespace Nvelope.Data
     {
         public DataProxy(Dictionary<string, TValue> overrides, object source = null, bool returnDefaultIfMissing = false, bool returnNullForExceptions = false)
         {
-            Source = source == null? new {} : source;
+            Source = source == null ? new { } : source;
             Overrides = overrides;
             ReturnDefaultIfMissing = returnDefaultIfMissing;
             ReturnNullForExceptions = returnNullForExceptions;
@@ -61,23 +62,20 @@ namespace Nvelope.Data
 
                 if (matchingKeys.Any())
                     return Overrides[matchingKeys.First()];
-                else if (Source._GetMembers().Names().Select(s => s.ToLower()).Contains(name))
-                {
-                    if (ReturnNullForExceptions)
-                    {
-                        try
-                        {
+                else if (Source._GetMembers().Names().Select(s => s.ToLower()).Contains(name)) {
+                    if (ReturnNullForExceptions) {
+                        try {
                             return Source.Get(name, false).ConvertTo<TValue>();
-                        }
-                        catch
-                        {
+                        } catch (FieldNotFoundException) {
+                            return default(TValue);
+                        } catch (ArgumentException) {
+                            return default(TValue);
+                        } catch (ConversionException) {
                             return default(TValue);
                         }
-                    }
-                    else
+                    } else
                         return Source.Get(name, false).ConvertTo<TValue>();
-                }
-                else if (ReturnDefaultIfMissing)
+                } else if (ReturnDefaultIfMissing)
                     return default(TValue);
                 else
                     throw new KeyNotFoundException("Neither the override collection nor the source object contained a field called '" + name + "'");

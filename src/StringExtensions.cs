@@ -475,23 +475,23 @@ namespace Nvelope
             return ContainsAll(source, strs as IEnumerable<string>);
         }
 
-        public static bool ContainsAll(this string source, IEnumerable<string> strs)
+        public static bool ContainsAll(this string source, IEnumerable<string> strings)
         {
-            foreach (var str in strs)
+            foreach (var str in strings)
                 if (!source.Contains(str))
                     return false;
 
             return true;
         }
 
-        public static bool ContainsAny(this string source, params string[] strs)
+        public static bool ContainsAny(this string source, params string[] strings)
         {
-            return ContainsAny(source, strs as IEnumerable<string>);
+            return ContainsAny(source, strings as IEnumerable<string>);
         }
 
-        public static bool ContainsAny(this string source, IEnumerable<string> strs)
+        public static bool ContainsAny(this string source, IEnumerable<string> strings)
         {
-            foreach (var str in strs)
+            foreach (var str in strings)
                 if (source.Contains(str))
                     return true;
 

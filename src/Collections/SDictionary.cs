@@ -81,18 +81,18 @@ namespace Nvelope.Collections
             if (ItemAdding(new DictItemChange(key, value, this)))
             {
                 _dict.Add(key, value);
-                ItemAdded(new DictItemChange(key, value, this));
+                this.ItemAdded(new DictItemChange(key, value, this));
             }
         }
 
         public bool ContainsKey(TKey key)
         {
-            return _dict.ContainsKey(key);
+            return this._dict.ContainsKey(key);
         }
 
         public ICollection<TKey> Keys
         {
-            get { return _dict.Keys; }
+            get { return this._dict.Keys; }
         }
         public bool Remove(TKey key)
         {

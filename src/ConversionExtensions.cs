@@ -161,41 +161,41 @@ namespace Nvelope
         {
             switch (source.Trim().ToLower())
             {
-                case("jan"):
-                case("january"):
+                case "jan":
+                case "january":
                     return Month.January;
-                case("feb"):
-                case("february"):
+                case "feb":
+                case "february":
                     return Month.February;
-                case("mar"):
-                case("march"):
+                case "mar":
+                case "march":
                     return Month.March;
-                case("apr"):
-                case("april"):
+                case "apr":
+                case "april":
                     return Month.April;
-                case("may"):
+                case "may":
                     return Month.May;
-                case("jun"):
-                case("june"):
+                case "jun":
+                case "june":
                     return Month.June;
-                case("jul"):
-                case("july"):
+                case "jul":
+                case "july":
                     return Month.July;
-                case("aug"):
-                case("august"):
+                case "aug":
+                case "august":
                     return Month.August;
-                case("sep"):
-                case("sept"):
-                case("september"):
+                case "sep":
+                case "sept":
+                case "september":
                     return Month.September;
-                case("oct"):
-                case("october"):
+                case "oct":
+                case "october":
                     return Month.October;
-                case("nov"):
-                case("november"):
+                case "nov":
+                case "november":
                     return Month.November;
-                case("dec"):
-                case("december"):
+                case "dec":
+                case "december":
                     return Month.December;
                 default:
                     throw new ConversionException("Could not convert '" + source + "' to Month", typeof(Month), source);

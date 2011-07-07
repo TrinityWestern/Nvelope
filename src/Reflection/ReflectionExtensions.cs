@@ -31,6 +31,9 @@ namespace Nvelope.Reflection
         /// <param name="source"></param>
         /// <param name="careAboutCase"></param>
         /// <param name="field"></param>
+        /// <exception cref="FieldNotFoundException">The field isn't set on the object</exception>
+        /// <exception cref="ArgumentException">The field isn't supported (an indexed field)</exception>
+        /// <exception cref="Exception">I'm not really sure what this means</exception>
         /// <returns></returns>
         public static object Get(this object source,
             string field, bool careAboutCase = true)
@@ -45,6 +48,7 @@ namespace Nvelope.Reflection
                 throw new FieldNotFoundException(source, field);
             }
             if (members.Count() > 1) {
+                // TODO: test this
                 throw new Exception("Too many members found. Don't know what this means");
             }
             var m = members[0];

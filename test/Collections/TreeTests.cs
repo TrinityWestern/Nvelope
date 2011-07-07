@@ -53,6 +53,7 @@ namespace Nvelope.Tests.Collections
         public void Formatting()
         {
             string format = "5\n  3\n    1\n    2\n  7\n";
+            format = format.Replace("\n", Environment.NewLine);
             Assert.AreEqual(format, GrowTree().ToString());
         }
 

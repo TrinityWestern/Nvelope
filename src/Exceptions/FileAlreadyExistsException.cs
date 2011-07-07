@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
 
 namespace Nvelope.Exceptions
 {
-    public class FileAlreadyExistsException : System.IO.IOException
+    [Serializable]
+    public class FileAlreadyExistsException : IOException
     {
         public String FileName { get; set; }
 
