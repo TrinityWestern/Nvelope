@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace Nvelope
 {
+    //TODO: The code in here should be moved into chocolate
     public static class HttpRequestExtensions
     {
         /// <summary>
