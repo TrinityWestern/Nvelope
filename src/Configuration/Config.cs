@@ -29,12 +29,10 @@ namespace Nvelope.Configuration
         {
             get
             {
-                if (_location == null)
-                    _location = _getLocation();
-                return _location.Value;
+                return _getLocation();
             }
         }
-        private static DeploymentLocation? _location = null;
+        
         private static DeploymentLocation _getLocation()
         {            
             // Check the machine.config for the setting
