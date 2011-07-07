@@ -127,13 +127,13 @@ namespace Nvelope
         /// <param name="namespaceManager"></param>
         /// <param name="xpathExpression"></param>
         /// <returns></returns>
-        public static string GetNamespaceUri(this XmlNamespaceManager namespaceManager, string xpathExpression)
+        public static Uri GetNamespace(this XmlNamespaceManager namespaceManager, string xpathExpression)
         {
             var prefix = xpathExpression.FirstNodePrefix();
             if (namespaceManager.HasNamespace(prefix))
-                return namespaceManager.LookupNamespace(prefix);
+                return new Uri(namespaceManager.LookupNamespace(prefix));
             else
-                return string.Empty;
+                return null;
         }
 
         /// <summary>
@@ -513,7 +513,9 @@ namespace Nvelope
         {
             if (nodeName.IsAttribute()) // it's an attribute
             {
-                XmlAttribute att = node.GetOwnerDocument().CreateAttribute(nodeName.FirstNodeName(), namespaceManager.GetNamespaceUri(nodeName));
+                XmlAttribute att = node.GetOwnerDocument().CreateAttribute(
+                    nodeName.FirstNodeName(),
+                    namespaceManager.GetNamespace(nodeName).ToString());
                 att.Value = value;
                 node.Attributes.Append(att);
 
@@ -526,7 +528,9 @@ namespace Nvelope
                 if (nodeName.HasPredicate())
                     atts = getAttsFromPredicate(nodeName);
                 
-                XmlElement elem = node.GetOwnerDocument().CreateElement(nodeName.FirstNodeName(), namespaceManager.GetNamespaceUri(nodeName));
+                XmlElement elem = node.GetOwnerDocument().CreateElement(
+                    nodeName.FirstNodeName(),
+                    namespaceManager.GetNamespace(nodeName).ToString());
                 elem.InnerText = value;
                 // Set the attributes
                 atts.Each(kv => elem.SetVal("/@" + kv.Key, kv.Value));
