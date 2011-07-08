@@ -89,11 +89,12 @@ namespace Nvelope.Collections
         /// Add a new child node.
         /// </summary>
         /// <param name="newChild"></param>
-        public IDirectedGraph<T> AppendChild(IDirectedGraph<T> node)
+        public IDirectedGraph<T> AppendChild(IDirectedGraph<T> graph)
         {
             IDirectedGraph<T> testnode = this;
             while (testnode != null) {
-                if (node.Eq(testnode)) {
+                if (graph.Eq(testnode))
+                {
                     throw new ArgumentException(
                         "Adding a node that is already in the tree, this will create a cycle");
                 } else {
@@ -101,20 +102,20 @@ namespace Nvelope.Collections
                 }
             }
 
-            node.Parent = this;
-            this.children.Add((DirectedAcyclicGraph<T>)node);
-            return node;
+            graph.Parent = this;
+            this.children.Add((DirectedAcyclicGraph<T>)graph);
+            return graph;
         }
 
         /// <summary>
         /// Remove a child node.
         /// </summary>
         /// <param name="node"></param>
-        public IDirectedGraph<T> RemoveChild(IDirectedGraph<T> node)
+        public IDirectedGraph<T> RemoveChild(IDirectedGraph<T> graph)
         {
-            this.children.Remove((DirectedAcyclicGraph<T>)node);
-            node.Parent = null;
-            return node;
+            this.children.Remove((DirectedAcyclicGraph<T>)graph);
+            graph.Parent = null;
+            return graph;
         }
 
         /// <summary>

@@ -2,10 +2,10 @@
 namespace Nvelope.Collections
 {
     using System;
-    using Nvelope;
     using System.Collections.Generic;
-    using System.Text;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
+    using Nvelope;
 
     /// <summary>
     /// This interface allows the implementing class to be used in various tree-based 
@@ -21,6 +21,8 @@ namespace Nvelope.Collections
         /// of the object.
         /// </summary>
         /// <returns></returns>
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures",
+            Justification = "This complication is necessary for graphs")]
         IEnumerable<IDirectedGraph<T>> Children { get; }
 
         /// <summary>
@@ -35,7 +37,8 @@ namespace Nvelope.Collections
 
     public static class IDirectedGraphExtensions
     {
-
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures",
+            Justification = "This complication is necessary for graphs")]
         public static IEnumerable<IDirectedGraph<T>> Traverse<T>(
             this IDirectedGraph<T> graph,
             TreeTraversal mode = TreeTraversal.PreOrder)
