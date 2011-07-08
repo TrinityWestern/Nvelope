@@ -55,7 +55,7 @@
     <Compile Include="HtmlExtensions.cs" />
     <Compile Include="Interval.cs" />
     <Compile Include="Collections\OrderedSequential.cs" />
-    <Compile Include="Collections\ITreeable.cs">
+    <Compile Include="Collections\IDirectedGraph.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Collections\MirrorDictionary.cs" />

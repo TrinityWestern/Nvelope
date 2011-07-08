@@ -38,7 +38,7 @@ namespace Nvelope.Tests.Collections
         {
             var tree = GrowTree();
             Assert.AreEqual("(5,3,1,2,7)",
-                tree.Select(n => n.Value).Print());
+                tree.Traverse().Select(n => n.Value).Print());
             Assert.AreEqual("(1,3,2,5,7)",
                 tree.Traverse(TreeTraversal.InOrder)
                 .Select(n => n.Value).Print());
@@ -65,9 +65,9 @@ namespace Nvelope.Tests.Collections
             tree.Promote(node);
             Assert.IsNull(node.Parent);
             Assert.AreEqual("(5,7)",
-                tree.Select(n => n.Value).Print());
+                tree.Traverse().Select(n => n.Value).Print());
             Assert.AreEqual("(3,1,2,5,7)",
-                node.Select(n => n.Value).Print());
+                node.Traverse().Select(n => n.Value).Print());
 
         }
 

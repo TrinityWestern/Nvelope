@@ -9,8 +9,11 @@ namespace Nvelope.Collections
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
 
+    [SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix",
+        Justification = "Graph suffix is good enough")]
     public enum TreeTraversal
     {
         /// <summary>
@@ -39,7 +42,7 @@ namespace Nvelope.Collections
     /// </para>This is actually a connected DAG in mathematical terms, similar to a tree.</para>
     /// </summary>
     [Serializable]
-    public class DirectedAcyclicGraph<T> : IEnumerable, IEnumerable<DirectedAcyclicGraph<T>>, ITreeable<T>
+    public class DirectedAcyclicGraph<T> : IDirectedGraph<T>
     {
         private DirectedAcyclicGraph<T> parent;
         private List<DirectedAcyclicGraph<T>> children;
@@ -63,15 +66,16 @@ namespace Nvelope.Collections
         /// <summary>
         /// The parent node (null if this is the root node)
         /// </summary>
-        public DirectedAcyclicGraph<T> Parent
+        public IDirectedGraph<T> Parent
         {
             get { return this.parent; }
+            set { this.parent = (DirectedAcyclicGraph<T>)value; }
         }
 
         /// <summary>
         /// The children of this node
         /// </summary>
-        public IEnumerable<DirectedAcyclicGraph<T>> Children
+        public IEnumerable<IDirectedGraph<T>> Children
         {
             get { return this.children; }
         }
@@ -81,18 +85,13 @@ namespace Nvelope.Collections
             get { return this.Value; }
         }
 
-        public IEnumerable<ITreeable<T>> GetChildren()
-        {
-            return this.children;
-        }
-
         /// <summary>
         /// Add a new child node.
         /// </summary>
         /// <param name="newChild"></param>
-        public DirectedAcyclicGraph<T> AppendChild(DirectedAcyclicGraph<T> node)
+        public IDirectedGraph<T> AppendChild(IDirectedGraph<T> node)
         {
-            var testnode = this;
+            IDirectedGraph<T> testnode = this;
             while (testnode != null) {
                 if (node.Eq(testnode)) {
                     throw new ArgumentException(
@@ -102,8 +101,8 @@ namespace Nvelope.Collections
                 }
             }
 
-            node.parent = this;
-            this.children.Add(node);
+            node.Parent = this;
+            this.children.Add((DirectedAcyclicGraph<T>)node);
             return node;
         }
 
@@ -111,10 +110,10 @@ namespace Nvelope.Collections
         /// Remove a child node.
         /// </summary>
         /// <param name="node"></param>
-        public DirectedAcyclicGraph<T> RemoveChild(DirectedAcyclicGraph<T> node)
+        public IDirectedGraph<T> RemoveChild(IDirectedGraph<T> node)
         {
-            this.children.Remove(node);
-            node.parent = null;
+            this.children.Remove((DirectedAcyclicGraph<T>)node);
+            node.Parent = null;
             return node;
         }
 
@@ -124,7 +123,7 @@ namespace Nvelope.Collections
         [Obsolete("I'm not sure this is a good thing to use, just do the select yourself")]
         public bool Contains(T value)
         {
-            return this.Select(n => n.Value).Contains(value);
+            return this.Traverse().Select(n => n.Value).Contains(value);
         }
 
         /// <summary>
@@ -133,7 +132,7 @@ namespace Nvelope.Collections
         /// Subordiates the rest of the tree to the root node of the subtree.
         /// </summary>
         /// <param name="subtree"></param>
-        public void Promote(DirectedAcyclicGraph<T> node)
+        public void Promote(IDirectedGraph<T> node)
         {
             if (node == this) return;
 
@@ -146,72 +145,6 @@ namespace Nvelope.Collections
         /// </summary>
         public override string ToString() {
             return this.ToString(string.Empty);
-        }
-        
-        public IEnumerable<DirectedAcyclicGraph<T>> Traverse(
-            TreeTraversal mode = TreeTraversal.PreOrder)
-        {
-            if (mode == TreeTraversal.PreOrder) {
-                yield return this;
-                foreach (var child in this.Children) {
-                    foreach (var item in child.Traverse(mode)) {
-                        yield return item;
-                    }
-                }
-            } else if (mode == TreeTraversal.InOrder) {
-                var children = this.Children.Copy();
-
-                if (children.Any()) {
-                    var first = children.Unshift();
-                    foreach (var item in first.Traverse(mode)) {
-                        yield return item;
-                    }
-                }
-
-                yield return this;
-
-                foreach (var child in children) {
-                    foreach (var item in child.Traverse(mode)) {
-                        yield return item;
-                    }
-                }
-            } else if (mode == TreeTraversal.PostOrder) {
-                foreach (var child in this.Children) {
-                    foreach (var item in child.Traverse(mode)) {
-                        yield return item;
-                    }
-                }
-
-                yield return this;
-            } else if (mode == TreeTraversal.LevelOrder) {
-                yield return this;
-
-                var level = this.Children;
-                var nextlevel = new List<DirectedAcyclicGraph<T>>();
-
-                while (level.Any()) {
-                    foreach (var item in level) {
-                        yield return item;
-                        nextlevel.AddRange(item.Children);
-                    }
-
-                    level = nextlevel.Copy();
-                    nextlevel.Clear();
-                }
-            } else { throw new ArgumentException("Unknown traversal mode"); }
-        }
-
-        IEnumerator<DirectedAcyclicGraph<T>> IEnumerable<DirectedAcyclicGraph<T>>.GetEnumerator()
-        {
-            foreach (var item in this.Traverse()) { yield return item; }
-        }
-
-        /// <summary>
-        /// Silly method required for the old .NET interface
-        /// </summary>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            foreach (object item in this) { yield return item; }
         }
 
 #region privates
