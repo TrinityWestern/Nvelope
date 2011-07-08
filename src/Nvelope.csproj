@@ -60,7 +60,7 @@
     </Compile>
     <Compile Include="Collections\MirrorDictionary.cs" />
     <Compile Include="Collections\SDictionary.cs" />
-    <Compile Include="Collections\DagTree.cs">
+    <Compile Include="Collections\DirectedAcyclicGraph.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Combinatorics\CombinatoricListExtensions.cs" />

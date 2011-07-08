@@ -11,14 +11,14 @@ namespace Nvelope.Tests.Collections
     [TestFixture]
     public class TreeTests
     {
-        protected DagTree<int> GrowTree()
+        protected DirectedAcyclicGraph<int> GrowTree()
         {
-            var tree = new DagTree<int>(5);
-            var branch = new DagTree<int>(3);
-            branch.AppendChild(new DagTree<int>(1));
-            branch.AppendChild(new DagTree<int>(2));
+            var tree = new DirectedAcyclicGraph<int>(5);
+            var branch = new DirectedAcyclicGraph<int>(3);
+            branch.AppendChild(new DirectedAcyclicGraph<int>(1));
+            branch.AppendChild(new DirectedAcyclicGraph<int>(2));
             tree.AppendChild(branch);
-            tree.AppendChild(new DagTree<int>(7));
+            tree.AppendChild(new DirectedAcyclicGraph<int>(7));
             return tree;
         }
 

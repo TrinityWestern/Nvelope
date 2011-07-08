@@ -1,3 +1,9 @@
+//-----------------------------------------------------------------------
+// <copyright file="DirectedAcyclicGraph.cs" company="TWU">
+// MIT Licenced
+// </copyright>
+//-----------------------------------------------------------------------
+
 namespace Nvelope.Collections
 {
     using System;
@@ -29,25 +35,24 @@ namespace Nvelope.Collections
     }
     
     /// <summary>
-    /// Represents a Node in a tree
-    /// 
-    /// Note: This is actually a connected DAG in mathematical terms, not a tree.
+    /// <para>Represents a Node in a tree</para>
+    /// </para>This is actually a connected DAG in mathematical terms, similar to a tree.</para>
     /// </summary>
     [Serializable]
-    public class DagTree<T> : IComparable, IEnumerable, IEnumerable<DagTree<T>>, ITreeable<T> where T : IComparable
+    public class DirectedAcyclicGraph<T> : IEnumerable, IEnumerable<DirectedAcyclicGraph<T>>, ITreeable<T>
     {
-        private DagTree<T> parent;
-        private List<DagTree<T>> children;
+        private DirectedAcyclicGraph<T> parent;
+        private List<DirectedAcyclicGraph<T>> children;
 
         /// <summary>
         /// Create new treenode
         /// </summary>
         /// <param name="data"></param>
-        public DagTree(T data)
+        public DirectedAcyclicGraph(T data)
         {
             this.Value = data;
             this.parent = null;
-            this.children = new List<DagTree<T>>();
+            this.children = new List<DirectedAcyclicGraph<T>>();
         }
 
         /// <summary>
@@ -58,7 +63,7 @@ namespace Nvelope.Collections
         /// <summary>
         /// The parent node (null if this is the root node)
         /// </summary>
-        public DagTree<T> Parent
+        public DirectedAcyclicGraph<T> Parent
         {
             get { return this.parent; }
         }
@@ -66,7 +71,7 @@ namespace Nvelope.Collections
         /// <summary>
         /// The children of this node
         /// </summary>
-        public IEnumerable<DagTree<T>> Children
+        public IEnumerable<DirectedAcyclicGraph<T>> Children
         {
             get { return this.children; }
         }
@@ -85,7 +90,7 @@ namespace Nvelope.Collections
         /// Add a new child node.
         /// </summary>
         /// <param name="newChild"></param>
-        public DagTree<T> AppendChild(DagTree<T> node)
+        public DirectedAcyclicGraph<T> AppendChild(DirectedAcyclicGraph<T> node)
         {
             var testnode = this;
             while (testnode != null) {
@@ -106,7 +111,7 @@ namespace Nvelope.Collections
         /// Remove a child node.
         /// </summary>
         /// <param name="node"></param>
-        public DagTree<T> RemoveChild(DagTree<T> node)
+        public DirectedAcyclicGraph<T> RemoveChild(DirectedAcyclicGraph<T> node)
         {
             this.children.Remove(node);
             node.parent = null;
@@ -128,7 +133,7 @@ namespace Nvelope.Collections
         /// Subordiates the rest of the tree to the root node of the subtree.
         /// </summary>
         /// <param name="subtree"></param>
-        public void Promote(DagTree<T> node)
+        public void Promote(DirectedAcyclicGraph<T> node)
         {
             if (node == this) return;
 
@@ -143,7 +148,7 @@ namespace Nvelope.Collections
             return this.ToString(string.Empty);
         }
         
-        public IEnumerable<DagTree<T>> Traverse(
+        public IEnumerable<DirectedAcyclicGraph<T>> Traverse(
             TreeTraversal mode = TreeTraversal.PreOrder)
         {
             if (mode == TreeTraversal.PreOrder) {
@@ -182,7 +187,7 @@ namespace Nvelope.Collections
                 yield return this;
 
                 var level = this.Children;
-                var nextlevel = new List<DagTree<T>>();
+                var nextlevel = new List<DirectedAcyclicGraph<T>>();
 
                 while (level.Any()) {
                     foreach (var item in level) {
@@ -196,7 +201,7 @@ namespace Nvelope.Collections
             } else { throw new ArgumentException("Unknown traversal mode"); }
         }
 
-        IEnumerator<DagTree<T>> IEnumerable<DagTree<T>>.GetEnumerator()
+        IEnumerator<DirectedAcyclicGraph<T>> IEnumerable<DirectedAcyclicGraph<T>>.GetEnumerator()
         {
             foreach (var item in this.Traverse()) { yield return item; }
         }
@@ -209,25 +214,11 @@ namespace Nvelope.Collections
             foreach (object item in this) { yield return item; }
         }
 
-#region IComparable Members
-        /// <summary>
-        /// Implements CompareTo
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        int IComparable.CompareTo(object obj)
-        {
-            if (!(obj is DagTree<T>))
-                return 1;
-            return this.Value.CompareTo(obj);
-        }
-
-#endregion
 #region privates
         protected string ToString(string prefix)
         {
             string res = prefix + this.Value.ToString() + Environment.NewLine;
-            foreach (DagTree<T> child in this.Children) {
+            foreach (DirectedAcyclicGraph<T> child in this.Children) {
                 res += child.ToString(prefix + "  ");
             }
             return res;
