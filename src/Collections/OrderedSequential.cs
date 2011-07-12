@@ -5,18 +5,33 @@ namespace Nvelope.Collections
 {
     public abstract class OrderedSequential<T> : Comparable<T>
     {
-        public static T operator +(OrderedSequential<T> obj, int n)
+        protected abstract T Add(int value);
+
+        public static T operator +(OrderedSequential<T> obj, int value)
         {
-            return obj.Add(n);
+            return obj.Add(value);
         }
-        public static T operator -(OrderedSequential<T> obj, int n)
+
+        public T Subtract(int value)
         {
-            return obj.Add(-n);
+            return this.Add(-value);
         }
-        public static int operator -(OrderedSequential<T> obj1, T obj2)
+
+        public static T operator -(OrderedSequential<T> obj, int value)
         {
-            return obj1.Difference(obj2);
+            return obj.Subtract(value);
         }
-        protected abstract T Add(int n);
+
+        public int Subtract(T value)
+        {
+            return this.Difference(value);
+        }
+
+        public static int operator -(OrderedSequential<T> obj, T value)
+        {
+            return obj.Subtract(value);
+        }
+
+
     }
 }
