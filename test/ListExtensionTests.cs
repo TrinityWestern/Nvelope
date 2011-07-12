@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
-using Nvelope;
-using Nvelope.Reflection;
-
-namespace Nvelope.Tests
+﻿namespace Nvelope.Tests
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using NUnit.Framework;
+    using Nvelope;
+    using Nvelope.Reflection;
+
     [TestFixture]
     public class ListExtensionTests
     {
@@ -15,25 +14,24 @@ namespace Nvelope.Tests
         public void Shift()
         {
             var list = "abcdef";
-            var victims = new char[]{'c','e'};
-            var res = list.Shift(victims, -1).ToSeperatedList("");
+            var victims = new char[] { 'c', 'e' };
+            var res = list.Shift(victims, -1).ToSeperatedList(string.Empty);
             Assert.AreEqual("acbedf", res);
 
             victims = new char[] { 'a', 'b' };
-            res = list.Shift(victims, -5).ToSeperatedList("");
+            res = list.Shift(victims, -5).ToSeperatedList(string.Empty);
             Assert.AreEqual("abcdef", res);
 
             victims = new char[] { 'b', 'd' };
-            res = list.Shift(victims, 1).ToSeperatedList("");
+            res = list.Shift(victims, 1).ToSeperatedList(string.Empty);
             Assert.AreEqual("acbedf", res);
 
             victims = new char[] { 'e', 'f' };
-            res = list.Shift(victims, 10).ToSeperatedList("");
+            res = list.Shift(victims, 10).ToSeperatedList(string.Empty);
             Assert.AreEqual("abcdef", res);
 
-            res = list.Shift('f'.List(), 100).ToSeperatedList("");
+            res = list.Shift('f'.List(), 100).ToSeperatedList(string.Empty);
             Assert.AreEqual("abcdef", res);
-
         }
 
         [Test]
@@ -69,23 +67,23 @@ namespace Nvelope.Tests
         {
             Assert.AreEqual("(b,c)", "abc".Rest().Print());
             Assert.AreEqual("()", "a".Rest().Print());
-            Assert.AreEqual("()", "".Rest().Print());  
+            Assert.AreEqual("()", string.Empty.Rest().Print());
         }
 
         [Test]
         public void ToSeperatedList()
-        {            
+        {
             Assert.AreEqual("1,2,3,4", 1.To(4).ToSeperatedList(","));
             Assert.AreEqual("1, 2, 3, 4", 1.To(4).ToSeperatedList(", "));
-            Assert.AreEqual("1234", 1.To(4).ToSeperatedList(""));
-            Assert.AreEqual("", new int[] { }.ToSeperatedList(""));
-            Assert.AreEqual("", new int[] { }.ToSeperatedList(","));            
+            Assert.AreEqual("1234", 1.To(4).ToSeperatedList(string.Empty));
+            Assert.AreEqual(string.Empty, new int[] { }.ToSeperatedList(string.Empty));
+            Assert.AreEqual(string.Empty, new int[] { }.ToSeperatedList(","));
         }
 
         [Test]
         public void AreAllEqual()
         {
-            Assert.IsTrue("".AreAllEqual());
+            Assert.IsTrue(string.Empty.AreAllEqual());
             Assert.IsTrue("1111".AreAllEqual());
             Assert.IsFalse("1112".AreAllEqual());
         }
@@ -168,8 +166,8 @@ namespace Nvelope.Tests
             Assert.AreEqual("(0,1)", list.Chop().Print());
             Assert.AreEqual("()", 1.List().Chop().Print());
             Assert.AreEqual("()", new List<int>().Chop().Print());
-
         }
+
         [Test]
         public void FirstOr()
         {
@@ -186,8 +184,8 @@ namespace Nvelope.Tests
         [Test]
         public void IsSameAs()
         {
-            var list = new int[]{1,2,3};
-            var other = new int[] {1,2,3};
+            var list = new int[] { 1, 2, 3 };
+            var other = new int[] { 1, 2, 3 };
             Assert.IsTrue(list.IsSameAs(other));
             Assert.IsFalse(list.IsSameAs(other.Rest()));
             Assert.IsFalse(list.IsSameAs(other.Skip(1)));
@@ -237,9 +235,9 @@ namespace Nvelope.Tests
         [Test]
         public void Or()
         {
-            var empty = new int[]{};
-            var a = new int[]{1,2,3};
-            var b = new int[]{4,5,6};
+            var empty = new int[] { };
+            var a = new int[] { 1, 2, 3 };
+            var b = new int[] { 4, 5, 6 };
             Assert.AreEqual("(1,2,3)", a.Or(b).Print());
             Assert.AreEqual("(4,5,6)", empty.Or(b).Print());
         }
@@ -255,7 +253,6 @@ namespace Nvelope.Tests
             Assert.AreEqual("(1,2,3,4)", odd.Interleave(shortEven).Print());
             Assert.AreEqual("(1,2,3,4,5,6,7,8)", odd.Interleave(longEven).Print());
             Assert.AreEqual("(1,0,3,0,5,0,7,0)", odd.Interleave(zeros).Print());
-
         }
 
         [Test]
@@ -279,6 +276,7 @@ namespace Nvelope.Tests
             var i = 1.Inc().Take(10);
             var parts = i.Partition(1.Inc().Take(3));
             Assert.AreEqual("((1),(2,3),(4,5,6),(7),(8,9),(10))", parts.Print());
+            
             // Make sure we can select 0-length lists
             Assert.AreEqual("((),(1,2,3,4,5),(),(6,7,8,9,10))", i.Partition(0.And(5)).Print());
         }
@@ -303,6 +301,7 @@ namespace Nvelope.Tests
         public void Intervals()
         {
             var i = new int[] { 1, 2, 4, 7, 11 };
+            
             // Compute the distance between each successive element, and return that 
             // as a list: the diff between 2 and 1 is 1; between 4 and 2 is 2, and so on
             Assert.AreEqual("(1,2,3,4)", i.Intervals((x, y) => y - x).Print());
@@ -313,9 +312,10 @@ namespace Nvelope.Tests
         {
             var strs = new string[] { "dddd", "ccc", "bb", "a" };
             Assert.AreEqual("dddd", strs.HavingMax(s => s.Length));
+            
             // If there's 2 things that have the max value, one of them should be 
             // returned (which one is undefined)
-            Assert.AreEqual(4, strs.And("eeee").HavingMax(s => s.Length).Length);           
+            Assert.AreEqual(4, strs.And("eeee").HavingMax(s => s.Length).Length);
         }
 
         [Test]
@@ -327,7 +327,7 @@ namespace Nvelope.Tests
         [Test]
         public void TakeByGroup()
         {
-            var i = new string[]{"a", "b", "c", "d", "aa", "bb", "cc", "dd"};
+            var i = new string[] { "a", "b", "c", "d", "aa", "bb", "cc", "dd" };
             Assert.AreEqual("(a,b,c,d)", i.TakeByGroup(s => s.Length, 1).Print());
             Assert.AreEqual("(a,b,c,d)", i.TakeByGroup(s => s.Length, 2).Print());
             Assert.AreEqual("(a,b,c,d)", i.TakeByGroup(s => s.Length, 3).Print());
@@ -338,26 +338,33 @@ namespace Nvelope.Tests
         [Test]
         public void Copy()
         {
-            var data = new int[][] {
+            var data = new int[][]
+            {
                 new int[] { 1, 2, 3 },
                 new int[] { 4, 5, 6 },
-                new int[] { 7, 8, 9 }};
+                new int[] { 7, 8, 9 }
+            };
 
             var original = new List<List<int>>();
             foreach (var row in data)
+            {
                 original.Add(row.ToList());
+            }
 
             var copy = original.Copy();
+            
             // the copy contains the same items as the original
             // so if you modify the items they are modified in both
             Assert.AreEqual(original[1][1], copy[1][1]);
             original[1][1] = 0;
             Assert.AreEqual(original[1][1], copy[1][1]);
+            
             // if you remove an item in the original list the item
             // is not removed in the copy
             original.Remove(original[2]);
             Assert.AreEqual(2, original.Count());
             Assert.AreEqual(3, copy.Count());
+
             // if you switch out an item in one copy it does not
             // modify the other copy
             Assert.AreEqual(original[0][0], copy[0][0]);
@@ -392,13 +399,15 @@ namespace Nvelope.Tests
         [Test]
         public void Print()
         {
-            var list = new Dictionary<string, object>[] {
-                new {name = "George", size=34}._AsDictionary(),
-                new {name = "Alice", size=29}._AsDictionary(),
-                new {name = "Dan", size=30}._AsDictionary()
+            var list = new Dictionary<string, object>[]
+            {
+                new { name = "George", size = 34 }._AsDictionary(),
+                new { name = "Alice", size = 29 }._AsDictionary(),
+                new { name = "Dan", size = 30 }._AsDictionary()
             };
-            Assert.AreEqual("(([name,George],[size,34])," +
-                "([name,Alice],[size,29]),([name,Dan],[size,30]))", list.Print());
+            Assert.AreEqual(
+                "(([name,George],[size,34]),([name,Alice],[size,29]),([name,Dan],[size,30]))",
+                list.Print());
         }
 
         [Test]
@@ -413,16 +422,18 @@ namespace Nvelope.Tests
         public void LastOr()
         {
             Assert.AreEqual('c', "abc".LastOr('x'));
-            Assert.AreEqual('x', "".LastOr('x'));
+            Assert.AreEqual('x', string.Empty.LastOr('x'));
         }
 
         [Test]
         public void Flatten()
         {
-            var data = new int[][] {
+            var data = new int[][]
+            {
                 new int[] { 1, 2, 3 },
                 new int[] { 4, 5, 6 },
-                new int[] { 7, 8, 9 }};
+                new int[] { 7, 8, 9 }
+            };
 
             Assert.AreEqual(1.To(9), data.Flatten());
         }
