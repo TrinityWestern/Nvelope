@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Web;
-using System.Collections.Generic;
-using System.Linq;
+using System.Globalization;
 using System.Text.RegularExpressions;
+using System.Web;
 
 namespace Nvelope
 {
@@ -37,7 +36,8 @@ namespace Nvelope
         private static string CreateLink(Match m)
         {
             var url = HttpUtility.HtmlEncode(m.Value);
-            return string.Format("<a href='{0}'>{0}</a>", url);
+            return string.Format(CultureInfo.InvariantCulture,
+                "<a href='{0}'>{0}</a>", url);
         }
     }
 }
