@@ -1,3 +1,8 @@
+//-----------------------------------------------------------------------
+// <copyright file="IDirectedGraph.cs" company="TWU">
+// MIT Licenced
+// </copyright>
+//-----------------------------------------------------------------------
 
 namespace Nvelope.Collections
 {
@@ -6,6 +11,29 @@ namespace Nvelope.Collections
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using Nvelope;
+
+    public enum DirectedGraphTraversal
+    {
+        /// <summary>
+        /// root, left subtree, right subtree
+        /// </summary>
+        PreOrder,
+
+        /// <summary>
+        /// left subtree, root, right subtree
+        /// </summary>
+        InOrder,
+
+        /// <summary>
+        /// left subtree, right subtree, root
+        /// </summary>
+        PostOrder,
+
+        /// <summary>
+        /// self, then children, then grandchildren, great grandchildren, etc
+        /// </summary>
+        LevelOrder
+    }
 
     /// <summary>
     /// This interface allows the implementing class to be used in various tree-based 
@@ -41,16 +69,16 @@ namespace Nvelope.Collections
             Justification = "This complication is necessary for graphs")]
         public static IEnumerable<IDirectedGraph<T>> Traverse<T>(
             this IDirectedGraph<T> graph,
-            TreeTraversal mode = TreeTraversal.PreOrder)
+            DirectedGraphTraversal mode = DirectedGraphTraversal.PreOrder)
         {
-            if (mode == TreeTraversal.PreOrder) {
+            if (mode == DirectedGraphTraversal.PreOrder) {
                 yield return graph;
                 foreach (var child in graph.Children) {
                     foreach (var item in child.Traverse(mode)) {
                         yield return item;
                     }
                 }
-            } else if (mode == TreeTraversal.InOrder) {
+            } else if (mode == DirectedGraphTraversal.InOrder) {
                 var children = graph.Children.Copy();
 
                 if (children.Any()) {
@@ -67,7 +95,7 @@ namespace Nvelope.Collections
                         yield return item;
                     }
                 }
-            } else if (mode == TreeTraversal.PostOrder) {
+            } else if (mode == DirectedGraphTraversal.PostOrder) {
                 foreach (var child in graph.Children) {
                     foreach (var item in child.Traverse(mode)) {
                         yield return item;
@@ -75,7 +103,7 @@ namespace Nvelope.Collections
                 }
 
                 yield return graph;
-            } else if (mode == TreeTraversal.LevelOrder) {
+            } else if (mode == DirectedGraphTraversal.LevelOrder) {
                 yield return graph;
 
                 var level = graph.Children;

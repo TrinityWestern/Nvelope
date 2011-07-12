@@ -40,13 +40,13 @@ namespace Nvelope.Tests.Collections
             Assert.AreEqual("(5,3,1,2,7)",
                 tree.Traverse().Select(n => n.Value).Print());
             Assert.AreEqual("(1,3,2,5,7)",
-                tree.Traverse(TreeTraversal.InOrder)
+                tree.Traverse(DirectedGraphTraversal.InOrder)
                 .Select(n => n.Value).Print());
             Assert.AreEqual("(1,2,3,7,5)",
-                tree.Traverse(TreeTraversal.PostOrder)
+                tree.Traverse(DirectedGraphTraversal.PostOrder)
                 .Select(n => n.Value).Print());
             Assert.AreEqual("(5,3,7,1,2)",
-                tree.Traverse(TreeTraversal.LevelOrder)
+                tree.Traverse(DirectedGraphTraversal.LevelOrder)
                 .Select(n => n.Value).Print());
         }
         [Test]

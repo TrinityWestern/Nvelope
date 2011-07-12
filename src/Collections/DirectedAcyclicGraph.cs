@@ -12,35 +12,12 @@ namespace Nvelope.Collections
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
 
-    [SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix",
-        Justification = "Graph suffix is good enough")]
-    public enum TreeTraversal
-    {
-        /// <summary>
-        /// root, left subtree, right subtree
-        /// </summary>
-        PreOrder,
-
-        /// <summary>
-        /// left subtree, root, right subtree
-        /// </summary>
-        InOrder,
-
-        /// <summary>
-        /// left subtree, right subtree, root
-        /// </summary>
-        PostOrder,
-
-        /// <summary>
-        /// self, then children, then grandchildren, great grandchildren, etc
-        /// </summary>
-        LevelOrder
-    }
-    
     /// <summary>
     /// <para>Represents a Node in a tree</para>
     /// </para>This is actually a connected DAG in mathematical terms, similar to a tree.</para>
     /// </summary>
+    [SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix",
+        Justification = "Graph suffix is good enough")]
     [Serializable]
     public class DirectedAcyclicGraph<T> : IDirectedGraph<T>
     {
