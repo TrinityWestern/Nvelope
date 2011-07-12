@@ -15,7 +15,7 @@ namespace Nvelope.Tests.Configuration
         [TearDown]
         public void Cleanup()
         {
-            Environment.SetEnvironmentVariable(Config.DeploymentEnvirontmentVariable, null);
+            Environment.SetEnvironmentVariable(Config.DeploymentEnvironmentVariable, null);
         }
 
         [Test]
@@ -51,7 +51,7 @@ namespace Nvelope.Tests.Configuration
 
             // check live settings
             Environment.SetEnvironmentVariable(
-                Config.DeploymentEnvirontmentVariable, 
+                Config.DeploymentEnvironmentVariable, 
                 DeploymentLocation.Live.ToString(),
                 EnvironmentVariableTarget.Process);
 
@@ -60,7 +60,7 @@ namespace Nvelope.Tests.Configuration
 
             // check dev settings
             Environment.SetEnvironmentVariable(
-                Config.DeploymentEnvirontmentVariable,
+                Config.DeploymentEnvironmentVariable,
                 DeploymentLocation.Dev.ToString(),
                 EnvironmentVariableTarget.Process);
 
@@ -68,7 +68,7 @@ namespace Nvelope.Tests.Configuration
             Assert.AreEqual(DeploymentLocation.Dev, Config.Location);
 
             Environment.SetEnvironmentVariable(
-                Config.DeploymentEnvirontmentVariable,
+                Config.DeploymentEnvironmentVariable,
                 DeploymentLocation.Local.ToString(),
                 EnvironmentVariableTarget.Process);
 

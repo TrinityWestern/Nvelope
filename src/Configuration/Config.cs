@@ -13,7 +13,7 @@ namespace Nvelope.Configuration
         // In order to do so, you need to add a DeploymentLocation environment variable to production
         private const string PRODUCTION_MACHINE_CONFIG_SETTING_NAME = "IsTwuProduction";
 
-        public const string DeploymentEnvirontmentVariable = "DeploymentLocation";
+        public const string DeploymentEnvironmentVariable = "DeploymentLocation";
 
         public static bool HasSetting(string name)
         {
@@ -45,7 +45,7 @@ namespace Nvelope.Configuration
             if (isProduction)
                 return DeploymentLocation.Live;
 
-            var loc = Environment.GetEnvironmentVariable(DeploymentEnvirontmentVariable);
+            var loc = Environment.GetEnvironmentVariable(DeploymentEnvironmentVariable);
             if (loc.CanConvertTo<DeploymentLocation>())
                 return loc.ConvertTo<DeploymentLocation>();
 
@@ -59,21 +59,21 @@ namespace Nvelope.Configuration
         /// <summary>
         /// If the config file has a setting, return it, else retun the default_value
         /// </summary>
-        public static string Setting(string name, string default_value = null, bool throw_if_missing = false)
+        public static string Setting(string name, string defaultValue = null, bool throwIfMissing = false)
         {
             var possibleNames = Config.GetLocationizedNames(Location, name);
 
             var res = possibleNames.Select(n => ConfigurationManager.AppSettings[n])
                 .Where(s => s != null)
-                .FirstOr(default_value);
+                .FirstOr(defaultValue);
 
-            if (throw_if_missing && res == null)
+            if (throwIfMissing && res == null)
                 throw new ConfigurationException("The setting '" + name + "' was not found in the config file!");
 
             return res;
         }
 
-        public static string ConnectionString(string name, string default_value = null)
+        public static string ConnectionString(string name, string defaultValue = null)
         {
             var possibleNames = Config.GetLocationizedNames(Location, name);
 
@@ -84,7 +84,7 @@ namespace Nvelope.Configuration
             if (res != null)
                 return res.ConnectionString;
             else
-                return default_value;
+                return defaultValue;
         }
 
         /// <summary>
