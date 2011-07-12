@@ -57,7 +57,7 @@
     <Compile Include="BinaryExtensionTests.cs" />
     <Compile Include="CharListExtensionTests.cs" />
     <Compile Include="Collections\OrderedSequentialTests.cs" />
-    <Compile Include="Collections\MirrorDictionaryTests.cs" />
+    <Compile Include="Collections\DictionaryMirrorTests.cs" />
     <Compile Include="Collections\RangeTests.cs" />
     <Compile Include="Collections\SDictionaryTests.cs" />
     <Compile Include="Collections\TreeTests.cs" />
