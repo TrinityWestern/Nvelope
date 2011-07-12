@@ -17,6 +17,8 @@ namespace Nvelope.Collections
         /// <summary>
         /// root, left subtree, right subtree
         /// </summary>
+        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly",
+            Justification = "This is pre-order traversal, not preordering.")]
         PreOrder,
 
         /// <summary>
