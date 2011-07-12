@@ -15,39 +15,39 @@ namespace Nvelope.Collections
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TValue"></typeparam>
-    public class DictionaryMirror<TKey, TValue>
+    public class DictionaryMirror<TFirst, TSecond>
     {
-        private Dictionary<TKey, TValue> mappingA = new Dictionary<TKey, TValue>();
-        private Dictionary<TValue, TKey> mappingB = new Dictionary<TValue, TKey>();
-        private List<TKey> aList = new List<TKey>();
-        private List<TValue> bList = new List<TValue>();
+        private Dictionary<TFirst, TSecond> mapOne = new Dictionary<TFirst, TSecond>();
+        private Dictionary<TSecond, TFirst> mapTwo = new Dictionary<TSecond, TFirst>();
+        private HashSet<TFirst> SetOne = new HashSet<TFirst>();
+        private HashSet<TSecond> SetTwo = new HashSet<TSecond>();
 
-        public void Add(TKey key, TValue value)
+        public void Add(TFirst valueOne, TSecond valueTwo)
         {
-            mappingA.Add(key, value);
-            mappingB.Add(value, key);
-            aList.Add(key);
-            bList.Add(value);
+            mapOne.Add(valueOne, valueTwo);
+            mapTwo.Add(valueTwo, valueOne);
+            SetOne.Add(valueOne);
+            SetTwo.Add(valueTwo);
         }
 
-        public TKey this[TValue value]
+        public TFirst this[TSecond value]
         {
-            get { return mappingB[value]; }
+            get { return mapTwo[value]; }
         }
 
-        public TValue this[TKey value]
+        public TSecond this[TFirst value]
         {
-            get { return mappingA[value]; }
+            get { return mapOne[value]; }
         }
 
-        public IEnumerable<TKey> Keys() 
+        public IEnumerable<TFirst> AllFirst() 
         {
-            return aList;
+            return SetOne;
         }
 
-        public IEnumerable<TValue> Values() 
+        public IEnumerable<TSecond> AllSecond() 
         {
-            return bList;
+            return SetTwo;
         }
     }
 }

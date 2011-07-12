@@ -19,8 +19,8 @@ namespace Nvelope.Tests.Collections
 
             Assert.AreEqual(2, m["two"]);
             Assert.AreEqual("two", m[2]);
-            Assert.AreEqual("(1,2)", m.Keys().Print());
-            Assert.AreEqual("(one,two)", m.Values().Print());
+            Assert.AreEqual("(1,2)", m.AllFirst().Print());
+            Assert.AreEqual("(one,two)", m.AllSecond().Print());
         }
     }
 }
