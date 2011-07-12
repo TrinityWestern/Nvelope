@@ -13,7 +13,7 @@ namespace Nvelope.Configuration
         // In order to do so, you need to add a DeploymentLocation environment variable to production
         private const string PRODUCTION_MACHINE_CONFIG_SETTING_NAME = "IsTwuProduction";
 
-        public const string DEPLOYMENT_ENV_VAR = "DeploymentLocation";
+        public const string DeploymentEnvirontmentVariable = "DeploymentLocation";
 
         public static bool HasSetting(string name)
         {
@@ -45,7 +45,7 @@ namespace Nvelope.Configuration
             if (isProduction)
                 return DeploymentLocation.Live;
 
-            var loc = Environment.GetEnvironmentVariable(DEPLOYMENT_ENV_VAR);
+            var loc = Environment.GetEnvironmentVariable(DeploymentEnvirontmentVariable);
             if (loc.CanConvertTo<DeploymentLocation>())
                 return loc.ConvertTo<DeploymentLocation>();
 
@@ -61,7 +61,7 @@ namespace Nvelope.Configuration
         /// </summary>
         public static string Setting(string name, string default_value = null, bool throw_if_missing = false)
         {
-            var possibleNames = _getLocationizedNames(Location, name);
+            var possibleNames = Config.GetLocationizedNames(Location, name);
 
             var res = possibleNames.Select(n => ConfigurationManager.AppSettings[n])
                 .Where(s => s != null)
@@ -75,7 +75,7 @@ namespace Nvelope.Configuration
 
         public static string ConnectionString(string name, string default_value = null)
         {
-            var possibleNames = _getLocationizedNames(Location, name);
+            var possibleNames = Config.GetLocationizedNames(Location, name);
 
             var res = possibleNames.Select(n => ConfigurationManager.ConnectionStrings[n])
                 .Where(s => s != null)
@@ -92,7 +92,7 @@ namespace Nvelope.Configuration
         /// could have in the config file, depending on the supplied location.
         /// </summary>
         /// <returns></returns>
-        public static IEnumerable<string> _getLocationizedNames(DeploymentLocation loc, string name)
+        private static IEnumerable<string> GetLocationizedNames(DeploymentLocation loc, string name)
         {
             if (loc == DeploymentLocation.Live)
                 yield return name + "-live";

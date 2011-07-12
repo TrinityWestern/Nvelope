@@ -15,7 +15,7 @@ namespace Nvelope.Tests.Configuration
         [TearDown]
         public void Cleanup()
         {
-            Environment.SetEnvironmentVariable(Config.DEPLOYMENT_ENV_VAR, null);
+            Environment.SetEnvironmentVariable(Config.DeploymentEnvirontmentVariable, null);
         }
 
         [Test]
@@ -40,36 +40,40 @@ namespace Nvelope.Tests.Configuration
         [Test]
         public void ReadsEnvironmentVariable()
         {
-            Environment.SetEnvironmentVariable(Config.DEPLOYMENT_ENV_VAR, 
-                DeploymentLocation.Live.ToString(), 
+            // check basic settings
+            ConfigurationManager.AppSettings["TestSetting"] = "Base";
+            Assert.AreEqual("Base", Config.Setting("TestSetting"));
+
+            // preconfigure settings for different environments
+            ConfigurationManager.AppSettings["TestSetting-live"] = "Live";
+            ConfigurationManager.AppSettings["TestSetting-dev"] = "Dev";
+            ConfigurationManager.AppSettings["TestSetting-local"] = "Local";
+
+            // check live settings
+            Environment.SetEnvironmentVariable(
+                Config.DeploymentEnvirontmentVariable, 
+                DeploymentLocation.Live.ToString(),
                 EnvironmentVariableTarget.Process);
 
+            Assert.AreEqual("Live", Config.Setting("TestSetting"));
             Assert.AreEqual(DeploymentLocation.Live, Config.Location);
 
-            Environment.SetEnvironmentVariable(Config.DEPLOYMENT_ENV_VAR,
+            // check dev settings
+            Environment.SetEnvironmentVariable(
+                Config.DeploymentEnvirontmentVariable,
                 DeploymentLocation.Dev.ToString(),
                 EnvironmentVariableTarget.Process);
 
+            Assert.AreEqual("Dev", Config.Setting("TestSetting"));
             Assert.AreEqual(DeploymentLocation.Dev, Config.Location);
 
-            Environment.SetEnvironmentVariable(Config.DEPLOYMENT_ENV_VAR,
+            Environment.SetEnvironmentVariable(
+                Config.DeploymentEnvirontmentVariable,
                 DeploymentLocation.Local.ToString(),
                 EnvironmentVariableTarget.Process);
 
+            Assert.AreEqual("Local", Config.Setting("TestSetting"));
             Assert.AreEqual(DeploymentLocation.Local, Config.Location);
-        }
-
-        [Test]
-        public void LocationizedNames()
-        {
-            var live  = Config._getLocationizedNames(DeploymentLocation.Live, "name");
-            var dev   = Config._getLocationizedNames(DeploymentLocation.Dev, "name");
-            var local = Config._getLocationizedNames(DeploymentLocation.Local, "name");
-            Assert.AreEqual("name-live", live.First());
-            Assert.AreEqual("name", live.Second());
-            Assert.AreEqual("name-dev", dev.First());
-            Assert.AreEqual("name-dev", local.Second());
-            Assert.AreEqual("name-local", local.First());
         }
 
         [Test]
