@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 using NUnit.Framework;
 using Nvelope.IO;
-using System.IO;
 
 namespace Nvelope.Tests.IO
 {

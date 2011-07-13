@@ -1,6 +1,4 @@
-﻿using System;
-using Nvelope;
-
+﻿
 namespace Nvelope.Collections
 {
     public abstract class OrderedSequential<T> : Comparable<T>

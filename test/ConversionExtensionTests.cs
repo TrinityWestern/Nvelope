@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Data;
 using System.Xml;
+using NUnit.Framework;
 using Nvelope.Exceptions;
 using Nvelope.Reflection;
-using NUnit.Framework;
 
 namespace Nvelope.Tests
 {

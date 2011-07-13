@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using NUnit.Framework;
 using System.Threading;
-using Nvelope;
+using NUnit.Framework;
 
 namespace Nvelope.Tests
 {

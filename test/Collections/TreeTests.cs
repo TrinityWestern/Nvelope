@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NUnit.Framework;
-using Nvelope;
 using Nvelope.Collections;
 
 namespace Nvelope.Tests.Collections

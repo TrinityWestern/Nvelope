@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Collections.Specialized;
-using Nvelope.Reflection;
+using System.Linq;
 using Nvelope.Exceptions;
+using Nvelope.Reflection;
 
 namespace Nvelope.Data
 {

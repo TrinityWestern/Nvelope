@@ -5,7 +5,6 @@
     using System.Linq;
     using NUnit.Framework;
     using Nvelope;
-    using Nvelope.Reflection;
 
     [TestFixture]
     public class ListExtensionTests

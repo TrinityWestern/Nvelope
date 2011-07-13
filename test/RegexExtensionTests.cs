@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
-using Nvelope;
+﻿using System.Linq;
 using System.Text.RegularExpressions;
+using NUnit.Framework;
 
 namespace Nvelope.Tests
 {
