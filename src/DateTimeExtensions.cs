@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace Nvelope
@@ -40,7 +38,7 @@ namespace Nvelope
         /// </summary>
         public static string ToIsoDate(this DateTime source)
         {
-            return source.ToString("yyyy-MM-dd");
+            return source.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
         }
 
         /// <summary>
@@ -129,7 +127,7 @@ namespace Nvelope
         {
             DateTime now = DateTime.Now;
             bool showTime = true;
-            string day = date.ToString("s").Substring(0, 10);
+            string day = date.ToIsoDate();
             if (date.Hour == 0 && date.Minute == 0 && date.Second == 0)
                 showTime = false;
 
