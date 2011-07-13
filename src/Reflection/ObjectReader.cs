@@ -31,10 +31,6 @@ namespace Nvelope.Reflection
         /// </summary>
         public bool SetProperties = true;
         /// <summary>
-        /// Should we trim the contents of the fields when we set them
-        /// </summary>
-        public bool TrimFields = false;
-        /// <summary>
         /// Are the field names case sensitive
         /// </summary>
         public bool IsCaseSensitive = false;
@@ -111,31 +107,30 @@ namespace Nvelope.Reflection
                 filterRef.Invoke(members, args);
             }
             
-            var objFields = members.Declarations();
-            foreach (string objField in objFields.Keys)
+            var decalaration = members.Declarations();
+            foreach (var kv in decalaration)
             {
-                string dataField = objField;
-                if (!IsCaseSensitive && data.Keys.Where(r => r.ToLower() == objField.ToLower()).Count() == 1)
-                    dataField = data.Keys.First(r => r.ToLower() == objField.ToLower());
+                var fieldName = kv.Key;
+                var fieldType = kv.Value;
+                string dataField = fieldName;
+                if (!IsCaseSensitive && data.Keys.Where(r => r.ToUpperInvariant() == fieldName.ToUpperInvariant()).Count() == 1)
+                    dataField = data.Keys.First(r => r.ToUpperInvariant() == fieldName.ToUpperInvariant());
 
                 object val;
                 try
                 {
                     if (data.ContainsKey(dataField))
-                        val = data[dataField].ConvertTo(objFields[objField]);
+                        val = data[dataField].ConvertTo(fieldType);
                     else
-                        val = OnMissingValue(data, objField, objFields[objField]);
+                        val = OnMissingValue(data, fieldName, fieldType);
                 }
                 catch (ConversionException ex)
                 {
-                    throw new ConversionException("Error setting object field \"" + objField + "\" from reader field \"" + dataField +
+                    throw new ConversionException("Error setting object field \"" + fieldName + "\" from reader field \"" + dataField +
                         "\" on type \"" + instance.GetType().Name + "\": " + ex.Message, ex.ExpectedType, ex.Value, ex);
                 }
 
-                if (TrimFields && val is string)
-                    val = ((val as string).Trim());
-
-                instance._Set(objField, val);
+                instance._Set(fieldName, val);
             }
 
             return instance;
@@ -162,7 +157,6 @@ namespace Nvelope.Reflection
             this.PreReadAction = reader.PreReadAction;
             this.SetFields = reader.SetFields;
             this.SetProperties = reader.SetProperties;
-            this.TrimFields = reader.TrimFields;
         }
 
 
@@ -182,11 +176,7 @@ namespace Nvelope.Reflection
             return (T)base.Read(Activator.CreateInstance(typeof(T)), data);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="reader"></param>
-        /// <returns></returns>
+        
         public List<T> ReadAll(IEnumerable<Dictionary<string, object>> data)
         {
             return base.ReadAll(typeof(T), data).Cast<T>().ToList();

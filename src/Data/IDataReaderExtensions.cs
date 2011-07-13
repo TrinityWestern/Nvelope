@@ -58,7 +58,7 @@
         /// </summary>
         public static ReadOnlyCollection<T> ReadAll<T>(this IDataReader reader) where T : class, new()
         {
-            var converter = new ObjectReader<T>() { TrimFields = true };
+            var converter = new ObjectReader<T>();
             return new ReadOnlyCollection<T>(converter.ReadAll(reader.AllRows()));
         }
 
