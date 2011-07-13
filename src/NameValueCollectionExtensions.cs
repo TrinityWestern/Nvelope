@@ -44,7 +44,7 @@ namespace Nvelope
 
             foreach (string item in items)
             {
-                if (item != "")
+                if (item.Length != 0)
                 {
                     string[] itemdata = item.SplitPair(keyValueSeparator);
                     res.Add(itemdata.First(), itemdata.Last());
