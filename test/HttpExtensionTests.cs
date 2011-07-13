@@ -45,8 +45,8 @@ namespace Nvelope.Tests
         [Test]
         public void CheckboxParam()
         {
-            Assert.IsTrue(mock_checked.CheckboxParam("checked"));
-            Assert.IsFalse(mock.CheckboxParam("checked"));
+            Assert.IsTrue(mock_checked.CheckBoxParam("checked"));
+            Assert.IsFalse(mock.CheckBoxParam("checked"));
         }
         [Test]
         public void HasParamTest()

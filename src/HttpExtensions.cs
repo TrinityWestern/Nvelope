@@ -90,7 +90,7 @@ namespace Nvelope
         /// </summary>
         /// <param name="input">The HTML value of a checkbox</param>
         /// <returns>True when the Checkbox value is found in request.Params, False otherwise.</returns>
-        public static bool CheckboxParam(this HttpRequestBase req, string name)
+        public static bool CheckBoxParam(this HttpRequestBase req, string name)
         {
             return req.Params.ContainsKey(name);
         }
@@ -117,9 +117,9 @@ namespace Nvelope
         {
             return new HttpRequestWrapper(req).ParamList<T>(name);
         }
-        public static bool CheckboxParam(this HttpRequest req, string name)
+        public static bool CheckBoxParam(this HttpRequest req, string name)
         {
-            return new HttpRequestWrapper(req).CheckboxParam(name);
+            return new HttpRequestWrapper(req).CheckBoxParam(name);
         }
 
         #endregion
