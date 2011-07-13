@@ -51,18 +51,19 @@ namespace Nvelope.Data
  
         protected object Source { get; set; }
 
-        protected IDictionary<string, TValue> Overrides { get; set; }
+        protected IDictionary<string, TValue> Overrides { get; private set; }
 
         public TValue this[string name]
         {
             get
             {
-                name = name.ToLower();
-                var matchingKeys = Overrides.Keys.Where(k => k.ToLower() == name);
+                name = name.ToUpperInvariant();
+                var matchingKeys = Overrides.Keys.Where(k => k.ToUpperInvariant() == name);
 
                 if (matchingKeys.Any())
                     return Overrides[matchingKeys.First()];
-                else if (Source._GetMembers().Names().Select(s => s.ToLower()).Contains(name)) {
+                else if (Source._GetMembers().Names().Select(s => s.ToUpperInvariant()).Contains(name))
+                {
                     if (ReturnNullForExceptions) {
                         try {
                             return Source.Get(name, false).ConvertTo<TValue>();

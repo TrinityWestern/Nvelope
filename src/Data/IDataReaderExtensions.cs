@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using Nvelope.Reflection;
-
-namespace Nvelope.Data
+﻿namespace Nvelope.Data
 {
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Data;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
+    using Nvelope.Reflection;
+
     public static class IDataReaderExtensions
     {
         /// <summary>
@@ -19,14 +21,16 @@ namespace Nvelope.Data
         /// <summary>
         /// Get a collection of dictionaries of all the rows in the reader
         /// </summary>
-        public static List<Dictionary<string, object>> AllRows(this IDataReader reader)
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures",
+            Justification = "I need to.")]
+        public static ReadOnlyCollection<Dictionary<string, object>> AllRows(this IDataReader reader)
         {
             var fields = reader.GetReaderFields();
             var res = new List<Dictionary<string, object>>();
             while (reader.Read())
                 res.Add(_getRow(reader, fields));
 
-            return res;
+            return new ReadOnlyCollection<Dictionary<string,object>>(res);
         }
 
         /// <summary>
@@ -41,21 +45,21 @@ namespace Nvelope.Data
         /// Reads the single column (or just the first column) from the reader, and
         /// converts the values to the specified type
         /// </summary>
-        public static List<T> SingleColumn<T>(this IDataReader reader)
+        public static ReadOnlyCollection<T> SingleColumn<T>(this IDataReader reader)
         {
             List<T> res = new List<T>();
             while(reader.Read())
                 res.Add(reader[0].ConvertTo<T>());
-            return res;
+            return new ReadOnlyCollection<T>(res);
 
         }
         /// <summary>
         /// Convert all the rows in the reader to objects
         /// </summary>
-        public static IEnumerable<T> ReadAll<T>(this IDataReader reader) where T : class, new()
+        public static ReadOnlyCollection<T> ReadAll<T>(this IDataReader reader) where T : class, new()
         {
             var converter = new ObjectReader<T>() { TrimFields = true };
-            return converter.ReadAll(reader.AllRows());
+            return new ReadOnlyCollection<T>(converter.ReadAll(reader.AllRows()));
         }
 
         #region Helpers
