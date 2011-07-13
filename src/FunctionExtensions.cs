@@ -81,7 +81,8 @@ namespace Nvelope
         /// to always use for the first argument
         /// </summary>
         /// <remarks>Also known as partial application</remarks>
-        public static Func<TResult> Curry<T, TResult>(this Func<T, TResult> func, T value)
+        public static Func<TResult> Curry<TCurry, TResult>
+            (this Func<TCurry, TResult> func, TCurry value)
         {
             var val = value;
             return () => func(val);
@@ -92,7 +93,8 @@ namespace Nvelope
         /// to always use for the first argument
         /// </summary>
         /// <remarks>Also known as partial application</remarks>
-        public static Func<U, TResult> Curry<T, U, TResult>(this Func<T, U, TResult> func, T value)
+        public static Func<T, TResult> Curry<TCurry, T, TResult>
+            (this Func<TCurry, T, TResult> func, TCurry value)
         {
             var val = value;
             return u => func(val, u);
@@ -102,7 +104,8 @@ namespace Nvelope
         /// Transform a function into one taking one less argument by supplying a value
         /// to always use for the first argument
         /// </summary>
-        public static Func<U, V, TResult> Curry<T, U, V, TResult>(this Func<T, U, V, TResult> func, T value)
+        public static Func<T1, T2, TResult> Curry<TCurry, T1, T2, TResult>
+            (this Func<TCurry, T1, T2, TResult> func, TCurry value)
         {
             var val = value;
             return (u, v) => func(val, u, v);
@@ -112,7 +115,8 @@ namespace Nvelope
         /// Transform a function into one taking one less argument by supplying a value
         /// to always use for the first argument
         /// </summary>
-        public static Func<U, V, W, TResult> Curry<T, U, V, W, TResult>(this Func<T, U, V, W, TResult> func, T value)
+        public static Func<T1, T2, T3, TResult> Curry<TCurry, T1, T2, T3, TResult>
+            (this Func<TCurry, T1, T2, T3, TResult> func, TCurry value)
         {
             var val = value;
             return (u, v, w) => func(val, u, v, w);
@@ -122,7 +126,8 @@ namespace Nvelope
         /// Transform a function into one taking one less argument by supplying a value
         /// to always use for the first argument
         /// </summary>
-        public static Action<U> Curry<T, U>(this Action<T, U> func, T value)
+        public static Action<TResult> Curry<TCurry, TResult>
+            (this Action<TCurry, TResult> func, TCurry value)
         {
             var val = value;
             return u => func(val, u);
@@ -132,7 +137,8 @@ namespace Nvelope
         /// Transform a function into one taking one less argument by supplying a value
         /// to always use for the first argument
         /// </summary>
-        public static Action<U, V> Curry<T, U, V>(this Action<T, U, V> func, T value)
+        public static Action<T, TResult> Curry<TCurry, T, TResult>
+            (this Action<TCurry, T, TResult> func, TCurry value)
         {
             var val = value;
             return (u, v) => func(val, u, v);
@@ -142,7 +148,8 @@ namespace Nvelope
         /// Transform a function into one taking one less argument by supplying a value
         /// to always use for the first argument
         /// </summary>
-        public static Action<U, V, W> Curry<T, U, V, W>(this Action<T, U, V, W> func, T value)
+        public static Action<T1, T2, TResult> Curry<TCurry, T1, T2, TResult>
+            (this Action<TCurry, T1, T2, TResult> func, TCurry value)
         {
             var val = value;
             return (u, v, w) => func(val, u, v, w);
@@ -167,7 +174,7 @@ namespace Nvelope
         /// <summary>
         /// Reverse the parameters of a function: f(t,u) becomes f(u,t)
         /// </summary>
-        public static Func<U, T, TResult> ReverseArgs<T, U, TResult>(this Func<T, U, TResult> func)
+        public static Func<T2, T1, TResult> ReverseArgs<T1, T2, TResult>(this Func<T1, T2, TResult> func)
         {
             return (u, t) => func(t, u);
         }
@@ -181,7 +188,7 @@ namespace Nvelope
         /// <typeparam name="TResult"></typeparam>
         /// <param name="func"></param>
         /// <returns></returns>
-        public static Func<V, U, T, TResult> ReverseArgs<T, U, V, TResult>(this Func<T, U, V, TResult> func)
+        public static Func<T3, T2, T1, TResult> ReverseArgs<T1, T2, T3, TResult>(this Func<T1, T2, T3, TResult> func)
         {
             return (v, u, t) => func(t, u, v);
         }
@@ -309,7 +316,10 @@ namespace Nvelope
         /// <param name="fn"></param>
         /// <param name="testData"></param>
         /// <returns></returns>
-        public static int Benchmark<T, U>(this Func<T, U> fn, IEnumerable<T> testData, int numRuns = 5)
+        public static int Benchmark<T, TResult>(
+            this Func<T, TResult> fn,
+            IEnumerable<T> testData,
+            int numRuns = 5)
         {
             var times = 1.To(numRuns).Select(i =>
             {
@@ -326,13 +336,16 @@ namespace Nvelope
         /// <summary>
         /// Run an action a bunch of times, and return the average execution time
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="U"></typeparam>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
         /// <param name="fn"></param>
         /// <param name="testData"></param>
         /// <param name="numRuns"></param>
         /// <returns></returns>
-        public static int Benchmark<T, U>(this Action<T, U> fn, IEnumerable<KeyValuePair<T, U>> testData, int numRuns = 5)
+        public static int Benchmark<T1, T2>(
+            this Action<T1, T2> fn,
+            IEnumerable<KeyValuePair<T1, T2>> testData,
+            int numRuns = 5)
         {
             var times = 1.To(numRuns).Select(i => 
             {
