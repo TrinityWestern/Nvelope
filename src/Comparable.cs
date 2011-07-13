@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Nvelope
 {
@@ -34,6 +35,8 @@ namespace Nvelope
             return Compare(obj1, obj2) >= 0;
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes",
+            Justification = "FxCop wanted this method public here as an alternet to the operator versions.")]
         public static int Compare(Comparable<T> obj1, Comparable<T> obj2)
         {
             if (object.ReferenceEquals(obj1, obj2)) return 0;
@@ -41,12 +44,14 @@ namespace Nvelope
             if (object.ReferenceEquals(obj2, null)) return -2;
             return obj1.CompareTo(obj2);
         }
+
         public int CompareTo(object obj)
         {
             if (!(obj is T))
                 throw new NotImplementedException("Unable to compare types");
             return CompareTo((T)obj);
         }
+
         public int CompareTo(T other)
         {
             if (object.ReferenceEquals(other, null))
@@ -61,6 +66,8 @@ namespace Nvelope
         public abstract int Difference(T other);
         public abstract override int GetHashCode();
 
+        [SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily",
+            Justification = "The cast is necessary to do value comparison.")]
         public override bool Equals(object obj)
         {
             if (!(obj is Comparable<T>)) return false;
