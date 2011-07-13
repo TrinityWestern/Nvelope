@@ -14,9 +14,9 @@ namespace Nvelope
                 yield return g as Group;
         }
 
-        public static string Print(this Group group)
+        public static string Print(this Capture capture)
         {
-            return group.Value;
+            return capture.Value;
         }
 
         public static string Print(this Match match)

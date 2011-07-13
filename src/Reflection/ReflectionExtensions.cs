@@ -204,14 +204,14 @@ namespace Nvelope.Reflection
             return _AsDictionary(source, members.Names());
         }
 
-        public static Dictionary<string, object> _AsDictionary(this object source, IEnumerable<string> fieldnames)
+        public static Dictionary<string, object> _AsDictionary(this object source, IEnumerable<string> fieldNames)
         {
             // If it's already a Dict<string,obj>, then just filter down to the keys we want
             if (source is Dictionary<string, object>)
-                return (source as Dictionary<string, object>).WhereKeys(f => fieldnames.Contains(f));
+                return (source as Dictionary<string, object>).WhereKeys(f => fieldNames.Contains(f));
 
             Dictionary<string, object> res = new Dictionary<string, object>();
-            foreach (var field in fieldnames)
+            foreach (var field in fieldNames)
                 res.Add(field, source.Get(field));
             return res;
         }

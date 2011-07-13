@@ -14,9 +14,9 @@ namespace Nvelope.IO
         /// <remarks>Stolen from Clojure</remarks>
         /// <param name="filename"></param>
         /// <param name="texts"></param>
-        public static void Spit(string filename, string text, bool append = false)
+        public static void Spit(string fileName, string text, bool append = false)
         {
-            using(var f = new StreamWriter(filename, append))
+            using (var f = new StreamWriter(fileName, append))
             {   
                 f.Write(text);
                 f.Close();
@@ -27,11 +27,12 @@ namespace Nvelope.IO
         /// Reads in text from a file. Returns empty list if the file doesn't exist
         /// </summary>
         /// <remarks>Stolen from Clojure</remarks>
-        public static string Slurp(string filename)
+        public static string Slurp(string fileName)
         {
-            if (!File.Exists(filename))
+            if (!File.Exists(fileName))
                 return "";
-            using (var f = new StreamReader(filename)) {
+            using (var f = new StreamReader(fileName))
+            {
                 var res = f.ReadToEnd();
                 f.Close();
                 return res;
