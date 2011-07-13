@@ -39,7 +39,7 @@ namespace Nvelope
             return "(" +  dt.Rows.ToList().Select(l => l.Print()).Join(",") + ")";
         }
 
-        public static string Val(this DataTable dt, CellLoc loc)
+        public static string Value(this DataTable dt, CellLoc loc)
         {
             return dt.Rows[loc.Row][loc.Col].ConvertTo<string>();
         }
