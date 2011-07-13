@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text;
 
 namespace Nvelope.Combinatorics
 {
-    public static class CombinatoricListExtensions
+    public static class CombinatoricsListExtensions
     {
         /// <summary>
         /// Get a list of all the k-permutations from list. (In a permutation, order matters, so
@@ -15,6 +14,10 @@ namespace Nvelope.Combinatorics
         /// <param name="list"></param>
         /// <param name="k"></param>
         /// <returns></returns>
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures",
+            Justification = "I need to.")]
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly",
+            Justification = "k has a special mathematical meaning")]
         public static IEnumerable<IEnumerable<T>> Permutations<T>(this IEnumerable<T> list, int k)
         {
             if (k == 0)
@@ -32,6 +35,10 @@ namespace Nvelope.Combinatorics
         /// <param name="list"></param>
         /// <param name="numToTake"></param>
         /// <returns></returns>
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures",
+            Justification = "I need to.")]
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly",
+            Justification = "k has a special mathematical meaning")]
         public static IEnumerable<IEnumerable<T>> Combinations<T>(this IEnumerable<T> list, int k)
         {
             if (k == 0)
