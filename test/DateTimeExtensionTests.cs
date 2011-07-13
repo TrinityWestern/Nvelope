@@ -238,19 +238,5 @@ namespace Nvelope.Tests
             Assert.LessOrEqual(age, d.Age());
             Assert.GreaterOrEqual(age + minSpeed, d.Age());
         }
-
-        [Test]
-        public void ToIntTime()
-        {
-            DateTime d = new DateTime(2011, 01, 10, 23, 10, 10);
-            Assert.AreEqual(2310, d.ToIntTime());
-        }
-
-        [Test]
-        public void ToJulianDate()
-        {
-            DateTime d = new DateTime(2011, 11, 10, 23, 10, 10);
-            Assert.AreEqual(2011314, d.ToJulianDate());
-        }
     }
 }

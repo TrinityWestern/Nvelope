@@ -8,39 +8,6 @@ namespace Nvelope
 {
     public static class DateTimeExtensions
     {
-        /// <summary>
-        /// Formats the date in the form used by the Astra database
-        /// </summary>
-        [Obsolete("Astra specific")]
-        public static int ToJulianDate(this DateTime date)
-        {
-            return date.Year * 1000 + date.DayOfYear;
-        }
-
-        /// <summary>
-        /// Gets the time as a 24hour-based integer, e.g. 11:30 PM -> 2330
-        /// </summary>
-        [Obsolete("This code is bad because it takes a string representation "
-            + "of a date and encodes it as an integer. Just use "
-            + "DateTime.ToString(). This is ASTRA specific.")]
-        public static int ToIntTime(this DateTime date)
-        {
-            return date.Hour * 100 + date.Minute;
-        }
-
-        /// <summary>
-        /// Gets the day of the week as a letter U/M/T/W/R/F/S
-        /// </summary>
-        /// <param name="date"></param>
-        /// <returns></returns>
-        [Obsolete("These UMTWRFS codes are ASTRA specific and do not belong "
-            + "here")]
-        public static string ToDayOfWeekLetter(this DateTime date)
-        {
-            string letters = "UMTWRFS";
-            return letters[Convert.ToInt32(date.DayOfWeek)].ToString();
-        }
-
         public static TimeSpan Age(this DateTime date)
         {
             return DateTime.Now - date;
