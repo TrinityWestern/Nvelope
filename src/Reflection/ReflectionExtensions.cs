@@ -350,28 +350,28 @@ namespace Nvelope.Reflection
         /// (if the second object defines more fields than the first, they will be ignored)
         /// </summary>
         public static bool _IsIdenticalOnFields(this object source, object other,
-            IEnumerable<string> fieldnames = null)
+            IEnumerable<string> fieldNames = null)
         {
-            if (fieldnames == null) fieldnames = source._GetMembers().Names();
-            return source._AsDictionary(true).IsSameAs(other._AsDictionary(true), fieldnames);
+            if (fieldNames == null) fieldNames = source._GetMembers().Names();
+            return source._AsDictionary(true).IsSameAs(other._AsDictionary(true), fieldNames);
         }
 
         /// <summary>
         /// Are the two objects identical when compared over the supplied fields
         /// </summary>
-        public static bool _IsIdenticalOnFields(this object source, object other, params string[] fieldnames)
+        public static bool _IsIdenticalOnFields(this object source, object other, params string[] fieldNames)
         {
-            return _IsIdenticalOnFields(source, other, fieldnames as IEnumerable<string>);
+            return _IsIdenticalOnFields(source, other, fieldNames as IEnumerable<string>);
         }
-        public static string _Inspect(this object source, params string[] fieldnames)
+        public static string _Inspect(this object source, params string[] fieldNames)
         {
-            return _Inspect(source, fieldnames as IEnumerable<string>);
+            return _Inspect(source, fieldNames as IEnumerable<string>);
         }
-        public static string _Inspect(this object source, IEnumerable<string> fieldnames = null)
+        public static string _Inspect(this object source, IEnumerable<string> fieldNames = null)
         {
-            if (fieldnames == null)
-                fieldnames = source._GetMembers().Names();
-            var dict = source._AsDictionary(fieldnames);
+            if (fieldNames == null)
+                fieldNames = source._GetMembers().Names();
+            var dict = source._AsDictionary(fieldNames);
             return dict.Print();
         }
 
