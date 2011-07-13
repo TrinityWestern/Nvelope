@@ -7,8 +7,12 @@ using Nvelope;
 
 namespace Nvelope.Tabular
 {
-    public struct CellLoc : IEquatable<CellLoc>
+    public struct CellLoc : IComparable<CellLoc>, IEquatable<CellLoc>
     {
+
+        public int Row { get; private set; }
+        public int Col { get; private set; }
+
         public CellLoc(int row, int col)
             : this()
         {
@@ -16,43 +20,39 @@ namespace Nvelope.Tabular
             Col = col;
         }
 
-        public CellLoc(string cellCoords) : this()
+        public CellLoc(string cellCoordinates) : this()
         {
-            var parts = Regex.Match(cellCoords, "^([A-Za-z]+)([0-9]+)$");
+            var parts = Regex.Match(cellCoordinates, "^([A-Za-z]+)([0-9]+)$");
             if (!parts.Success)
-                throw new FormatException("The value '" + cellCoords + "' was not a valid cell coordinate. Expected something like 'AK343'");
-            var colPart = parts.Groups[1].Value.ToUpper();
+                throw new FormatException("The value '" + cellCoordinates + "' was not a valid cell coordinate. Expected something like 'AK343'");
+            var colPart = parts.Groups[1].Value.ToUpperInvariant();
             var colNum = 'A'.Inc('Z').IndexOfEach(colPart).Single();
             var rowNum = parts.Groups[2].Value.ConvertTo<int>() - 1;
 
             Row = rowNum;
             Col = colNum;
         }
-
-        public readonly int Row;
-        public readonly int Col;
-
         public override string ToString()
         {
             return "[" + Row + "," + Col + "]";
         }
 
-        public static bool operator ==(CellLoc a, CellLoc b)
+        public static bool operator ==(CellLoc cell1, CellLoc cell2)
         {
-            return a.CompareTo(b) == 0;
+            return cell1.CompareTo(cell2) == 0;
         }
 
-        public static bool operator !=(CellLoc a, CellLoc b)
+        public static bool operator !=(CellLoc cell1, CellLoc cell2)
         {
-            return a.CompareTo(b) != 0;
+            return cell1.CompareTo(cell2) != 0;
         }
 
         #region IComparable Members
 
-        public int CompareTo(object obj)
+        public int CompareTo(object value)
         {
-            if (obj is CellLoc)
-                return this.CompareTo((CellLoc)obj);
+            if (value is CellLoc)
+                return this.CompareTo((CellLoc)value);
             return -1;
         }
 
@@ -67,6 +67,14 @@ namespace Nvelope.Tabular
             if (this.Col != other.Col)
                 return this.Col - other.Col;
             return 0;
+        }
+        public static bool operator <(CellLoc obj1, CellLoc obj2)
+        {
+            return obj1.CompareTo(obj2) < 0;
+        }
+        public static bool operator >(CellLoc obj1, CellLoc obj2)
+        {
+            return obj1.CompareTo(obj2) > 0;
         }
 
         #endregion
