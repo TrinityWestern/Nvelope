@@ -23,11 +23,7 @@ namespace Nvelope
         /// <remarks>Might be node itself if node is an XMLDocument</remarks>
         public static XmlDocument GetOwnerDocument(this XmlNode node)
         {
-            var doc = node.OwnerDocument;
-            if (doc == null && node is XmlDocument)
-                doc = node as XmlDocument;
-
-            return doc;
+            return node.OwnerDocument ?? node as XmlDocument;
         }
 
         #region Formattting / Strings

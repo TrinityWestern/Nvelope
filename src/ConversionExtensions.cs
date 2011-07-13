@@ -254,6 +254,9 @@ namespace Nvelope
             if (type == typeof(object))
                 return source;
 
+
+            var sourceString = source as string;
+
             // Handle nullable types
             if (type.IsGenericType && type.GetGenericTypeDefinition().Name == "Nullable`1")
             {
@@ -264,19 +267,18 @@ namespace Nvelope
                 // try to convert to the underlying base type instead
                 type = type.GetGenericArguments()[0];
 
-                if (source is string) {
-                    var str = source as string;
-
+                if (sourceString != null)
+                {
                     // If we're trying to convert to a nullable datetime, use the extension method
                     if (type == typeof(DateTime))
-                        return str.ToDateTimeNullable();
+                        return sourceString.ToDateTimeNullable();
 
-                    if (type == typeof(bool) && str.IsBool())
-                        return str.ToBoolFriendly();
+                    if (type == typeof(bool) && sourceString.IsBool())
+                        return sourceString.ToBoolFriendly();
 
                     // If we're expecting a nullable type and we've got an empty string,
                     // return null
-                    if (str.IsNullOrEmpty())
+                    if (sourceString.IsNullOrEmpty())
                         return null;
                 }
             }
@@ -288,37 +290,36 @@ namespace Nvelope
                     return source.ToString().ToBoolFriendly();
             }
 
-            if (source is string)
+            if (sourceString != null)
             {
-                var str = source as string;
                 if (type == typeof(DateTime))
                 {
-                    return str.ToDateTimeFriendly();
+                    return sourceString.ToDateTimeFriendly();
                 }
                 if (type == typeof(Month))
-                    return str.ToMonth();
+                    return sourceString.ToMonth();
                 if (type.IsEnum)
                 {
                     if (Enum.GetUnderlyingType(type) == typeof(int))
                     {
                         int number;
                         // If the result is numeric, convert to an int and cast to the enum
-                        if (Int32.TryParse(str, out number))
+                        if (Int32.TryParse(sourceString, out number))
                             return number;
                     }
 
                     // Otherwise, try to parse the enum name
-                    return Enum.Parse(type, str);
+                    return Enum.Parse(type, sourceString);
                 }
                 else if (type == typeof(Guid))
-                    return new Guid(str);
+                    return new Guid(sourceString);
                 else if (type == typeof(XmlDocument))
-                    return str.ToXml();
+                    return sourceString.ToXml();
                 else if (type == typeof(decimal))
                 {
                     // If it's in scientific notation, convert to double, then to decimal
-                    if (Regex.IsMatch(str, "^\\d+\\.\\d+E\\-?\\d+$"))
-                        return str.ConvertTo<double>().ConvertTo<decimal>();
+                    if (Regex.IsMatch(sourceString, "^\\d+\\.\\d+E\\-?\\d+$"))
+                        return sourceString.ConvertTo<double>().ConvertTo<decimal>();
                 }
             }
 
@@ -334,9 +335,14 @@ namespace Nvelope
             }
 
             // Handle parsing a byte array to a string
-            if (source is byte[] && type == typeof(string))
-                return (source as byte[]).ToUtf8String();
-
+            if (type == typeof(string))
+            {
+                var sourceBytes = source as byte[];
+                if (sourceBytes != null)
+                {
+                    return sourceBytes.ToUtf8String();
+                }
+            }
 
             Exception convertException = null;
 

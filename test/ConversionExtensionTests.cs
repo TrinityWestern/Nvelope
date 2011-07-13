@@ -202,7 +202,7 @@ namespace Nvelope.Tests
         public void GetException()
         {
             DataTable dt = new DataTable();
-            var ex = Assert.Throws<FieldNotFoundException>(()=>dt.Get("fieldName"));
+            var ex = Assert.Throws<FieldNotFoundException>(()=>dt.GetFieldValue("fieldName"));
             Assert.AreEqual("Could not find a field called fieldName on the object", ex.Message);
         }
 
@@ -211,7 +211,7 @@ namespace Nvelope.Tests
         {
             DataTable table = new DataTable(); // Create DataTable
             table.TableName = "TestTable";
-            Assert.AreEqual("TestTable", table.Get("TableName"));
+            Assert.AreEqual("TestTable", table.GetFieldValue("TableName"));
         }
 
         [Test]
@@ -219,7 +219,7 @@ namespace Nvelope.Tests
         {
             DataTable table = new DataTable(); // Create DataTable
             table.TableName = "123";
-            Assert.AreEqual(123, table.Get<int>("TableName"));
+            Assert.AreEqual(123, table.GetFieldValue<int>("TableName"));
         }
 
         [Test]

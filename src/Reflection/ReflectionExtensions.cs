@@ -35,29 +35,29 @@ namespace Nvelope.Reflection
         /// <exception cref="ArgumentException">The field isn't supported (an indexed field)</exception>
         /// <exception cref="Exception">I'm not really sure what this means</exception>
         /// <returns></returns>
-        public static object Get(this object source,
-            string field, bool careAboutCase = true)
+        public static object GetFieldValue(this object source,
+            string fieldName, bool careAboutCase = true)
         {
             var bindingFlags = BindingFlags.Public | BindingFlags.Instance;
             if (!careAboutCase)
                 bindingFlags |= BindingFlags.IgnoreCase;
 
             Type type = source.GetType();
-            var members = type.GetMember(field, bindingFlags);
+            var members = type.GetMember(fieldName, bindingFlags);
             if (members.Count() == 0) {
-                throw new FieldNotFoundException(source, field);
+                throw new FieldNotFoundException(source, fieldName);
             }
             if (members.Count() > 1) {
                 // TODO: test this
                 throw new Exception("Too many members found. Don't know what this means");
             }
-            var m = members[0];
-            if (m is PropertyInfo) {
-                var p = m as PropertyInfo;
-                if (p.GetIndexParameters().Count() != 0)
+            var member = members[0];
+            var property = member as PropertyInfo;
+            if (property != null) {
+                if (property.GetIndexParameters().Count() != 0)
                     throw new ArgumentException("Can't handle parameters with indexies");
                 try {
-                    return p.GetValue(source, null);
+                    return property.GetValue(source, null);
                 } catch (TargetInvocationException) {
                     // TODO: I don't think catching this exception
                     // is something I should be doing, but I'm just doing
@@ -66,9 +66,11 @@ namespace Nvelope.Reflection
                     return null;
                 }
             }
-            if (m is FieldInfo) {
+            var field = member as FieldInfo;
+            if (field != null)
+            {
                 try {
-                    return ((FieldInfo)m).GetValue(source);
+                    return field.GetValue(source);
                 } catch (TargetInvocationException) {
                     return null;
                 }
@@ -79,9 +81,9 @@ namespace Nvelope.Reflection
         /// <summary>
         /// Gets the property or field on the object and converts to the specified type
         /// </summary>
-        public static T Get<T>(this object source, string fieldName)
+        public static T GetFieldValue<T>(this object source, string fieldName)
         {
-            return (T)Get(source, fieldName).ConvertTo(typeof(T));
+            return (T)GetFieldValue(source, fieldName).ConvertTo(typeof(T));
         }
 
         /// <summary>
@@ -182,11 +184,22 @@ namespace Nvelope.Reflection
                 "Only fields and properties are suppored members");
         }
 
+        /// <summary>
+        /// See if a member looks and acts like a field. In other words,
+        /// it has a single value that can be gotten and set.
+        /// </summary>
+        /// <param name="member"></param>
+        /// <returns>true if member is field-like</returns>
         public static bool Fieldlike(this MemberInfo member)
         {
-            return (member is FieldInfo) ||
-                (member is PropertyInfo &&
-                    ((PropertyInfo)member).GetIndexParameters().Count() == 0);
+            // if it is a fieldinfo, then of course it's fieldlike
+            if (member is FieldInfo)
+            {
+                return true;
+            }
+            // otherwise make sure it's not an indexed property
+            var property = member as PropertyInfo;
+            return property.GetIndexParameters().Count() == 0;
         }
 
 
@@ -221,7 +234,7 @@ namespace Nvelope.Reflection
         {
             Dictionary<string, object> res = new Dictionary<string, object>();
             foreach (var field in fieldNames)
-                res.Add(field, source.Get(field));
+                res.Add(field, source.GetFieldValue(field));
             return res;
         }
 

@@ -66,7 +66,7 @@ namespace Nvelope.Data
                 {
                     if (ReturnNullForExceptions) {
                         try {
-                            return Source.Get(name, false).ConvertTo<TValue>();
+                            return Source.GetFieldValue(name, false).ConvertTo<TValue>();
                         } catch (FieldNotFoundException) {
                             return default(TValue);
                         } catch (ArgumentException) {
@@ -75,7 +75,7 @@ namespace Nvelope.Data
                             return default(TValue);
                         }
                     } else
-                        return Source.Get(name, false).ConvertTo<TValue>();
+                        return Source.GetFieldValue(name, false).ConvertTo<TValue>();
                 } else if (ReturnDefaultIfMissing)
                     return default(TValue);
                 else
