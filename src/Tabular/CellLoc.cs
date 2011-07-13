@@ -7,7 +7,7 @@ using Nvelope;
 
 namespace Nvelope.Tabular
 {
-    public struct CellLoc : IComparable, IComparable<CellLoc>
+    public struct CellLoc : IEquatable<CellLoc>
     {
         public CellLoc(int row, int col)
             : this()
@@ -70,6 +70,28 @@ namespace Nvelope.Tabular
         }
 
         #endregion
+
+        #region IEquatable<CellLoc> Members
+        
+        public override int GetHashCode()
+        {
+            return this.Row ^ this.Col;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is CellLoc))
+                return false;
+
+            return Equals((CellLoc)obj);
+        }
+
+        public bool Equals(CellLoc other)
+        {
+            return this.CompareTo(other) == 0;
+        }
+        #endregion
+
     }
 
     public static class CellLocExtensions
