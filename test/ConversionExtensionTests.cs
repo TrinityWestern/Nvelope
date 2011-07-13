@@ -124,10 +124,7 @@ namespace Nvelope.Tests
         public void AsDictionary()
         {
             var data = new Data() { IntField = 1, StrField = "a" };
-            var dict = data._AsDictionary();
-
-            dict = dict._AsDictionary();
-
+            
             Assert.AreEqual("([IntField,1],[StrField,a])", data._Inspect());
         }
 

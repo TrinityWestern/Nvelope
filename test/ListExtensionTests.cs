@@ -401,9 +401,9 @@
         {
             var list = new Dictionary<string, object>[]
             {
-                new { name = "George", size = 34 }._AsDictionary(),
-                new { name = "Alice", size = 29 }._AsDictionary(),
-                new { name = "Dan", size = 30 }._AsDictionary()
+                new Dictionary<string, object> { { "name", "George" }, { "size", 34 } },
+                new Dictionary<string, object> { { "name", "Alice" }, { "size", 29 } },
+                new Dictionary<string, object> { { "name", "Dan" }, { "size", 30 } },
             };
             Assert.AreEqual(
                 "(([name,George],[size,34]),([name,Alice],[size,29]),([name,Dan],[size,30]))",

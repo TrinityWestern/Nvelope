@@ -154,16 +154,32 @@ namespace Nvelope.Reflection
         {
             var dict = new Dictionary<string, Type>();
             foreach (var member in members) {
-                if (member is FieldInfo) {
-                    dict.Add(member.Name, ((FieldInfo)member).FieldType);
-                } else if (member is PropertyInfo) {
-                    dict.Add(member.Name, ((PropertyInfo)member).PropertyType);
-                } else {
-                    throw new ArgumentException(
-                        "Only fields and properties are suppored members");
-                }
+                dict.Add(member.Name, member.ReturnType());
             }
             return dict;
+        }
+
+        /// <summary>
+        /// Gets the return type of FieldInfo and PropertyInfo objects
+        /// </summary>
+        /// <param name="member">field or property</param>
+        /// <returns>return type of member</returns>
+        /// <exception cref="ArgumentException">Thrown if object isn't a
+        /// FieldInfo or PropertyInfo object.</exception>
+        public static Type ReturnType(this MemberInfo member)
+        {
+            var field = member as FieldInfo;
+            if (field != null)
+            {
+                return field.FieldType;
+            }
+            var property = member as PropertyInfo;
+            if (property != null)
+            {
+                return property.PropertyType;
+            }
+            throw new ArgumentException(
+                "Only fields and properties are suppored members");
         }
 
         public static bool Fieldlike(this MemberInfo member)
@@ -182,9 +198,6 @@ namespace Nvelope.Reflection
             Type attributeType = null, bool includeInheritedAttributes = true,
             bool includeReadOnlyProperties = true)
         {
-            if (source is Dictionary<string, object>)
-                return source as Dictionary<string, object>;
-
             var include = MemberTypes.Field | MemberTypes.Property;
             if (!includeFields)
                 include &= ~MemberTypes.Field;
@@ -206,10 +219,6 @@ namespace Nvelope.Reflection
 
         public static Dictionary<string, object> _AsDictionary(this object source, IEnumerable<string> fieldNames)
         {
-            // If it's already a Dict<string,obj>, then just filter down to the keys we want
-            if (source is Dictionary<string, object>)
-                return (source as Dictionary<string, object>).WhereKeys(f => fieldNames.Contains(f));
-
             Dictionary<string, object> res = new Dictionary<string, object>();
             foreach (var field in fieldNames)
                 res.Add(field, source.Get(field));
@@ -294,7 +303,19 @@ namespace Nvelope.Reflection
             if (fields == null)
                 fields = data._GetMembers().RemoveReadOnly().Names();
             // Filter down to just those fields that were included
-            return _SetFrom(source, data._AsDictionary(fields), caseSensitive);
+
+            // If it's already a Dict<string,object>, then just filter down to the keys we want
+            // I'm not sure this is actually the best behaviour, it makes more sense just to
+            // require a non-dictionary.
+            var dataDict = data as Dictionary<string, object>;
+            if (dataDict != null)
+            {
+                dataDict = dataDict.WhereKeys(f => fields.Contains(f));
+            } else {
+                dataDict = data._AsDictionary();
+            }
+
+            return _SetFrom(source, dataDict, caseSensitive);
         }
 
         /// <summary>
@@ -381,10 +402,8 @@ namespace Nvelope.Reflection
         /// </summary>
         public static object Realize(this object source)
         {
-            if (source is Func<object>)
-                return (source as Func<object>)();
-            else
-                return source;
+            var func = source as Func<object>;
+            return func == null ? source : func();
         }
     }
 }
