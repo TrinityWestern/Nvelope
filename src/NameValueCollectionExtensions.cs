@@ -12,7 +12,12 @@ namespace Nvelope
         {
             var res = new Dictionary<string, string>();
             foreach (string key in collection.Keys)
-                res.Add(key, collection[key]);
+            {
+                if (key == null)
+                    res.Add("", "");
+                else
+                    res.Add(key, collection[key]);
+            }
             return res;
         }
 
