@@ -8,7 +8,7 @@ using Nvelope.Combinatorics;
 namespace Nvelope.Tests.Combinatorics
 {
     [TestFixture]
-    public class CombinatoricListExtensionTests
+    public class CombinatoricsListExtensionTests
     {
         [Test]
         public void Combinations()

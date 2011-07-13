@@ -63,7 +63,7 @@
     <Compile Include="Collections\DirectedAcyclicGraph.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Combinatorics\CombinatoricListExtensions.cs" />
+    <Compile Include="Combinatorics\CombinatoricsListExtensions.cs" />
     <Compile Include="Comparable.cs" />
     <Compile Include="Configuration\DeploymentLocation.cs" />
     <Compile Include="Configuration\Config.cs" />
