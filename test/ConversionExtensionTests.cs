@@ -156,6 +156,22 @@ namespace Nvelope.Tests
         }
 
         [Test]
+        public void ConvertToExceptions()
+        {
+            var abc = "abc";
+            string nullString = null;
+            var otherPhone = new PhoneNumber("1-123-456-3412");
+            Int64 big = Int64.MaxValue;
+            int? nullInt = null;
+
+            Assert.Throws<ConversionException>(() => { abc.ConvertTo<int>(); });
+            Assert.Throws<ConversionException>(() => { nullString.ConvertTo<int>(); });
+            Assert.Throws<ConversionException>(() => { otherPhone.ConvertTo<int>(); });
+            Assert.Throws<ConversionException>(() => { big.ConvertTo<Int32>(); });
+            Assert.Throws<ConversionException>(() => { nullInt.ConvertTo<float>(); });
+        }
+
+        [Test]
         public void Null_to_nullable_type()
         {
             object o = null;
@@ -283,7 +299,7 @@ namespace Nvelope.Tests
             Assert.AreEqual(false, u.IsBool());
         }
         [Test]
-        public void ConvertAs()
+        public void ConvertNullable()
         {
             Assert.AreEqual(-1, "-1".ConvertNullable<int>());
             Assert.AreEqual(0, "0".ConvertNullable<int>());

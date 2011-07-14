@@ -241,6 +241,7 @@ namespace Nvelope
         /// Convert to another type intelligently
         /// </summary>
         /// <remarks>Does a better job than the build-in Convert.ChangeType</remarks>
+        /// <exception cref="ConversionException">The conversion somehow failed.</exception>
         public static object ConvertTo(this object source, Type type)
         {
             Type sourceType = null;
@@ -395,7 +396,9 @@ namespace Nvelope
             try {
                 ConvertTo(source, type);
                 return true;
-            } catch {
+            }
+            catch (ConversionException)
+            {
                 return false;
             }
         }
@@ -408,7 +411,9 @@ namespace Nvelope
             try {
                 ConvertTo<T>(source);
                 return true;
-            } catch {
+            }
+            catch (ConversionException)
+            {
                 return false;
             }
         }
@@ -425,7 +430,9 @@ namespace Nvelope
             {
                 result = ConvertTo<T>(source);
             }
-            catch { }
+            catch (ConversionException)
+            {
+            }
             return result;
         }
 
@@ -440,7 +447,9 @@ namespace Nvelope
             {
                 result = ConvertTo<T>(source);
             }
-            catch { }
+            catch (ConversionException)
+            {
+            }
             return result;
         }
     }
