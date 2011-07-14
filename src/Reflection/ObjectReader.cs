@@ -124,7 +124,7 @@ namespace Nvelope.Reflection
                 catch (ConversionException ex)
                 {
                     throw new ConversionException("Error setting object field \"" + fieldName + "\" from reader field \"" + dataField +
-                        "\" on type \"" + instance.GetType().Name + "\": " + ex.Message, ex.ExpectedType, ex.Value, ex);
+                        "\" on type \"" + instance.GetType().Name + "\": " + ex.Message, ex);
                 }
 
                 instance._Set(fieldName, val);

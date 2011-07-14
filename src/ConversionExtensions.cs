@@ -51,7 +51,8 @@ namespace Nvelope
                 case ("off"):
                     return false;
                 default:
-                    throw new ConversionException("Could not convert value '" + source + "' to a Boolean", typeof(bool), source);
+                    throw new ConversionException(
+                        "Could not convert value '" + source + "' to a Boolean");
             }
         }
 
@@ -151,9 +152,14 @@ namespace Nvelope
         {
             var res = ToDateTimeNullable(source);
             if (res == null)
-                throw new ConversionException("Could not convert value \"" + source + "\" to DateTime", typeof(DateTime), source);
+            {
+                throw new ConversionException(
+                    "Could not convert value \"" + source + "\" to DateTime");
+            }
             else
+            {
                 return res.Value;
+            }
 
         }
 
@@ -198,7 +204,7 @@ namespace Nvelope
                 case "december":
                     return Month.December;
                 default:
-                    throw new ConversionException("Could not convert '" + source + "' to Month", typeof(Month), source);
+                    throw new ConversionException("Could not convert '" + source + "' to Month");
             }
         }
 
@@ -285,7 +291,9 @@ namespace Nvelope
 
             if (type == typeof(bool)) {
                 if (source == null)
-                    throw new ConversionException("Cannot convert null into a bool - if the value might be null, check before calling ConvertTo, or call ConvertTo<bool?>() instead", typeof(bool), source);
+                    throw new ConversionException(
+                        "Cannot convert null into a bool - if the value might be null, " + 
+                        "check before calling ConvertTo, or call ConvertTo<bool?>() instead");
                 else
                     return source.ToString().ToBoolFriendly();
             }
@@ -362,7 +370,9 @@ namespace Nvelope
             if (constructor != null)
                 return constructor.Invoke(new object[] { source });
             else
-                throw new ConversionException("Could not convert value '" + source.ToStringN() + "' to requested type '" + type.Name + "'", type, source, convertException);
+                throw new ConversionException("Could not convert value '" +
+                    source.ToStringN() + "' to requested type '" + type.Name + "'",
+                    convertException);
         }
 
         /// <summary>

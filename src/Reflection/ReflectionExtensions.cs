@@ -45,7 +45,7 @@ namespace Nvelope.Reflection
             Type type = source.GetType();
             var members = type.GetMember(fieldName, bindingFlags);
             if (members.Count() == 0) {
-                throw new FieldNotFoundException(source, fieldName);
+                throw new FieldNotFoundException("Missing field '" + fieldName + "'");
             }
             if (members.Count() > 1) {
                 // TODO: test this
@@ -264,7 +264,7 @@ namespace Nvelope.Reflection
                     property.SetValue(source, converted, null);
                 else
                     throw new ConversionException("Error setting property '" + fieldName + "' - cannot convert to type '" + property.PropertyType.Name + "' from value '"
-                        + (value == null ? "<null>" : value.ToString()) + "'", property.PropertyType, value);
+                        + (value == null ? "<null>" : value.ToString()) + "'");
             } else { // Try a field
                 var field = type.GetField(fieldName);
                 if (field != null)
@@ -272,11 +272,12 @@ namespace Nvelope.Reflection
                         field.SetValue(source, converted);
                     else
                         throw new ConversionException("Error setting field '" + fieldName + "' - cannot convert to type '" + field.FieldType.Name + "' from value '" +
-                        (value == null ? "<null>" : value.ToString()) + "'", field.FieldType, value);
+                        (value == null ? "<null>" : value.ToString()) + "'");
 
 
                 else {
-                    throw new FieldNotFoundException(source, fieldName);
+                    throw new FieldNotFoundException(
+                        "Missing field '" + fieldName + "' in " + source.Print());
                 }
             }
 

@@ -25,13 +25,13 @@ namespace Nvelope.Tests
 
              if (File.Exists(FileName))
              {
-                 try{
-                     throw new FileAlreadyExistsException(FileName, "File already exists");
+                 try {
+                     throw new FileAlreadyExistsException("File (" + FileName + ") already exists");
                  }
-                 catch(Exception ex)
+                 catch (FileAlreadyExistsException ex)
                  {
-                     Assert.AreEqual(typeof(FileAlreadyExistsException), ex.GetType());
-                     Assert.AreEqual("File already exists", ex.Message);
+                     Assert.IsTrue(ex.Message.StartsWith("File ("));
+                     Assert.IsTrue(ex.Message.EndsWith("test.txt) already exists"));
                  }
              }
              
