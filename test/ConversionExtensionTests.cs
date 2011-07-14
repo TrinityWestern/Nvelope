@@ -203,7 +203,7 @@ namespace Nvelope.Tests
         {
             DataTable dt = new DataTable();
             var ex = Assert.Throws<FieldNotFoundException>(()=>dt.GetFieldValue("fieldName"));
-            Assert.AreEqual("Could not find a field called fieldName on the object", ex.Message);
+            Assert.AreEqual("Missing field 'fieldName'", ex.Message);
         }
 
         [Test]
