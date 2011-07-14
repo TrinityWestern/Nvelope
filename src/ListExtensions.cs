@@ -71,7 +71,11 @@ namespace Nvelope
 
         public static List<T> Paginate<T>(this IEnumerable<T> list, int itemsPerPage, int page)
         {
-            return list.Skip((page - 1) * itemsPerPage).Take(itemsPerPage).ToList();
+            if (page > 0)
+            {
+                list = list.Skip((page - 1) * itemsPerPage);
+            }
+            return list.Take(itemsPerPage).ToList();
         }
 
         /// <summary>
@@ -203,7 +207,8 @@ namespace Nvelope
         /// <summary>
         /// Takes two sequences and combines them element-by-element into a third
         /// </summary>
-        public static IEnumerable<Tuple<T,U>> Zip<T, U>(this IEnumerable<T> source, IEnumerable<U> other)
+        public static IEnumerable<Tuple<TThis, TOther>> Zip<TThis, TOther>
+            (this IEnumerable<TThis> source, IEnumerable<TOther> other)
         {
             using (var sourceEnum = source.GetEnumerator())
             {
@@ -218,7 +223,8 @@ namespace Nvelope
         /// <summary>
         /// Takes two sequences and combines them element-by-element into a dictionary
         /// </summary>
-        public static Dictionary<T, U> ZipToDict<T, U>(this IEnumerable<T> source, IEnumerable<U> other)
+        public static Dictionary<TThis, TOther> ZipToDict<TThis, TOther>
+            (this IEnumerable<TThis> source, IEnumerable<TOther> other)
         {            
             return source.Zip(other).ToKeyValues().ToDictionary();
         }
@@ -256,9 +262,9 @@ namespace Nvelope
         /// <summary>
         /// Pretty-print a list of list of dictionaries
         /// </summary>
-        public static string Print<TKey, TValue>(this IEnumerable<Dictionary<TKey, TValue>> dicts)
+        public static string Print<TKey, TValue>(this IEnumerable<Dictionary<TKey, TValue>> dictionaries)
         {
-            return dicts.Select(d => d.Print()).Print();
+            return dictionaries.Select(d => d.Print()).Print();
         }
 
         /// <summary>
@@ -517,12 +523,12 @@ namespace Nvelope
         /// <param name="list"></param>
         /// <param name="seperator"></param>
         /// <returns></returns>
-        public static IEnumerable<T> Interpose<T>(this IEnumerable<T> list, T seperator)
+        public static IEnumerable<T> Interpose<T>(this IEnumerable<T> list, T separator)
         {
             // Swap the order of the lists, then interleave, then drop the first item
             // That way, we don't end up with a trailing seperator
             // (because Interleave will return (s,1,s,2,s,3) and we want (1,s,2,s,3)
-            return Interleave(new T[]{seperator}.Repeat(), list).Skip(1);
+            return Interleave(new T[] { separator }.Repeat(), list).Skip(1);
         }
 
         /// <summary>
@@ -531,17 +537,19 @@ namespace Nvelope
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="U"></typeparam>
         /// <param name="list"></param>
-        /// <param name="intervalFn">A function that takes two subsequent elements in the list and
+        /// <param name="intervalFunc">A function that takes two subsequent elements in the list and
         /// calculates the difference between them</param>
         /// <returns>A list with one less element than the original list (since an list of length
         /// n has n-1 intervals between its elements)</returns>
-        public static IEnumerable<U> Intervals<T, U>(this IEnumerable<T> list, Func<T, T, U> intervalFn)
+        public static IEnumerable<TResult> Intervals<T, TResult>(
+            this IEnumerable<T> list,
+            Func<T, T, TResult> intervalFunc)
         {            
             var prev = list.First();
             // Go from item #2 to the end of the list, calling the fn on each pair of items
             foreach (var cur in list.Rest())
             {
-                yield return intervalFn(prev, cur);
+                yield return intervalFunc(prev, cur);
                 prev = cur;
             }
         }
@@ -632,12 +640,12 @@ namespace Nvelope
         /// Basically, this will take up until the first point after minNumToTake where partitionFn changes values
         /// </summary>
         /// <remarks>See tests for examples</remarks>
-        public static IEnumerable<T> TakeByGroup<T, U>(this IEnumerable<T> list, Func<T, U> partitionFn, int minNumToTake)
+        public static IEnumerable<T> TakeByGroup<T, TGroup>(this IEnumerable<T> list, Func<T, TGroup> partitionFn, int minNumToTake)
         {
             if(!list.Any() || minNumToTake == 0)
                 yield break;
 
-            U lastGroup = default(U);
+            TGroup lastGroup = default(TGroup);
             int taken = 0;
             foreach (var item in list)
             {                
@@ -656,7 +664,9 @@ namespace Nvelope
         /// If more than one element has the max value, only one of them will be returned (which one
         /// should not be relied on)
         /// </summary>
-        public static T HavingMax<T, U>(this IEnumerable<T> list, Func<T, U> selector)
+        public static T HavingMax<T, TResult>(
+            this IEnumerable<T> list,
+            Func<T, TResult> selector)
         {
             var index = list.Index(selector);
             var biggestIndex = index.Keys.Max();
