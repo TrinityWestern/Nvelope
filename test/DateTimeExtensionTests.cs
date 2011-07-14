@@ -190,13 +190,6 @@ namespace Nvelope.Tests
         }
 
         [Test]
-        public void ToPrettyTime()
-        {
-            DateTime d = new DateTime(2011, 01, 10, 10, 10, 10);
-            Assert.AreEqual("10:10 am", d.ToPrettyTime());
-        }
-
-        [Test]
         public void ToUtc()
         {
             DateTime d = new DateTime(2011, 01, 10, 10, 10, 10);

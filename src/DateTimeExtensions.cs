@@ -65,12 +65,6 @@ namespace Nvelope
             return source.HasValue ? source.Value.ToIsoDateTime() : "";
         }
 
-        [Obsolete("replace with ToShortTimeString()")]
-        public static String ToPrettyTime(this DateTime date)
-        {
-            return date.ToString("h:mm tt", CultureInfo.InvariantCulture).ToLower();
-        }
-        
         /// <summary>
         /// Checks if a given DateTime is on the same day as this one
         /// </summary>
