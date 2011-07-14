@@ -24,7 +24,7 @@ namespace Nvelope
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("{0}—{1}", this.Start, this.End);
+            return this.Start + "—" + this.End;
         }
         /// <summary>
         /// Test if range contains this item
