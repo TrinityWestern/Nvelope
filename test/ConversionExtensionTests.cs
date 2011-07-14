@@ -285,12 +285,12 @@ namespace Nvelope.Tests
         [Test]
         public void ConvertAs()
         {
-            Assert.AreEqual(-1, "-1".ConvertAs<int>());
-            Assert.AreEqual(0, "0".ConvertAs<int>());
-            Assert.AreEqual(1, "1".ConvertAs<int>());
-            Assert.AreEqual(null, "b".ConvertAs<int>());
-            Assert.AreEqual(1, (1.0).ConvertAs<int>());
-            Assert.AreEqual(1, (1.1).ConvertAs<int>());
+            Assert.AreEqual(-1, "-1".ConvertNullable<int>());
+            Assert.AreEqual(0, "0".ConvertNullable<int>());
+            Assert.AreEqual(1, "1".ConvertNullable<int>());
+            Assert.AreEqual(null, "b".ConvertNullable<int>());
+            Assert.AreEqual(1, (1.0).ConvertNullable<int>());
+            Assert.AreEqual(1, (1.1).ConvertNullable<int>());
         }
 
 

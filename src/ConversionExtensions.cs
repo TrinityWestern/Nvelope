@@ -389,6 +389,7 @@ namespace Nvelope
         /// <summary>
         /// Can we convert this value to some other type?
         /// </summary>
+        [Obsolete("Use the generic version instead")]
         public static bool CanConvertTo(this object source, Type type)
         {
             try {
@@ -441,12 +442,30 @@ namespace Nvelope
         /// Like ConvertTo, but returns null on failure instead of throwing
         /// an exception. Like the 'as' keyword.
         /// </summary>
-        public static T? ConvertAs<T>(this object source) where T : struct
+        /// <remarks>Use ConvertNullable for value types</remarks>
+        public static T ConvertAs<T>(this object source) where T : class
+        {
+            T result = null;
+            try
+            {
+                result = ConvertTo<T>(source);
+            }
+            catch { }
+            return result;
+        }
+
+        /// <summary>
+        /// Like ConvertAs but for value types. Makes a nullable version of
+        /// the value.
+        /// </summary>
+        public static T? ConvertNullable<T>(this object source) where T : struct
         {
             T? result = null;
-            try {
+            try
+            {
                 result = ConvertTo<T>(source);
-            } catch {}
+            }
+            catch { }
             return result;
         }
     }
