@@ -10,7 +10,9 @@ namespace Nvelope
         /// Returns the first element each group having the largest value for fn
         /// NOTE: Only returns one value, even if 
         /// </summary>
-        public static IEnumerable<T> HavingMax<T, G, K>(this IEnumerable<IGrouping<G, T>> groups, Func<T, K> fn)
+        public static IEnumerable<TElement> HavingMax<TElement, TKey, TCompare>(
+            this IEnumerable<IGrouping<TKey, TElement>> groups,
+            Func<TElement, TCompare> fn)
         {
             foreach (var group in groups)
                 yield return group.OrderByDescending(fn).First();
@@ -19,7 +21,9 @@ namespace Nvelope
         /// <summary>
         /// Returns the first element each group having the smallest value for fn
         /// </summary>
-        public static IEnumerable<T> HavingMin<T, G, K>(this IEnumerable<IGrouping<G, T>> groups, Func<T, K> fn)
+        public static IEnumerable<TElement> HavingMin<TElement, TKey, TCompare>(
+            this IEnumerable<IGrouping<TKey, TElement>> groups,
+            Func<TElement, TCompare> fn)
         {
             foreach (var group in groups)
                 yield return group.OrderBy(fn).First();
@@ -31,9 +35,11 @@ namespace Nvelope
         /// </summary>
         /// <example>{"a", "bb", "b"}.HavingDistinct(s => s.Length) returns {"a","bb"}</example>
         /// <returns></returns>
-        public static IEnumerable<T> HavingDistinct<T, K>(this IEnumerable<T> source, Func<T, K> fn)
+        public static IEnumerable<T> HavingDistinct<T, TCompare>(
+            this IEnumerable<T> source,
+            Func<T, TCompare> fn)
         {
-            var seenValues = new List<K>();
+            var seenValues = new List<TCompare>();
             foreach (var t in source)
             {
                 var k = fn(t);
