@@ -127,6 +127,9 @@ namespace Nvelope.Tests
             string f = "Today @ " + e.ToShortTimeString();
             Assert.AreEqual("2008-02-28", d.ToFriendlyDate());
             Assert.AreEqual(f, e.ToFriendlyDate());
+
+            d = DateTime.Now.AddDays(-20);
+            Assert.AreEqual(d.ToString("m"), d.ToFriendlyDate());
         }
 
         [Test]

@@ -54,7 +54,7 @@ namespace Nvelope
         /// </summary>
         public static string ToIsoDateTime(this DateTime source)
         {
-            return source.ToString("s").Replace('T', ' ');
+            return source.ToString("s", CultureInfo.InvariantCulture).Replace('T', ' ');
         }
 
         /// <summary>
@@ -65,9 +65,10 @@ namespace Nvelope
             return source.HasValue ? source.Value.ToIsoDateTime() : "";
         }
 
+        [Obsolete("replace with ToShortTimeString()")]
         public static String ToPrettyTime(this DateTime date)
         {
-            return date.ToString("h:mm tt").ToLower();
+            return date.ToString("h:mm tt", CultureInfo.InvariantCulture).ToLower();
         }
         
         /// <summary>
@@ -123,8 +124,13 @@ namespace Nvelope
         /// <summary>
         /// Returns a "friendly" formatted date
         /// </summary>
-        public static string ToFriendlyDate(this DateTime date)
+        public static string ToFriendlyDate(this DateTime date, IFormatProvider provider = null)
         {
+            if (provider == null)
+            {
+                provider = CultureInfo.CurrentCulture;
+            }
+
             DateTime now = DateTime.Now;
             bool showTime = true;
             string day = date.ToIsoDate();
@@ -147,7 +153,7 @@ namespace Nvelope
                     day = date.DayOfWeek.ToString();
 
                 else if (date.Date.Year == now.Year)
-                    day = date.ToString("m");
+                    day = date.ToString("m", provider);
             }
 
             else if (date > now) //future
