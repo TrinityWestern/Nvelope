@@ -63,7 +63,11 @@ namespace Nvelope
         public static int MakeFourDigitYear(int twoDigitYear)
         {
             if (twoDigitYear > 99 || twoDigitYear < 0)
-                throw new ArgumentOutOfRangeException("two digit year must be less than 100");
+            {
+                throw new ArgumentOutOfRangeException(
+                    "twoDigitYear",
+                    "two digit year must be less than 100");
+            }
 
             var now = DateTime.Now.Year;
 
@@ -97,8 +101,14 @@ namespace Nvelope
         public static DateTime? ToDateTimeNullable(this string source)
         {
             DateTime res = DateTime.MinValue;
-            if (DateTime.TryParse(source, CultureInfo.GetCultureInfo("en-CA"), DateTimeStyles.AllowWhiteSpaces, out res))
+            if (DateTime.TryParse(
+                source,
+                CultureInfo.CurrentCulture,
+                DateTimeStyles.AllowWhiteSpaces,
+                out res))
+            {
                 return res;
+            }
 
             var match = Regex.Match(source, "^ *(\\d{1,2})[\\\\/\\-](\\d{1,2})[\\\\/\\-](\\d{2,4})( +(\\d{1,2}) *: *(\\d{1,2})( *: *)?(\\d{1,2})?( *)?(AM|PM)?)? *$");
             if (match.Success)
@@ -106,8 +116,8 @@ namespace Nvelope
                 int year, month, day, hour = 0, minute = 0, second = 0;
                 // Check the first two elements - if one is greater than 12, it's the day, and the other is year
                 // otherwise, default to dd/mm/yyyy
-                var a = Convert.ToInt32(match.Groups[1].Value);
-                var b = Convert.ToInt32(match.Groups[2].Value);
+                var a = match.Groups[1].Value.ConvertTo<int>();
+                var b = match.Groups[2].Value.ConvertTo<int>();
                 if (b > 12) {
                     day = b;
                     month = a;
@@ -116,7 +126,7 @@ namespace Nvelope
                     month = b;
                 }
                 // Group 3 is year
-                year = Convert.ToInt32(match.Groups[3].Value);
+                year = match.Groups[3].Value.ConvertTo<int>();
                 if (year < 100)
                     year = MakeFourDigitYear(year);
 
@@ -127,15 +137,15 @@ namespace Nvelope
                 if (match.Groups[5].Success)
                 {
                     bool isNoon = match.Groups[5].Value == "12";
-                    hour = Convert.ToInt32(match.Groups[5].Value) + ((isPM && !isNoon) ? 12 : 0);
+                    hour = match.Groups[5].Value.ConvertTo<int>() + ((isPM && !isNoon) ? 12 : 0);
                 }
 
                 if (match.Groups[6].Success)
-                    minute = Convert.ToInt32(match.Groups[6].Value);
+                    minute = match.Groups[6].Value.ConvertTo<int>();
 
                 // Seconds are optional
                 if (match.Groups[7].Success)
-                    second = Convert.ToInt32(match.Groups[8].Value);
+                    second = match.Groups[8].Value.ConvertTo<int>();
 
                 return new DateTime(year, month, day, hour, minute, second);
             }
@@ -353,14 +363,14 @@ namespace Nvelope
                 }
             }
 
-            Exception convertException = null;
-
             try {
                 // If nothing else works, let .NET try to do it
-                return System.Convert.ChangeType(source, type);
-            } catch (Exception ex) {
-                convertException = ex;
+                return Convert.ChangeType(source, type, CultureInfo.InvariantCulture);
             }
+            catch (InvalidCastException) { }
+            catch (FormatException) { }
+            catch (OverflowException) { }
+            catch (ArgumentNullException) { }
 
             // Last ditch effort - look at the constructors for the class, and see if there's a 
             // constructor that takes our input type
@@ -372,8 +382,7 @@ namespace Nvelope
                 return constructor.Invoke(new object[] { source });
             else
                 throw new ConversionException("Could not convert value '" +
-                    source.ToStringN() + "' to requested type '" + type.Name + "'",
-                    convertException);
+                    source.ToStringN() + "' to requested type '" + type.Name + "'");
         }
 
         /// <summary>
