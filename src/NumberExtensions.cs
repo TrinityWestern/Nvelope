@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -114,7 +115,7 @@ namespace Nvelope
         /// <returns>String with the percentage, plus a percent sign.</returns>
         public static string AsPercentage(this decimal rate)
         {
-            return (rate * 100).ToString("0.00") + "%";
+            return (rate * 100).ToString("0.00", CultureInfo.CurrentCulture) + "%";
 		}
 
         /// <summary>
