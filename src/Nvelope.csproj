@@ -106,11 +106,7 @@
     <Compile Include="TimeSpanExtensions.cs" />
     <Compile Include="TupleExtensions.cs" />
     <Compile Include="XmlExtensions.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="keypair.snk" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="CodeAnalysisDictionary.xml">
       <SubType>Designer</SubType>
     </Content>
