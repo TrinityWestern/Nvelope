@@ -257,19 +257,17 @@ namespace Nvelope.Reflection
 
             var property = type.GetProperty(fieldName);
 
-            object converted = null;
-
             if (property != null) {
-                if (value.CanConvertTo(property.PropertyType, out converted))
-                    property.SetValue(source, converted, null);
+                if (value.CanConvertTo(property.PropertyType))
+                    property.SetValue(source, value.ConvertTo(property.PropertyType), null);
                 else
                     throw new ConversionException("Error setting property '" + fieldName + "' - cannot convert to type '" + property.PropertyType.Name + "' from value '"
                         + (value == null ? "<null>" : value.ToString()) + "'");
             } else { // Try a field
                 var field = type.GetField(fieldName);
                 if (field != null)
-                    if (value.CanConvertTo(field.FieldType, out converted))
-                        field.SetValue(source, converted);
+                    if (value.CanConvertTo(field.FieldType))
+                        field.SetValue(source, value.ConvertTo(field.FieldType));
                     else
                         throw new ConversionException("Error setting field '" + fieldName + "' - cannot convert to type '" + field.FieldType.Name + "' from value '" +
                         (value == null ? "<null>" : value.ToString()) + "'");

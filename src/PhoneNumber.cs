@@ -63,8 +63,8 @@ namespace Nvelope
         public static string TryFormat(string str)
         {
             if (str == null) return str;
-            PhoneNumber phone;
-            return str.CanConvertTo(out phone) ? phone.ToString() : str;
+            var phone = str.ConvertAs<PhoneNumber>();
+            return phone != null ? phone.ToString() : str;
         }
 
         public override string ToString() {

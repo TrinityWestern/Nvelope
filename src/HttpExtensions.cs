@@ -24,9 +24,8 @@ namespace Nvelope
             // that yet. At the moment it just throws a FormatException
             if (!req.Params.ContainsKey(name))
                 throw new HttpException("Required '" + name + "' not set");
-            T output = default(T);
-            if (req.Params[name].CanConvertTo<T>(out output))
-                return output;
+            if (req.Params[name].CanConvertTo<T>())
+                return req.Params[name].ConvertTo<T>();
             else
                 throw new HttpException("Parameter '" + name + "' is not the right format");
         }

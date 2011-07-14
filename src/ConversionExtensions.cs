@@ -413,31 +413,6 @@ namespace Nvelope
             }
         }
 
-        public static bool CanConvertTo(this object source, Type type, out object value)
-        {
-            try {
-                value = ConvertTo(source, type);
-                return true;
-            } catch {
-                value = null;
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Can we convert this value to some other type?
-        /// </summary>
-        public static bool CanConvertTo<T>(this object source, out T value)
-        {
-            try {
-                value = ConvertTo<T>(source);
-                return true;
-            } catch {
-                value = default(T);
-                return false;
-            }
-        }
-
         /// <summary>
         /// Like ConvertTo, but returns null on failure instead of throwing
         /// an exception. Like the 'as' keyword.
