@@ -386,16 +386,6 @@
         }
 
         [Test]
-        public void TryEach()
-        {
-            var list = new string[] { "1", "foobar", "3" };
-            var errors = list.TryEach(str => str.ConvertTo<int>());
-            Assert.AreEqual(1, errors.Count);
-            Assert.AreEqual("foobar", errors.Keys.First());
-            Assert.IsTrue(errors.Values.First().GetType().IsSubclassOf(typeof(Exception)));
-        }
-
-        [Test]
         public void Print()
         {
             var list = new Dictionary<string, object>[]

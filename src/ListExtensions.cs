@@ -705,29 +705,6 @@ namespace Nvelope
             return false;
         }
 
-        /// <summary>
-        /// Trys to execute an action for every item in the list; returns a mapping of all
-        /// the elements that threw an exception
-        /// </summary>
-        [Obsolete("Code that relies on Exception handling is bad practice")]
-        public static Dictionary<T, Exception> TryEach<T>(this IEnumerable<T> list, Action<T> action)
-        {
-            Dictionary<T, Exception> errors = new Dictionary<T, Exception>();
-            foreach (var t in list)         
-            { 
-                try
-                {
-                    action(t);
-                }
-                catch(Exception e)
-                {
-                    errors.Add(t, e);
-                }            
-            }
-            return errors;        
-        }
-    
-
         #region Infinite sequences
         /// <summary>
         /// Repeats the sequence forever. WARNING: Generates an infinite sequence - 
