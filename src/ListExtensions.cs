@@ -174,7 +174,7 @@ namespace Nvelope
 
         public static T ElementOr<T>(this IEnumerable<T> list, int index, T alternate)
         {
-            if (list.AtLeast(index + 1))
+            if (index < int.MaxValue && list.AtLeast(index + 1))
                 return list.ElementAt(index);
             
             return alternate;
@@ -199,8 +199,6 @@ namespace Nvelope
         {
             return ElementOr(list, 4, alternate);
         }
-
-
 
         #endregion
 
@@ -607,12 +605,14 @@ namespace Nvelope
         /// </summary>
         /// <remarks>Stolen from Scala 2.8's ScanLeft/ScanRight</remarks>
         /// <typeparam name="T"></typeparam>
-        /// <typeparam name="U"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
         /// <param name="list"></param>
         /// <param name="initialValue"></param>
         /// <param name="fn"></param>
         /// <returns></returns>
-        public static IEnumerable<U> Scan<T, U>(this IEnumerable<T> list, U initialValue, Func<U, T, U> fn)
+        public static IEnumerable<TResult> Scan<T, TResult>(
+            this IEnumerable<T> list, TResult initialValue,
+            Func<TResult, T, TResult> fn)
         {
             var cur = initialValue;
             foreach (var item in list)
