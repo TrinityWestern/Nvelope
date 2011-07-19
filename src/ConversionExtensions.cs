@@ -379,9 +379,14 @@ namespace Nvelope
                 constructor = type.GetConstructor(new Type[] { sourceType });
 
             if (constructor != null)
-                return constructor.Invoke(new object[] { source });
-            else
-                throw new ConversionException("Could not convert value '" +
+            {
+                try
+                {
+                    return constructor.Invoke(new object[] { source });
+                }
+                catch (TargetInvocationException) { }
+            }
+            throw new ConversionException("Could not convert value '" +
                     source.ToStringN() + "' to requested type '" + type.Name + "'");
         }
 
