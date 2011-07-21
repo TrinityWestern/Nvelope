@@ -422,14 +422,22 @@ namespace Nvelope
         /// </summary>
         public static bool CanConvertTo<T>(this object source)
         {
-            try {
+            try
+            {
                 ConvertTo<T>(source);
                 return true;
             }
             catch (ConversionException)
             {
+                // This is for if we're trying to convert from a string to an enum
+                // and there is no enum value that corresponds to that string
                 return false;
             }
+            catch (ArgumentException)
+            {
+                return false;
+            }
+
         }
 
         /// <summary>

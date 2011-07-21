@@ -179,6 +179,13 @@ namespace Nvelope.Tests
         }
 
         [Test]
+        public void CanConvertTo_Enum()
+        {
+            Assert.True("One".CanConvertTo<TestEnum>());
+            Assert.False("asdfadsf".CanConvertTo<TestEnum>());
+        }
+
+        [Test]
         public void Enum_to_int()
         {
             Assert.AreEqual(1, TestEnum.One.ConvertTo<int>());
