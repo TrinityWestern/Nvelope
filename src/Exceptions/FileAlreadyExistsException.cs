@@ -17,6 +17,14 @@ namespace Nvelope.Exceptions
     [Serializable]
     public class FileAlreadyExistsException : IOException
     {
+        public string FileName { get; set; }
+
+        public FileAlreadyExistsException(string filename, string message)
+            : base(message)
+        {
+            FileName = filename;
+        }
+
         #region These are just here for FxCop rules
 
         /// <summary>
@@ -24,15 +32,6 @@ namespace Nvelope.Exceptions
         /// The instance will be empty.
         /// </summary>
         public FileAlreadyExistsException() : base()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the FileAlreadyExistsException class.
-        /// Important properties in the instance will be empty.
-        /// </summary>
-        /// <param name="message">The error message that explains the reason for the exception.</param>
-        public FileAlreadyExistsException(string message) : base(message)
         {
         }
 
@@ -60,6 +59,7 @@ namespace Nvelope.Exceptions
         {
         }
 
-        #endregion
+        #endregion        
+
     }
 }

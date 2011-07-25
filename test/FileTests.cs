@@ -26,7 +26,7 @@ namespace Nvelope.Tests
              if (File.Exists(FileName))
              {
                  try {
-                     throw new FileAlreadyExistsException("File (" + FileName + ") already exists");
+                     throw new FileAlreadyExistsException(FileName, "File (" + FileName + ") already exists");
                  }
                  catch (FileAlreadyExistsException ex)
                  {
