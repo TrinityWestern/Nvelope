@@ -77,6 +77,22 @@ namespace Nvelope.Tests
         }
 
         [Test]
+        public void OverlapWith0LengthIntervals()
+        {
+            var ab = new Interval<DateTime>(A, B);            
+            var bd = new Interval<DateTime>(B, D);
+            var cd = new Interval<DateTime>(C, D);
+
+            var over = ab.Overlap(bd, true);
+            Assert.NotNull(over);
+            Assert.AreEqual(B, over.Start);
+            Assert.AreEqual(B, over.End);
+
+            over = ab.Overlap(cd, true);
+            Assert.Null(over);
+        }
+
+        [Test]
         public void Gap()
         {
             var ab = new Interval<DateTime>(A, B);

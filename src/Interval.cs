@@ -58,7 +58,14 @@ namespace Nvelope
         {
             return new Interval<T>(this.End, this.Start);
         }
-        public Interval<T> Overlap(Interval<T> other)
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="other"></param>
+        /// <param name="return0LengthIntervals">If true, will return 0 length overlaps, ie [5->5] for places where the two intervals touch</param>
+        /// <returns></returns>
+        public Interval<T> Overlap(Interval<T> other, bool return0LengthIntervals = false)
         {
             var interval = this.Normalized();
             other = other.Normalized();
@@ -66,6 +73,8 @@ namespace Nvelope
             var start = interval.Start.And(other.Start).Max();
             var end = interval.End.And(other.End).Min();
 
+            if (return0LengthIntervals && start.CompareTo(end) == 0)
+                return new Interval<T>(start, end);
             if (start.CompareTo(end) >= 0)
                 return null;
             return new Interval<T>(start, end);
