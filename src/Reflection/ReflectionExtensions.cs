@@ -333,6 +333,21 @@ namespace Nvelope.Reflection
         /// <summary>
         /// Update the fields on source from data, converting the types if necessary
         /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="data"></param>
+        /// <param name="caseSensitive"></param>
+        /// <param name="fields"></param>
+        /// <returns></returns>
+        public static T _SetFrom<T>(this T source, Dictionary<string, string> data, bool caseSensitive = true, IEnumerable<string> fields = null) where T : class
+        {
+            var convertedData = data.SelectVals(v => v as object);
+            return _SetFrom(source, convertedData, caseSensitive, fields);
+        }
+
+        /// <summary>
+        /// Update the fields on source from data, converting the types if necessary
+        /// </summary>
         /// <param name="caseSensitive">Are the field/property names case sensitive?</param>
         /// <returns>The original object (source)</returns>
         public static T _SetFrom<T>(this T source, Dictionary<string, object> data, bool caseSensitive = true, IEnumerable<string> fields = null) where T : class

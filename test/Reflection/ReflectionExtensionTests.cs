@@ -4,8 +4,9 @@ using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
+using Nvelope.Reflection;
 
-namespace Nvelope.Reflection.Tests
+namespace Nvelope.Tests.Reflection
 {
     [TestFixture]
     public class ReflectionExtensionTests
