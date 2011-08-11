@@ -31,7 +31,13 @@ namespace Nvelope.Exceptions
         /// Initializes a new instance of the FileAlreadyExistsException class.
         /// The instance will be empty.
         /// </summary>
-        public FileAlreadyExistsException() : base()
+        public FileAlreadyExistsException()
+            : base()
+        {
+        }
+
+        public FileAlreadyExistsException(string message)
+            : base(message)
         {
         }
 
