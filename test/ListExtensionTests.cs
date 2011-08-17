@@ -289,6 +289,34 @@
         }
 
         [Test]
+        public void Scoop()
+        {
+            var data = new string[] { "a", "bb", "ccc"};
+            var res = data.Scoop(1, s => s.Length);
+            Assert.AreEqual("((a, 1))", res.Print());
+            res = data.Scoop(2, s => s.Length);
+            Assert.AreEqual("((a, 1),(bb, 1))", res.Print());
+            res = data.Scoop(5, s => s.Length);
+            Assert.AreEqual("((a, 1),(bb, 2),(ccc, 2))", res.Print());
+            res = data.Scoop(11, s => s.Length);
+            Assert.AreEqual("((a, 1),(bb, 2),(ccc, 3))", res.Print());
+        }
+
+        [Test]
+        public void ScoopDecimal()
+        {
+            var data = new decimal[] { .1m, .7m, 2m };
+            var res = data.Scoop(.1m, d => d);
+            Assert.AreEqual("((0.1, 0.1))", res.Print());
+            res = data.Scoop(.4m, d => d);
+            Assert.AreEqual("((0.1, 0.1),(0.7, 0.3))", res.Print());
+            res = data.Scoop(1.2m, d => d);
+            Assert.AreEqual("((0.1, 0.1),(0.7, 0.7),(2, 0.4))", res.Print());
+            res = data.Scoop(5m, d => d);
+            Assert.AreEqual("((0.1, 0.1),(0.7, 0.7),(2, 2))", res.Print());
+        }
+
+        [Test]
         public void TakeNth()
         {
             var i = new int[] { 1, 2, 3, 4, 5, 6 };

@@ -623,6 +623,60 @@ namespace Nvelope
         }
 
         /// <summary>
+        /// Weights each item in list according to sizeFn, then takes items until the total
+        /// weight reaches amtToScoop. The result is a mapping of each item to the amount
+        /// we need to take from the item to achieve the target weight
+        /// </summary>
+        /// <typeparam name="T"></typeparam>        
+        /// <param name="list"></param>
+        /// <param name="sizeFn"></param>
+        /// <returns></returns>
+        public static IEnumerable<Tuple<T, int>> Scoop<T>(this IEnumerable<T> list, int amtToScoop, Func<T, int> sizeFn)
+        {   
+            var sum = 0;
+            foreach (var item in list)
+            {
+                var itemSize = sizeFn(item);
+                var newSum = sum + itemSize;
+                if (newSum < amtToScoop)
+                    yield return Tuple.Create(item, itemSize);
+                else
+                {
+                    yield return Tuple.Create(item, amtToScoop - sum);
+                    yield break;
+                }
+                sum = newSum;
+            }
+        }
+
+        /// <summary>
+        /// Weights each item in list according to sizeFn, then takes items until the total
+        /// weight reaches amtToScoop. The result is a mapping of each item to the amount
+        /// we need to take from the item to achieve the target weight
+        /// </summary>
+        /// <typeparam name="T"></typeparam>        
+        /// <param name="list"></param>
+        /// <param name="sizeFn"></param>
+        /// <returns></returns>
+        public static IEnumerable<Tuple<T, decimal>> Scoop<T>(this IEnumerable<T> list, decimal amtToScoop, Func<T, decimal> sizeFn)
+        {
+            var sum = 0m;
+            foreach (var item in list)
+            {
+                var itemSize = sizeFn(item);
+                var newSum = sum + itemSize;
+                if (newSum < amtToScoop)
+                    yield return Tuple.Create(item, itemSize);
+                else
+                {
+                    yield return Tuple.Create(item, amtToScoop - sum);
+                    yield break;
+                }
+                sum = newSum;
+            }
+        }
+
+        /// <summary>
         /// Gets every nth item in the list
         /// ie, [1,2,3,4].TakeNth(2) -> [2,4]
         /// </summary>
