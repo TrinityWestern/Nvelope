@@ -45,6 +45,8 @@ namespace Nvelope
         public static T OptionalParam<T>(this HttpRequestBase req, string name, T default_value)
         {
             if (!req.Params.ContainsKey(name)) return default_value;
+            if (req.Params[name].IsNullOrEmpty())
+                return default_value;
             return req.RequiredParam<T>(name);
         }
 
