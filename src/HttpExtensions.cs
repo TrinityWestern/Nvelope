@@ -41,12 +41,13 @@ namespace Nvelope
         /// <param name="req">HttpRequest object</param>
         /// <param name="name">paramater name</param>
         /// <param name="default_value">value to return when not set</param>
+        /// <param name="defaultIfInvalid">Return default value if the parameter is not in the right format</param>
         /// <returns>instance of T</returns>
-        public static T OptionalParam<T>(this HttpRequestBase req, string name, T default_value)
+        public static T OptionalParam<T>(this HttpRequestBase req, string name, T default_value, bool defaultIfInvalid = false)
         {
             if (!req.Params.ContainsKey(name)) return default_value;
-            if (req.Params[name].IsNullOrEmpty())
-                return default_value;
+            if (req.Params[name].IsNullOrEmpty()) return default_value;
+            if (defaultIfInvalid && !req.Params[name].CanConvertTo<T>()) return default_value;
             return req.RequiredParam<T>(name);
         }
 
@@ -102,9 +103,9 @@ namespace Nvelope
         {
             return new HttpRequestWrapper(req).RequiredParam<T>(name);
         }
-        public static T OptionalParam<T>(this HttpRequest req, string name, T default_value)
+        public static T OptionalParam<T>(this HttpRequest req, string name, T default_value, bool defaultIfInvalid = false)
         {
-            return new HttpRequestWrapper(req).OptionalParam<T>(name, default_value);
+            return new HttpRequestWrapper(req).OptionalParam<T>(name, default_value, defaultIfInvalid);
         }
         public static bool HasParam(this HttpRequest req, string name)
         {
