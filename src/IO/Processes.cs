@@ -38,12 +38,13 @@ namespace Nvelope.IO
             p.WaitForExit();
 
             if (p.ExitCode != 0)
-                throw new ExternalProcessException("External processed exited with code: " + p.ExitCode + 
-                    " and message: " + error + "\n" + output);
+            {
+                var message = string.Format("External process '{0}' exited with code: {1} and message: {2}\nProcess output:{3}",
+                    command.And(arguments).Join(" "), p.ExitCode, error, output);
+                throw new ExternalProcessException(message);
+            }
 
             return output;
-
-
         }
     }
 }
