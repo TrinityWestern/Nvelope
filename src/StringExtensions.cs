@@ -43,6 +43,16 @@ namespace Nvelope
             return res;
         }
 
+        public static string SentenceCase(this string sentence)
+        {
+            // matches the first sentence of a string, as well as subsequent sentences
+            var r = new Regex(@"^\s*([a-z])",
+                RegexOptions.ExplicitCapture | RegexOptions.Multiline);
+            // MatchEvaluator delegate defines replacement of setence starts to uppercase
+            return r.Replace(sentence, s => s.Value.ToUpper());
+
+        }
+
         /// <summary>
         /// Tries to parse the string as an integer, returning 0 if there's a problem
         /// </summary>
