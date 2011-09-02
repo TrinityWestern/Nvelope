@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="BinaryExtensions.cs" />
     <Compile Include="CharListExtensions.cs" />
+    <Compile Include="English.cs" />
     <Compile Include="SerializationExtensions.cs" />
     <Compile Include="HtmlExtensions.cs" />
     <Compile Include="Interval.cs" />
