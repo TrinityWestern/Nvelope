@@ -50,7 +50,12 @@ namespace Nvelope
         /// </summary>
         public static string Print<TKey, TValue>(this Dictionary<TKey, TValue> dict)
         {
-            return dict.OrderBy(kv => kv.Key).Select(kv => "[" + kv.Key.Print() + "," + kv.Value.Print() + "]").Print();
+            IEnumerable<KeyValuePair<TKey, TValue>> orderedDict = dict;
+            // If we can order the keys, do so
+            if (typeof(TKey).IsAssignableFrom(typeof(IComparable)))
+                orderedDict = dict.OrderBy(kv => kv.Key);
+
+            return orderedDict.Select(kv => "[" + kv.Key.Print() + "," + kv.Value.Print() + "]").Print();
         }
 
         /// <summary>
