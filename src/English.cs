@@ -35,10 +35,10 @@
             return firstBit.Join(", ") + ", " + conjuction + " " + parts.Last();
         }
 
-        public static string Number(string noun, int count)
+        public static string Number(string noun, int count, bool spellOut)
         {
             string number = count.ToString();
-            if (WrittenNumerals.Keys.Contains(count)) {
+            if (spellOut && WrittenNumerals.Keys.Contains(count)) {
                 number = WrittenNumerals[count];
             }
             return number + " " + (count != 1 ? English.Pluralize(noun) : noun);

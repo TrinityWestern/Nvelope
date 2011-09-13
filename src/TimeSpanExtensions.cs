@@ -66,7 +66,7 @@
             return new TimeSpan(0);
         }
 
-        public static string ToEnglish(this TimeSpan interval)
+        public static string ToEnglish(this TimeSpan interval, bool spellOut)
         {
             // May a nice human readable string
             var parts = new List<string>();
@@ -79,28 +79,28 @@
 
                 if (years > 0)
                 {
-                    parts.Add(English.Number("year", years));
+                    parts.Add(English.Number("year", years, spellOut));
                 }
                 if (months > 0)
                 {
-                    parts.Add(English.Number("month", months));
+                    parts.Add(English.Number("month", months, spellOut));
                 }
                 if (days > 0)
                 {
-                    parts.Add(English.Number("day", days));
+                    parts.Add(English.Number("day", days, spellOut));
                 }
             }
             if (interval.Hours > 0)
             {
-                parts.Add(English.Number("hour", interval.Hours));
+                parts.Add(English.Number("hour", interval.Hours, spellOut));
             }
             if (interval.Minutes > 0)
             {
-                parts.Add(English.Number("minute", interval.Minutes));
+                parts.Add(English.Number("minute", interval.Minutes, spellOut));
             }
             if (interval.Seconds > 0)
             {
-                parts.Add(English.Number("second", interval.Seconds));
+                parts.Add(English.Number("second", interval.Seconds, spellOut));
             }
 
             if (!parts.Any())

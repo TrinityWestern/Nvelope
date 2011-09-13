@@ -39,7 +39,7 @@ namespace Nvelope.Tests
             var thirtyfiveMonth = new DateTime(2013, 12, 24);
             var eightPfiveYear = new DateTime(2019, 7, 24);
 
-            var fn = new Func<DateTime, string>(d => d.Subtract(now).Approximate().ToEnglish());
+            var fn = new Func<DateTime, string>(d => d.Subtract(now).Approximate().ToEnglish(true));
 
             Assert.AreEqual("one second", fn(second));
             Assert.AreEqual("5 seconds", fn(fiveSecond));
@@ -57,6 +57,27 @@ namespace Nvelope.Tests
             Assert.AreEqual("two years", fn(twoYear));
             Assert.AreEqual("three years", fn(thirtyfiveMonth));
             Assert.AreEqual("9 years", fn(eightPfiveYear),
+                "If it's a big enough number of years, don't bother counting it in months");
+
+
+            var digit = new Func<DateTime, string>(d => d.Subtract(now).Approximate().ToEnglish(false));
+
+            Assert.AreEqual("1 second", digit(second));
+            Assert.AreEqual("5 seconds", digit(fiveSecond));
+            Assert.AreEqual("1 minute", digit(minute));
+            Assert.AreEqual("5 minutes", digit(fiveMinute));
+            Assert.AreEqual("1 hour", digit(hour));
+            Assert.AreEqual("5 hours", digit(fiveHour));
+            Assert.AreEqual("1 day", digit(day));
+            Assert.AreEqual("5 days", digit(fiveDay));
+            Assert.AreEqual("1 month", digit(month));
+            Assert.AreEqual("6 months", digit(sixMonth));
+            Assert.AreEqual("1 year", digit(year));
+            Assert.AreEqual("1 year", digit(yearAndDay),
+                "If it's close to a year, just call it a year");
+            Assert.AreEqual("2 years", digit(twoYear));
+            Assert.AreEqual("3 years", digit(thirtyfiveMonth));
+            Assert.AreEqual("9 years", digit(eightPfiveYear),
                 "If it's a big enough number of years, don't bother counting it in months");
         }
         [Test]
@@ -123,9 +144,13 @@ namespace Nvelope.Tests
             var barelyTwo = new TimeSpan(547, 12, 0, 0);
             var oneMinute = new TimeSpan(0, 1, 0);
 
-            Assert.AreEqual("now", new TimeSpan(0, 0, 0, 0, 232).Approximate().ToEnglish());
-            Assert.AreEqual("one year", (barelyTwo - oneMinute).Approximate().ToEnglish());
-            Assert.AreEqual("two years", barelyTwo.Approximate().ToEnglish());
+            Assert.AreEqual("now", new TimeSpan(0, 0, 0, 0, 232).Approximate().ToEnglish(true));
+            Assert.AreEqual("one year", (barelyTwo - oneMinute).Approximate().ToEnglish(true));
+            Assert.AreEqual("two years", barelyTwo.Approximate().ToEnglish(true));
+
+            Assert.AreEqual("now", new TimeSpan(0, 0, 0, 0, 232).Approximate().ToEnglish(false));
+            Assert.AreEqual("1 year", (barelyTwo - oneMinute).Approximate().ToEnglish(false));
+            Assert.AreEqual("2 years", barelyTwo.Approximate().ToEnglish(false));
         }
 
         [Test]
