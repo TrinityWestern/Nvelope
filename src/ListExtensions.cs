@@ -496,6 +496,23 @@ namespace Nvelope
         }
 
         /// <summary>
+        /// Return items from a list until haltFn returns true - returns the item that returned true as well
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="haltFn"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> TakeUntil<T>(this IEnumerable<T> list, Func<T, bool> haltFn)
+        {
+            foreach (var t in list)
+            {
+                yield return t;
+                if (haltFn(t))
+                    yield break;
+            }
+        }
+
+        /// <summary>
         /// Returns the first item of list, first of other, second of list, and so on
         /// Stops when either list reaches the end
         /// </summary>

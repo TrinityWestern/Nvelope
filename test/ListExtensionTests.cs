@@ -222,6 +222,16 @@
         }
 
         [Test]
+        public void TakeUntil()
+        {
+            var ints = 1.To(5);
+
+            Assert.AreEqual("(1)", ints.TakeUntil(i => i > 0).Print());
+            Assert.AreEqual("(1,2,3)", ints.TakeUntil(i => i > 2).Print());
+            Assert.AreEqual("(1,2,3,4,5)", ints.TakeUntil(i => i > 10).Print());
+        }
+
+        [Test]
         public void And()
         {
             Assert.AreEqual("(a,b,c,d)", "ab".Take(2).And("cd").Print());
