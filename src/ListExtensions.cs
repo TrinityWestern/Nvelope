@@ -91,10 +91,7 @@ namespace Nvelope
         /// </summary>
         public static IEnumerable<T> And<T>(this IEnumerable<T> source, IEnumerable<T> other)
         {
-            foreach (T t in source)
-                yield return t;
-            foreach (T t in other)
-                yield return t;
+            return source.Concat(other);
         }
 
         /// <summary>
