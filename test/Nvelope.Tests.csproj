@@ -62,6 +62,7 @@
     <Compile Include="Collections\SDictionaryTests.cs" />
     <Compile Include="Collections\TreeTests.cs" />
     <Compile Include="Combinatorics\CombinatoricsListExtensionTests.cs" />
+    <Compile Include="EnglishTests.cs" />
     <Compile Include="HtmlExtensionTests.cs" />
     <Compile Include="DataTableExtensionTests.cs" />
     <Compile Include="FileTests.cs" />
