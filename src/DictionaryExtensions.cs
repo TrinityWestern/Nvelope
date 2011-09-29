@@ -52,8 +52,12 @@ namespace Nvelope
         {
             IEnumerable<KeyValuePair<TKey, TValue>> orderedDict = dict;
             // If we can order the keys, do so
-            if (typeof(TKey).IsAssignableFrom(typeof(IComparable)))
-                orderedDict = dict.OrderBy(kv => kv.Key);
+            if (dict.Any())
+            {
+                var asIComp = dict.Keys.First() as IComparable;
+                if (asIComp != null) // If we can't convert to IComparable, so we can't sort
+                    orderedDict = dict.OrderBy(kv => kv.Key);
+            }
 
             return orderedDict.Select(kv => "[" + kv.Key.Print() + "," + kv.Value.Print() + "]").Print();
         }
