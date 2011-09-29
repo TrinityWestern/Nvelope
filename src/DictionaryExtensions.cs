@@ -51,7 +51,7 @@ namespace Nvelope
         public static string Print<TKey, TValue>(this Dictionary<TKey, TValue> dict)
         {
             IEnumerable<KeyValuePair<TKey, TValue>> orderedDict = dict;
-            // If we can order the keys, do so
+            // If we can order the keys, do soBB
             if (dict.Any())
             {
                 var asIComp = dict.Keys.First() as IComparable;
