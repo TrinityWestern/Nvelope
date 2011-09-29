@@ -104,7 +104,7 @@ namespace Nvelope.Reflection
                 filterRef.Invoke(members, args);
             }
             
-            var decalaration = members.Declarations();
+            var decalaration = members.FieldDeclarations();
             foreach (var kv in decalaration)
             {
                 var fieldName = kv.Key;

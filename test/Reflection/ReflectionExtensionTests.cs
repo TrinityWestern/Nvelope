@@ -35,10 +35,10 @@ namespace Nvelope.Tests.Reflection
         {
             var dh = new DollHouse();
             var members = dh._GetMembers();
-            var declare = members.Declarations();
+            var declare = members.FieldDeclarations();
             Assert.AreEqual(typeof(Color), declare["Paint"]);
             var allmembers = dh._GetMembers(MemberTypes.All);
-            Assert.Throws<ArgumentException>(() => allmembers.Declarations());
+            Assert.Throws<ArgumentException>(() => allmembers.FieldDeclarations());
         }
 
         [Test]

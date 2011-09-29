@@ -151,12 +151,15 @@ namespace Nvelope.Reflection
         /// </summary>
         /// <param name="members"></param>
         /// <returns></returns>
-        public static Dictionary<string, Type> Declarations(
+        public static Dictionary<string, Type> FieldDeclarations(
             this IEnumerable<MemberInfo> members)
         {
             var dict = new Dictionary<string, Type>();
             foreach (var member in members) {
-                dict.Add(member.Name, member.ReturnType());
+                if (member.Fieldlike())
+                {
+                    dict.Add(member.Name, member.ReturnType());
+                }
             }
             return dict;
         }
