@@ -202,6 +202,8 @@ namespace Nvelope.Reflection
             }
             // otherwise make sure it's not an indexed property
             var property = member as PropertyInfo;
+            if (property == null)
+                return false;
             return property.GetIndexParameters().Count() == 0;
         }
 
