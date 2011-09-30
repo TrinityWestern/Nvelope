@@ -98,7 +98,7 @@
     <Compile Include="Exceptions\FileAlreadyExistsException.cs" />
     <Compile Include="ListExtensions.cs" />
     <Compile Include="NumberExtensions.cs" />
-    <Compile Include="AspExtensions.cs" />
+    <Compile Include="Web\AspExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Collections\Range.cs" />
     <Compile Include="Reflection\ReflectionExtensions.cs" />
@@ -107,6 +107,8 @@
     <Compile Include="Tabular\CellLoc.cs" />
     <Compile Include="TimeSpanExtensions.cs" />
     <Compile Include="TupleExtensions.cs" />
+    <Compile Include="TypeExtensions.cs" />
+    <Compile Include="Web\HtmlExtensions.cs" />
     <Compile Include="XmlExtensions.cs" />
     <None Include="keypair.snk" />
     <Content Include="CodeAnalysisDictionary.xml">

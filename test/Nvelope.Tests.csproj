@@ -53,7 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AspExtensionTests.cs" />
+    <Compile Include="Web\AspExtensionTests.cs" />
     <Compile Include="BinaryExtensionTests.cs" />
     <Compile Include="CharListExtensionTests.cs" />
     <Compile Include="Collections\OrderedSequentialTests.cs" />
@@ -95,6 +95,7 @@
     <Compile Include="Tabular\CellLocTests.cs" />
     <Compile Include="TimeSpanExtensionTests.cs" />
     <Compile Include="TupleExtensionTests.cs" />
+    <Compile Include="Web\HtmlExtensionTests.cs" />
     <Compile Include="XmlExtensionTests.cs" />
   </ItemGroup>
   <ItemGroup>

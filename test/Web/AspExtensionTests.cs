@@ -1,8 +1,9 @@
 ﻿using System.Linq;
 using System.Web.UI.WebControls;
 using NUnit.Framework;
+using Nvelope.Web;
 
-namespace Nvelope.Tests
+namespace Nvelope.Tests.Web
 {
     [TestFixture]
     class AspExtensionTests
