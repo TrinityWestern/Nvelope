@@ -29,13 +29,23 @@
         [Test]
         public void HtmlFormatFormats()
         {
-            Assert.AreEqual("Amount: " + (10m).ToString("c"), "Amount: {0:c}".HtmlFormat(10m).ToHtmlString());
+            Assert.AreEqual("Amount: " + (10m).ToString("c"), "{0}: {1:c}".HtmlFormat("Amount", 10m).ToHtmlString());
         }
 
         [Test]
         public void HtmlFormatExceptions()
         {
             Assert.Throws<ArgumentNullException>(() => "foo{0}bar".HtmlFormat(null));
+            Assert.Throws<ArgumentNullException>(() => string.Format("foo{0}bar", null));
+        }
+        [Test]
+        public void boom()
+        {
+            Assert.AreEqual("eer", "eer".HtmlFormat(123).ToHtmlString());
+            //Index (zero based) must be greater than or equal to zero and less than the size of the argument list.
+            Assert.Throws<FormatException>(() => "e{1}er".HtmlFormat(123).ToHtmlString());
+            Assert.Throws<FormatException>(() => "e{0}e{1}r".HtmlFormat(123).ToHtmlString());
+            Assert.AreEqual("ee123r", "ee{1}r".HtmlFormat(12, 123).ToHtmlString());
         }
     }
 }
