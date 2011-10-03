@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using System.Web;
 
     /// <summary>
     /// TODO: Update summary.
@@ -33,6 +34,12 @@
             }
             var firstBit = parts.Slice(0, -1);
             return firstBit.Join(", ") + ", " + conjuction + " " + parts.Last();
+        }
+
+        public static IHtmlString Conjoin(string conjuction, IEnumerable<IHtmlString> parts)
+        {
+            var decoded = parts.Select(p => p.ToHtmlString());
+            return new HtmlString(Conjoin(conjuction, decoded));
         }
 
         public static string Number(string noun, int count, bool spellOut = false)
