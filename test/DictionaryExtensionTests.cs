@@ -30,6 +30,25 @@ namespace Nvelope.Tests
         }
 
         [Test]
+        public void Assoc_ExistingKey()
+        {
+            var dict = new Dictionary<string, int>();
+            dict.Add("a", 1);
+            var res = dict.Assoc("a", 2);
+            Assert.AreEqual("([a,2])", res.Print());
+        }
+
+        [Test]
+        public void Assoc_IsImmutable()
+        {
+            var dict = new Dictionary<string, int>();
+            dict.Add("a", 1);
+            var other = dict.Assoc("b", 2);
+            Assert.AreEqual("([a,1])", dict.Print(),
+                "Calling Assoc should not change the original dictionary");
+        }
+
+        [Test]
         public void Ensure()
         {
             var dict = new Dictionary<string, int>();

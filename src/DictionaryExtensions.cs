@@ -254,14 +254,14 @@ namespace Nvelope
         }
 
         /// <summary>
-        /// Return a new dictionary with the extra key added.
+        /// Return a new dictionary with the extra key added. If the key already exists, it's value is changed in the new dictionary
         /// </summary>
         /// <remarks>This makes it easier to do immutable programming with dictionaries. 
         /// Shamelessly stolen from clojure</remarks>
         public static Dictionary<TKey, TValue> Assoc<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey newKey, TValue newValue)
         {
             var res = new Dictionary<TKey, TValue>(dict);
-            res.Add(newKey, newValue);
+            res.SetVal(newKey, newValue);
             return res;
         }
 
