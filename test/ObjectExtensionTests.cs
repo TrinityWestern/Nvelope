@@ -10,7 +10,6 @@ namespace Nvelope.Tests
         {
             object a = 1;
             object b = 1;
-            Assert.False(a == b);
             Assert.True(a.Eq(b));
 
             b = null;
@@ -19,6 +18,21 @@ namespace Nvelope.Tests
             a = null;
             Assert.True(a.Eq(b));
             Assert.True(b.Eq(a));
+        }
+
+        [Test]
+        public void Neq()
+        {
+            object a = 1;
+            object b = 1;
+            Assert.False(a.Neq(b));
+
+            b = null;
+            Assert.True(a.Neq(b));
+            Assert.True(b.Neq(a));
+            a = null;
+            Assert.False(a.Neq(b));
+            Assert.False(b.Neq(a));
         }
                
         [Test]

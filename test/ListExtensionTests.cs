@@ -16,6 +16,10 @@
             Assert.True(list.None(i => i > 10));
             Assert.False(list.None(i => i > 0));
             Assert.False(list.None(i => i > 3));
+
+            // None on an empty list should always return true
+            list = new int[] { };
+            Assert.True(list.None(i => i > 10));
         }
 
         [Test]
