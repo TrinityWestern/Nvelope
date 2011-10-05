@@ -50,6 +50,9 @@ namespace Nvelope
         /// </summary>
         public static string Print<TKey, TValue>(this Dictionary<TKey, TValue> dict)
         {
+            if (dict == null)
+                return "";
+
             IEnumerable<KeyValuePair<TKey, TValue>> orderedDict = dict;
             // If we can order the keys, do so
             if (dict.Any())

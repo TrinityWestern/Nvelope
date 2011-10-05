@@ -8,6 +8,23 @@ namespace Nvelope.Tests
     public class DictionaryExtensionTests
     {
         [Test]
+        public void Print()
+        {
+            var d = new Dictionary<string, object>();
+            d.Ensure("foo", 1);
+            d.Ensure("bar", true);
+            // Note - Print should alphabetize the keys
+            Assert.AreEqual("([bar,True],[foo,1])", d.Print());
+        }
+
+        [Test]
+        public void PrintNull()
+        {
+            Dictionary<string, object> d = null;
+            Assert.AreEqual("", d.Print());
+        }
+
+        [Test]
         public void Realize()
         {
             var dict = new Dictionary<string, object>();
