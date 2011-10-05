@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Web.UI.WebControls;
 
-namespace Nvelope
+namespace Nvelope.Web
 {
     /// <summary>
     /// Extentions on ASP web forms and other such things
