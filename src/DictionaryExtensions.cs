@@ -50,6 +50,9 @@ namespace Nvelope
         /// </summary>
         public static string Print<TKey, TValue>(this Dictionary<TKey, TValue> dict)
         {
+            if (dict == null)
+                return "";
+
             IEnumerable<KeyValuePair<TKey, TValue>> orderedDict = dict;
             // If we can order the keys, do so
             if (dict.Any())
@@ -121,7 +124,7 @@ namespace Nvelope
                     return true;
                 else if (dict[key] != null && other[key] == null)
                     return false;
-                else if (!dict[key].Equals(other[key]))
+                else if (!dict[key].Eq(other[key]))
                     return false;
 
             return true;
@@ -254,14 +257,14 @@ namespace Nvelope
         }
 
         /// <summary>
-        /// Return a new dictionary with the extra key added.
+        /// Return a new dictionary with the extra key added. If the key already exists, it's value is changed in the new dictionary
         /// </summary>
         /// <remarks>This makes it easier to do immutable programming with dictionaries. 
         /// Shamelessly stolen from clojure</remarks>
         public static Dictionary<TKey, TValue> Assoc<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey newKey, TValue newValue)
         {
             var res = new Dictionary<TKey, TValue>(dict);
-            res.Add(newKey, newValue);
+            res.SetVal(newKey, newValue);
             return res;
         }
 
