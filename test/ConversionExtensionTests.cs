@@ -130,14 +130,6 @@ namespace Nvelope.Tests
         }
 
         [Test]
-        public void AsDictionary()
-        {
-            var data = new Data() { IntField = 1, StrField = "a" };
-            
-            Assert.AreEqual("([IntField,1],[StrField,a])", data._Inspect());
-        }
-
-        [Test]
         public void SetFrom_CaseInsensitive()
         {
             var data = new Data() { IntField = 1, StrField = "one" };
