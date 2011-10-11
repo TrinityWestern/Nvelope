@@ -10,6 +10,19 @@
     public class ListExtensionTests
     {
         [Test]
+        public void None()
+        {
+            var list = 1.To(5);
+            Assert.True(list.None(i => i > 10));
+            Assert.False(list.None(i => i > 0));
+            Assert.False(list.None(i => i > 3));
+
+            // None on an empty list should always return true
+            list = new int[] { };
+            Assert.True(list.None(i => i > 10));
+        }
+
+        [Test]
         public void Shift()
         {
             var list = "abcdef";

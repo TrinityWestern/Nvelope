@@ -8,6 +8,29 @@ namespace Nvelope
     public static class ListExtensions
     {
         /// <summary>
+        /// The opposite of All() - if any item passes predicate, return false
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public static bool None<T>(this IEnumerable<T> list, Func<T, bool> predicate)
+        {
+            return list.All(t => !predicate(t));
+        }
+
+        /// <summary>
+        /// Wrapper around new HashSet(list)
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public static HashSet<T> ToSet<T>(this IEnumerable<T> list)
+        {
+            return new HashSet<T>(list);
+        }
+
+        /// <summary>
         /// Make a shallow copy of a list/enumeration
         /// 
         /// This makes a copy of the list itself, but all the contents are

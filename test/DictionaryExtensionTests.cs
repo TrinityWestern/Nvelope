@@ -8,6 +8,23 @@ namespace Nvelope.Tests
     public class DictionaryExtensionTests
     {
         [Test]
+        public void Print()
+        {
+            var d = new Dictionary<string, object>();
+            d.Ensure("foo", 1);
+            d.Ensure("bar", true);
+            // Note - Print should alphabetize the keys
+            Assert.AreEqual("([bar,True],[foo,1])", d.Print());
+        }
+
+        [Test]
+        public void PrintNull()
+        {
+            Dictionary<string, object> d = null;
+            Assert.AreEqual("", d.Print());
+        }
+
+        [Test]
         public void Realize()
         {
             var dict = new Dictionary<string, object>();
@@ -27,6 +44,25 @@ namespace Nvelope.Tests
             dict.Add("a", 1);
             var res = dict.Assoc("b", 2);
             Assert.AreEqual("([a,1],[b,2])", res.Print());
+        }
+
+        [Test]
+        public void Assoc_ExistingKey()
+        {
+            var dict = new Dictionary<string, int>();
+            dict.Add("a", 1);
+            var res = dict.Assoc("a", 2);
+            Assert.AreEqual("([a,2])", res.Print());
+        }
+
+        [Test]
+        public void Assoc_IsImmutable()
+        {
+            var dict = new Dictionary<string, int>();
+            dict.Add("a", 1);
+            var other = dict.Assoc("b", 2);
+            Assert.AreEqual("([a,1])", dict.Print(),
+                "Calling Assoc should not change the original dictionary");
         }
 
         [Test]

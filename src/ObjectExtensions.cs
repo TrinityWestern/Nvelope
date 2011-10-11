@@ -19,6 +19,17 @@
         }
 
         /// <summary>
+        /// Inverse of Eq
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public static bool Neq(this object obj, object other)
+        {
+            return !obj.Eq(other);
+        }
+
+        /// <summary>
         /// Like ToString, but it handles nulls and gives nicer results for
         /// some objects.
         /// </summary>
