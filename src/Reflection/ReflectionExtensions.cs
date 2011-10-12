@@ -207,6 +207,27 @@ namespace Nvelope.Reflection
             return property.GetIndexParameters().Count() == 0;
         }
 
+        /// <summary>
+        /// Converts the object to a dictionary. If the object is already a dictionary, returns a copy
+        /// </summary>
+        /// <remarks>This function makes a copy of the dictionary rather than just returning
+        /// the original dictionary in order to preserve the semantics of _AsDictionary - when you
+        /// call it on an object, you get a new object back. Similarly here, you'll get a new dictionary
+        /// back.</remarks>
+        /// <param name="source"></param>
+        /// <param name="fieldNames"></param>
+        /// <returns></returns>
+        public static Dictionary<string, object> _AsDictionary(this Dictionary<string, object> source,
+            IEnumerable<string> fieldNames = null)
+        {
+            if (fieldNames == null)
+                return source.Copy();
+            else
+            {
+                var fieldSet = fieldNames.ToSet();
+                return source.WhereKeys(k => fieldSet.Contains(k));
+            }
+        }
 
         /// <summary>
         /// Converts the object to a collection of key-value pairs
@@ -216,6 +237,14 @@ namespace Nvelope.Reflection
             Type attributeType = null, bool includeInheritedAttributes = true,
             bool includeReadOnlyProperties = true)
         {
+            // Fake polymorphism here
+            // If there's a variable of type object, but it actually contains a dictionary, then make sure we call
+            // the version of _AsDictionary that just returns a copy of the dictionary, instead of digging up the 
+            // properties of the dictionary
+            // The semantics of AsDictionary imply that if you pass in a dictionary, you should get that dictionary back
+            if (source is Dictionary<string, object>)
+                return _AsDictionary(source as Dictionary<string, object>);
+
             var include = MemberTypes.Field | MemberTypes.Property;
             if (!includeFields)
                 include &= ~MemberTypes.Field;
@@ -237,6 +266,14 @@ namespace Nvelope.Reflection
 
         public static Dictionary<string, object> _AsDictionary(this object source, IEnumerable<string> fieldNames)
         {
+            // Fake polymorphism here
+            // If there's a variable of type object, but it actually contains a dictionary, then make sure we call
+            // the version of _AsDictionary that just returns a copy of the dictionary, instead of digging up the 
+            // properties of the dictionary
+            // The semantics of AsDictionary imply that if you pass in a dictionary, you should get that dictionary back
+            if (source is Dictionary<string, object>)
+                return _AsDictionary(source as Dictionary<string, object>, fieldNames);
+
             Dictionary<string, object> res = new Dictionary<string, object>();
             foreach (var field in fieldNames)
                 res.Add(field, source.GetFieldValue(field));

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 using Nvelope.Reflection;
+using System.Collections.Generic;
 
 namespace Nvelope.Tests.Reflection
 {
@@ -63,6 +64,90 @@ namespace Nvelope.Tests.Reflection
 
         }
 
+        [Test]
+        public void _Inspect()
+        {
+            var data = new { IntField = 1, StrField = "a" };
+            Assert.AreEqual("([IntField,1],[StrField,a])", data._Inspect());
+        }
+
+        [Test]
+        public void _AsDictionary()
+        {
+            var data = new { IntField = 1, StrField = "a" }._AsDictionary();
+            Assert.True(data.ContainsKey("IntField"));
+            Assert.True(data.ContainsKey("StrField"));
+            Assert.AreEqual(data["IntField"], 1);
+            Assert.AreEqual(data["StrField"], "a");
+        }
+
+        [Test]
+        public void _AsDictionary_KeepsAsDictionary()
+        {
+            var data = new Dictionary<string, object>();
+            data.Add("IntField", 1);
+            data.Add("StrField", "a");
+            var res = data._AsDictionary();
+            // Make sure the compiler doesn't screw around with us and change this on us
+            Assert.AreEqual(typeof(Dictionary<string, object>), res.GetType());
+            Assert.AreEqual("([IntField,1],[StrField,a])", res.Print());
+        }
+
+        [Test]
+        public void _AsDictionary_WithFields_KeepsAsDictionary()
+        {
+            var data = new Dictionary<string, object>();
+            data.Add("IntField", 1);
+            data.Add("StrField", "a");
+            var res = data._AsDictionary("IntField".And("StrField"));
+            // Make sure the compiler doesn't screw around with us and change this on us
+            Assert.AreEqual(typeof(Dictionary<string, object>), res.GetType());
+            Assert.AreEqual("([IntField,1],[StrField,a])", res.Print());
+        }
+
+        [Test]
+        public void _AsDictionary_KeepsAsDictionaryPolymorphically()
+        {
+            var data = new Dictionary<string, object>();
+            data.Add("IntField", 1);
+            data.Add("StrField", "a");
+            // If we assign the dictionary to an object, it should still call the
+            // right version of _AsDictionary internally, even though the compiler
+            // will call the object version instead of the Dictionary<> version
+            object obj = data;
+            var res = obj._AsDictionary();
+            Assert.AreEqual("([IntField,1],[StrField,a])", res.Print());
+            // If the above has Comparer... etc in it, that means that instead of
+            // evaluating the thing as a Dictionary and passing it back, the _AsDictionary
+            // function got the properties of the Dictionary instead
+        }
+
+        [Test]
+        public void _AsDictionary_WithFields_KeepsAsDictionaryPolymorphically()
+        {
+            var data = new Dictionary<string, object>();
+            data.Add("IntField", 1);
+            data.Add("StrField", "a");
+            // If we assign the dictionary to an object, it should still call the
+            // right version of _AsDictionary internally, even though the compiler
+            // will call the object version instead of the Dictionary<> version
+            object obj = data;
+            var res = obj._AsDictionary("IntField".And("StrField"));
+            Assert.AreEqual("([IntField,1],[StrField,a])", res.Print());
+            // If the above has Comparer... etc in it, that means that instead of
+            // evaluating the thing as a Dictionary and passing it back, the _AsDictionary
+            // function got the properties of the Dictionary instead
+        }
+
+        [Test]
+        public void _AsDictionary_WithDictionaryReturnsCopy()
+        {
+            var data = new Dictionary<string, object>();
+            data.Add("IntField", 1);
+            data.Add("StrField", "a");
+            var res = data._AsDictionary();
+            Assert.False(data == res, "The two dictionaries shouldn't have been the same object");
+        }
     }
 
     public class DollHouse
