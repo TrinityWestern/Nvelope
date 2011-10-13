@@ -264,6 +264,13 @@ namespace Nvelope.Reflection
             return _AsDictionary(source, members.Names());
         }
 
+        /// <summary>
+        /// Converts the object to key-value pairs. If the object is a dictionary, a subset of the 
+        /// dictionary will be returned
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="fieldNames"></param>
+        /// <returns></returns>
         public static Dictionary<string, object> _AsDictionary(this object source, IEnumerable<string> fieldNames)
         {
             // Fake polymorphism here
@@ -278,6 +285,19 @@ namespace Nvelope.Reflection
             foreach (var field in fieldNames)
                 res.Add(field, source.GetFieldValue(field));
             return res;
+        }
+
+        /// <summary>
+        /// Get the names of the fields of the object, or the keys if it's a dictionary
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static IEnumerable<string> _Fields(this object source)
+        {
+            if (source is Dictionary<string, object>)
+                return (source as Dictionary<string, object>).Keys;
+
+            return source._GetMembers().Names();
         }
 
         public static T _ToObject<T>(this Dictionary<string, object> dict, ObjectReader reader = null)
