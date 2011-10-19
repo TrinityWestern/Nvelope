@@ -75,5 +75,14 @@ namespace Nvelope
             return result;
         }
 
+        /// <summary>
+        /// Returns a "normalized" form of phone number (essentially only the digits)
+        /// </summary>
+        /// <returns>Number as string (e.g. "(604)853-7994" becomes "6048537994")</returns>
+        public string Normalized()
+        {
+            var concat = this.Country + this.Area + this.Local + this.Extension;
+            return Regex.Replace(concat, "\\D", "");
+        }
     }
 }
