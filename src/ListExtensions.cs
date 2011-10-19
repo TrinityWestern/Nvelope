@@ -110,6 +110,33 @@ namespace Nvelope
         }
 
         /// <summary>
+        /// Returns only those items in source that are in allowed
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="allowed"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> Only<T>(this IEnumerable<T> source, IEnumerable<T> allowed)
+        {
+            foreach (var item in source)
+                if (allowed.Contains(item))
+                    yield return item;
+        }
+
+        /// <summary>
+        /// Returns only those items in source that are in allowed
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="items"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> Only<T>(this IEnumerable<T> source, params T[] items)
+        {
+            var allowSet = items.ToSet();
+            return source.Only(allowSet);
+        }
+
+        /// <summary>
         /// Add one list to the end of another
         /// </summary>
         public static IEnumerable<T> And<T>(this IEnumerable<T> source, IEnumerable<T> other)

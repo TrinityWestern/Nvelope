@@ -114,6 +114,40 @@ namespace Nvelope
         }
 
         /// <summary>
+        /// Compare two dictionaries and return the differences
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="dict"></param>
+        /// <param name="other"></param>
+        /// <param name="fields"></param>
+        /// <param name="nullVal">If one dict doesn't define a field, return this as the value for that dict for that field</param>
+        /// <returns></returns>
+        public static Dictionary<TKey, Tuple<TValue, TValue>> Diff<TKey, TValue>(
+            this Dictionary<TKey, TValue> dict, Dictionary<TKey, TValue> other, IEnumerable<TKey> fields = null, TValue nullVal = default(TValue))
+        {
+            if(fields == null || !fields.Any())
+                fields = dict.Keys.Union(other.Keys);
+
+            // Get the values that exist only in dict
+            var onlyA = dict.Keys.Except(other.Keys).Only(fields).ToSet();
+
+            // Get the values that exist only in other
+            var onlyB = other.Keys.Except(dict.Keys).Only(fields).ToSet();
+
+            // Get the values that are different in dict and other
+            // These are the fields that exist on dict and other and are contained in fields
+            var comparisonKeys = dict.Keys.Only(fields).Except(onlyA).Except(onlyB).ToSet();
+            var neq = comparisonKeys.Where(k => dict[k].Neq(other[k]));
+
+            var res = neq.ToDictionary(s => s, s => Tuple.Create(dict[s], other[s]))
+                .Union(onlyA.ToDictionary(s => s, s => Tuple.Create(dict[s], nullVal)))
+                .Union(onlyB.ToDictionary(s => s, s => Tuple.Create(nullVal, other[s])));
+
+            return res;
+        }
+
+        /// <summary>
         /// Are the two dictionaries the same? Compares on the supplied keys
         /// </summary>
         /// <typeparam name="TKey"></typeparam>

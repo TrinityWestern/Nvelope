@@ -473,6 +473,31 @@ namespace Nvelope.Reflection
         {
             return _IsIdenticalOnFields(source, other, fieldNames as IEnumerable<string>);
         }
+
+        /// <summary>
+        /// Compares two objects, returning a dict of any fields that are not the same (or are on one object or the other)
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="other"></param>
+        /// <param name="fieldNames">If supplied, only compare on these fields</param>
+        /// <returns></returns>
+        public static Dictionary<string, Tuple<object, object>> _Diff(this object source, object other, IEnumerable<string> fieldNames)
+        {
+            return source._AsDictionary().Diff(other._AsDictionary(), fieldNames);
+        }
+
+        /// <summary>
+        /// Compares two objects, returning a dict of any fields that are not the same (or are on one object or the other)
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="other"></param>
+        /// <param name="fieldNames">If supplied, only compare on these fields</param>
+        /// <returns></returns>
+        public static Dictionary<string, Tuple<object, object>> _Diff(this object source, object other, params string[] fieldNames)
+        {
+            return _Diff(source, other, fieldNames as IEnumerable<string>);
+        }
+
         public static string _Inspect(this object source, params string[] fieldNames)
         {
             return _Inspect(source, fieldNames as IEnumerable<string>);

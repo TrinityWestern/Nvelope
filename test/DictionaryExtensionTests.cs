@@ -303,6 +303,37 @@ namespace Nvelope.Tests
         }
 
         [Test]
+        public void Diff()
+        {
+            var a = new Dictionary<string, int>() { { "A", 1 }, { "B", 2 }, {"C", 3}};
+            var b = a.Assoc("B", -2);
+
+            var diff = a.Diff(b);
+            Assert.AreEqual("([B,(2, -2)])", diff.Print());
+
+            diff = a.Diff(b, "A".And("B"));
+            Assert.AreEqual("([B,(2, -2)])", diff.Print());
+
+            diff = a.Diff(b, "A".And("C"));
+            Assert.AreEqual("()", diff.Print());
+
+            var copyA = a.Copy();
+            diff = a.Diff(copyA);
+            Assert.AreEqual("()", diff.Print());
+        }
+
+        [Test]
+        public void Diff_MissingFields()
+        {
+            var a = new Dictionary<string, int>() { { "A", 1 } };
+            var b = new Dictionary<string, int>() { { "B", 2 } };
+
+            var diff = a.Diff(b, nullVal: -1);
+            Assert.AreEqual("([A,(1, -1)],[B,(-1, 2)])", diff.Print());
+        }
+
+
+        [Test]
         public void ValuesForKeysParams()
         {
             var dict = new Dictionary<string, int>()

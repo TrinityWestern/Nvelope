@@ -148,6 +148,36 @@ namespace Nvelope.Tests.Reflection
             var res = data._AsDictionary();
             Assert.False(data == res, "The two dictionaries shouldn't have been the same object");
         }
+
+        [Test]
+        public void _Diff()
+        {
+            var a = new { A = 1, B = 2, C = 3 };
+            var b = new { A = 1, B = -2, C = 3 };
+            
+            var diff = a._Diff(b);
+            Assert.AreEqual("([B,(2, -2)])", diff.Print());
+
+            diff = a._Diff(b, "A", "B");
+            Assert.AreEqual("([B,(2, -2)])", diff.Print());
+
+            diff = a._Diff(b, "A", "C");
+            Assert.AreEqual("()", diff.Print());
+
+            var copyA = new { A = 1, B = 2, C = 3 };
+            diff = a._Diff(copyA);
+            Assert.AreEqual("()", diff.Print());
+        }
+
+        [Test]
+        public void _Diff_MissingFields()
+        {
+            var a = new { A = 1 };
+            var b = new { B = 2 };
+
+            var diff = a._Diff(b);
+            Assert.AreEqual("([A,(1, )],[B,(, 2)])", diff.Print());
+        }
     }
 
     public class DollHouse
