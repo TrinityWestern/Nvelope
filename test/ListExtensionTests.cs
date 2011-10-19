@@ -75,6 +75,13 @@
         }
 
         [Test]
+        public void Only()
+        {
+            Assert.AreEqual("(1,2,3)", 1.To(5).Only(1.To(3)).Print());
+            Assert.AreEqual("(1,2,3)", 1.To(3).Only(1.To(5)).Print());
+        }
+
+        [Test]
         public void Rest()
         {
             Assert.AreEqual("(b,c)", "abc".Rest().Print());
