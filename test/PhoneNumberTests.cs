@@ -75,6 +75,14 @@ namespace Nvelope.Tests
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => new PhoneNumber(""));
         }
+
+        [Test]
+        public void Normalized()
+        {
+            var number = new PhoneNumber("(604)853-7994");
+            Assert.AreEqual("6048537994", number.Normalized());
+        }
+
         [Test]
         public void CreateAnyway()
         {
