@@ -207,6 +207,27 @@ namespace Nvelope.Reflection
             return property.GetIndexParameters().Count() == 0;
         }
 
+        /// <summary>
+        /// Converts the object to a dictionary. If the object is already a dictionary, returns a copy
+        /// </summary>
+        /// <remarks>This function makes a copy of the dictionary rather than just returning
+        /// the original dictionary in order to preserve the semantics of _AsDictionary - when you
+        /// call it on an object, you get a new object back. Similarly here, you'll get a new dictionary
+        /// back.</remarks>
+        /// <param name="source"></param>
+        /// <param name="fieldNames"></param>
+        /// <returns></returns>
+        public static Dictionary<string, object> _AsDictionary(this Dictionary<string, object> source,
+            IEnumerable<string> fieldNames = null)
+        {
+            if (fieldNames == null)
+                return source.Copy();
+            else
+            {
+                var fieldSet = fieldNames.ToSet();
+                return source.WhereKeys(k => fieldSet.Contains(k));
+            }
+        }
 
         /// <summary>
         /// Converts the object to a collection of key-value pairs
@@ -216,6 +237,14 @@ namespace Nvelope.Reflection
             Type attributeType = null, bool includeInheritedAttributes = true,
             bool includeReadOnlyProperties = true)
         {
+            // Fake polymorphism here
+            // If there's a variable of type object, but it actually contains a dictionary, then make sure we call
+            // the version of _AsDictionary that just returns a copy of the dictionary, instead of digging up the 
+            // properties of the dictionary
+            // The semantics of AsDictionary imply that if you pass in a dictionary, you should get that dictionary back
+            if (source is Dictionary<string, object>)
+                return _AsDictionary(source as Dictionary<string, object>);
+
             var include = MemberTypes.Field | MemberTypes.Property;
             if (!includeFields)
                 include &= ~MemberTypes.Field;
@@ -235,12 +264,40 @@ namespace Nvelope.Reflection
             return _AsDictionary(source, members.Names());
         }
 
+        /// <summary>
+        /// Converts the object to key-value pairs. If the object is a dictionary, a subset of the 
+        /// dictionary will be returned
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="fieldNames"></param>
+        /// <returns></returns>
         public static Dictionary<string, object> _AsDictionary(this object source, IEnumerable<string> fieldNames)
         {
+            // Fake polymorphism here
+            // If there's a variable of type object, but it actually contains a dictionary, then make sure we call
+            // the version of _AsDictionary that just returns a copy of the dictionary, instead of digging up the 
+            // properties of the dictionary
+            // The semantics of AsDictionary imply that if you pass in a dictionary, you should get that dictionary back
+            if (source is Dictionary<string, object>)
+                return _AsDictionary(source as Dictionary<string, object>, fieldNames);
+
             Dictionary<string, object> res = new Dictionary<string, object>();
             foreach (var field in fieldNames)
                 res.Add(field, source.GetFieldValue(field));
             return res;
+        }
+
+        /// <summary>
+        /// Get the names of the fields of the object, or the keys if it's a dictionary
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static IEnumerable<string> _Fields(this object source)
+        {
+            if (source is Dictionary<string, object>)
+                return (source as Dictionary<string, object>).Keys;
+
+            return source._GetMembers().Names();
         }
 
         public static T _ToObject<T>(this Dictionary<string, object> dict, ObjectReader reader = null)
@@ -416,6 +473,31 @@ namespace Nvelope.Reflection
         {
             return _IsIdenticalOnFields(source, other, fieldNames as IEnumerable<string>);
         }
+
+        /// <summary>
+        /// Compares two objects, returning a dict of any fields that are not the same (or are on one object or the other)
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="other"></param>
+        /// <param name="fieldNames">If supplied, only compare on these fields</param>
+        /// <returns></returns>
+        public static Dictionary<string, Tuple<object, object>> _Diff(this object source, object other, IEnumerable<string> fieldNames)
+        {
+            return source._AsDictionary().Diff(other._AsDictionary(), fieldNames);
+        }
+
+        /// <summary>
+        /// Compares two objects, returning a dict of any fields that are not the same (or are on one object or the other)
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="other"></param>
+        /// <param name="fieldNames">If supplied, only compare on these fields</param>
+        /// <returns></returns>
+        public static Dictionary<string, Tuple<object, object>> _Diff(this object source, object other, params string[] fieldNames)
+        {
+            return _Diff(source, other, fieldNames as IEnumerable<string>);
+        }
+
         public static string _Inspect(this object source, params string[] fieldNames)
         {
             return _Inspect(source, fieldNames as IEnumerable<string>);
