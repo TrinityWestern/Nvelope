@@ -302,6 +302,17 @@ namespace Nvelope.Tests
             Assert.AreEqual(true, dict.IsSameAs(dictCopy, keysToCheck));
         }
 
+        [Test(Description="This test covers a bug found in IsSameAs that shouldn't happen")]
+        public void IsSameAsNullBug()
+        {
+            // If we have two objects that both have a null field, but the objects have differences
+            // on other fields after that field, IsSameAs falsely returns true
+            var a = new Dictionary<string, object>() { { "A", 1 }, { "B", null }, { "C", 3 } };
+            var b = a.Assoc("C", 47);
+
+            Assert.False(a.IsSameAs(b), "These are not the same!");
+        }
+
         [Test]
         public void Diff()
         {
