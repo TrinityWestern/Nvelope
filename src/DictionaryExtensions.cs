@@ -172,8 +172,6 @@ namespace Nvelope
                     return false;
                 else if (dict[key] == null && other[key] != null)
                     return false;
-                else if (dict[key] == null && other[key] == null)
-                    return true;
                 else if (dict[key] != null && other[key] == null)
                     return false;
                 else if (!dict[key].Eq(other[key]))
