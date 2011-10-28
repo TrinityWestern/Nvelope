@@ -137,6 +137,20 @@ namespace Nvelope
         }
 
         /// <summary>
+        /// Gets all the distinct elements (as chosen by selector) from the sequence.
+        /// Shorthand for source.Select(selector).Distinct() - this is a bit more concise
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="U"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="selector"></param>
+        /// <returns></returns>
+        public static IEnumerable<U> Distinct<T, U>(this IEnumerable<T> source, Func<T, U> selector)
+        {
+            return source.Select(selector).Distinct();
+        }
+
+        /// <summary>
         /// Add one list to the end of another
         /// </summary>
         public static IEnumerable<T> And<T>(this IEnumerable<T> source, IEnumerable<T> other)

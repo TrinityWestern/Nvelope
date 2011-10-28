@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="BinaryExtensions.cs" />
     <Compile Include="CharListExtensions.cs" />
+    <Compile Include="DictionaryListExtensions.cs" />
     <Compile Include="English.cs" />
     <Compile Include="EnumExtras.cs" />
     <Compile Include="ICollectionExtensions.cs" />

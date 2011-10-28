@@ -164,7 +164,7 @@
             idx.Add('b', null);
             idx.Add('c', null);
 
-            "abc".Chars().For((i, c) => idx[c] = i);
+            "abc".For((i, c) => idx[c] = i);
             Assert.AreEqual("([a,0],[b,1],[c,2])", idx.Print());
         }
 
@@ -493,6 +493,17 @@
             Assert.IsTrue(1.In(1, 2, 3));
             Assert.IsTrue(3.In(1, 2, 3));
             Assert.IsFalse(4.In(1, 2, 3));
+        }
+
+        [Test]
+        public void Distinct()
+        {
+            var objs = new { A = 1, B = 2 }
+                .And(new { A = 1, B = 42 });
+
+            Assert.AreEqual("(2,42)", objs.Distinct(o => o.B).Print());
+            Assert.AreEqual("(1)", objs.Distinct(o => o.A).Print());
+
         }
     }
 }

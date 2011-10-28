@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DictionaryListExtensionTests.cs" />
     <Compile Include="Web\AspExtensionTests.cs" />
     <Compile Include="BinaryExtensionTests.cs" />
     <Compile Include="CharListExtensionTests.cs" />
