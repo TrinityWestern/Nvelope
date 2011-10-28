@@ -18,7 +18,7 @@ namespace Nvelope.Tests
         {
             string s = "Aqueduct";
             char[] c = { 'A', 'q', 'u', 'e', 'd', 'u', 'c', 't' };
-            Assert.AreEqual(c, s.Chars());
+            Assert.AreEqual(c, s);
         }
 
         [Test]

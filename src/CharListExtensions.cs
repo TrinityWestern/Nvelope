@@ -22,16 +22,6 @@ namespace Nvelope
         }
 
         /// <summary>
-        /// Explicitly convert the string to IEnumerable{char}
-        /// </summary>
-        [Obsolete("Only used in a test with and obsolete method")]
-        public static IEnumerable<char> Chars(this string source)
-        {
-            foreach (char c in source)
-                yield return c;
-        }
-
-        /// <summary>
         /// Generates an infinite sequence of strings in a digits pattern - ie ('a'.Inc('b') -> (a,b,aa,ab,ba,bb,aaa ....)
         /// </summary>
         /// <param name="start">The first "digit" to use</param>
