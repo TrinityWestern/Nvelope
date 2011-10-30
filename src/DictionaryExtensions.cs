@@ -13,7 +13,7 @@ namespace Nvelope
         public static Dictionary<TKey, TValue> Union<TKey, TValue>(this Dictionary<TKey, TValue> dict, Dictionary<TKey, TValue> other)
         {
             if (other.Count == 0)
-                return dict;
+                return dict.Copy();
 
             Dictionary<TKey, TValue> res = new Dictionary<TKey, TValue>(dict);
             foreach (TKey key in other.Keys)
