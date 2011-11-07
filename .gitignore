@@ -1,7 +1,7 @@
 *.suo
-**/bin/
-**/obj/
-/workspace
+**\bin
+**\obj
+\workspace
 *.swp
 rakelog.txt
 MetricResults
