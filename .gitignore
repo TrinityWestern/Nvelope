@@ -1,6 +1,6 @@
 *.suo
-**/bin
-**/obj
+**/bin/
+**/obj/
 /workspace
 *.swp
 rakelog.txt

@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nvelope", "src\Nvelope.csproj", "{AC4A93B6-DDB6-4FE1-B528-665DE101052B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nvelope", "src\Nvelope\Nvelope.csproj", "{AC4A93B6-DDB6-4FE1-B528-665DE101052B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nvelope.Tests", "test\Nvelope.Tests.csproj", "{4F16F9CA-016C-4DBD-B090-52B2FB8DED6A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nvelope.Tests", "test\Nvelope.Tests\Nvelope.Tests.csproj", "{4F16F9CA-016C-4DBD-B090-52B2FB8DED6A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
