@@ -54,7 +54,7 @@ namespace Nvelope
         /// out of the cache</param>
         public static Func<T, TResult> Memoize<T, TResult>(this Func<T, TResult> func, TimeSpan duration)
         {
-            return func.Memoize(CacheForDuration<T>(duration));
+            return func.Memoize(HasBeenCalledIn<T>(duration));
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Nvelope
         /// <typeparam name="T"></typeparam>
         /// <param name="duration"></param>
         /// <returns></returns>
-        public static Func<T, bool> CacheForDuration<T>(TimeSpan duration)
+        public static Func<T, bool> HasBeenCalledIn<T>(TimeSpan duration)
         {
             Dictionary<T,DateTime> cacheDte = new Dictionary<T,DateTime>();
             return t =>
