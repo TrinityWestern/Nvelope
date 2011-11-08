@@ -404,7 +404,6 @@ namespace Nvelope
         /// <summary>
         /// Can we convert this value to some other type?
         /// </summary>
-        [Obsolete("Use the generic version instead")]
         public static bool CanConvertTo(this object source, Type type)
         {
             try {
