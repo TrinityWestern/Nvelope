@@ -178,6 +178,15 @@ namespace Nvelope.Tests.Reflection
             var diff = a._Diff(b);
             Assert.AreEqual("([A,(1, )],[B,(, 2)])", diff.Print());
         }
+
+        [Test]
+        public void _AsType()
+        {
+            object o = typeof(int);
+            Assert.AreEqual(typeof(int), o._AsType());
+            o = 1;
+            Assert.AreEqual(typeof(int), o._AsType());
+        }
     }
 
     public class DollHouse

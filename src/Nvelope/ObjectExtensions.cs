@@ -1,4 +1,5 @@
-﻿namespace Nvelope
+﻿using System;
+namespace Nvelope
 {
     public static class ObjectExtensions
     {
@@ -10,8 +11,8 @@
         {
             // Handle nulls
             if (obj == null)
-                return (other == null);     
-            
+                return (other == null);
+
             if (other == null)
                 return false;
 
@@ -33,7 +34,7 @@
         /// Like ToString, but it handles nulls and gives nicer results for
         /// some objects.
         /// </summary>
-        public static string Print(this object o) 
+        public static string Print(this object o)
         {
             // This function should also work polymorphically
             // Sometimes, we've got variables of type object, but we want them to print 

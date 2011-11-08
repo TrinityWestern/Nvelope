@@ -519,5 +519,17 @@ namespace Nvelope.Reflection
             var func = source as Func<object>;
             return func == null ? source : func();
         }
+
+        /// <summary>
+        /// Returns the type of the object. If it is already a Type, returns itself
+        /// </summary>
+        /// <param name="o"></param>
+        /// <returns></returns>
+        public static Type _AsType(this object o)
+        {
+            if (o is Type)
+                return o as Type;
+            return o.GetType();
+        }
     }
 }
