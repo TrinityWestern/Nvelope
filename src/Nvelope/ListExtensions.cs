@@ -186,6 +186,22 @@ namespace Nvelope
         
         #region Numerical stuff
         /// <summary>
+        /// Returns the single item in the list or the alternate. If the list
+        /// contains more than one item, throw an exception
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="alternate"></param>
+        /// <returns></returns>
+        public static T SingleOr<T>(this IEnumerable<T> list, T alternate)
+        {
+            if (list.Any())
+                return list.Single();
+            else
+                return alternate;
+        }
+
+        /// <summary>
         /// Returns the first item in the list, if there are any. If the list is empty,
         /// return the alternate item
         /// </summary>

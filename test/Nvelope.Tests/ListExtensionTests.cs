@@ -188,6 +188,17 @@
         }
 
         [Test]
+        public void SingleOr()
+        {
+            var list = 1.List();
+            Assert.AreEqual(1, list.SingleOr(42));
+            list = new int[]{};
+            Assert.AreEqual(42, list.SingleOr(42));
+            list = 1.And(2);
+            Assert.Throws<InvalidOperationException>(() => list.SingleOr(42));
+        }
+
+        [Test]
         public void FirstOr()
         {
             var list = new string[] { "a", "b" };
