@@ -357,7 +357,6 @@ namespace Nvelope.Tests
                 Assert.AreEqual(x, v);
                 x = x + 2;
             }
-
         }
 
          [Test]
@@ -408,6 +407,16 @@ namespace Nvelope.Tests
             var dict = new Dictionary<int, string>() { { 1, "one" }, { 2, "two" } };
             var ints = new HashSet<int> { 1, 2 };
             Assert.IsTrue(dict.Keys.ToSet().SetEquals(ints));
+        }
+
+        [Test]
+        public void ToList()
+        {
+            var dict = new Dictionary<int, string>() { { 1, "one" }, { 2, "two" } };
+            var res = dict.ToList((i, str) => i + " is " + str);
+            Assert.AreEqual(typeof(List<string>), res.GetType());
+            Assert.AreEqual("(1 is one,2 is two)", res.Print());
+            
         }
 
         private IEnumerable<KeyValuePair<string, string>> kvp(string key, string value)

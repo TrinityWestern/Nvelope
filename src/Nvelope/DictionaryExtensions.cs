@@ -447,5 +447,22 @@ namespace Nvelope
         {
             return new HashSet<TKey>(keys);
         }
+
+        /// <summary>
+        /// Calls selector with each key-value pair to produce the resulting list
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <typeparam name="TRes"></typeparam>
+        /// <param name="dict"></param>
+        /// <param name="selector"></param>
+        /// <returns></returns>
+        public static List<TRes> ToList<TKey, TValue, TRes>(this Dictionary<TKey, TValue> dict, Func<TKey, TValue, TRes> selector)
+        {
+            var res = new List<TRes>();
+            foreach (var kv in dict)
+                res.Add(selector(kv.Key, kv.Value));
+            return res;
+        }
     }
 }
