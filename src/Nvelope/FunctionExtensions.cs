@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Nvelope.Collections;
 
 namespace Nvelope
 {
@@ -87,7 +88,26 @@ namespace Nvelope
                 };
         }
 
-       
+        /// <summary>
+        /// Returns a function that returns true if the function has been called n times in the last duration
+        /// </summary>
+        /// <param name="n"></param>
+        /// <param name="duration"></param>
+        /// <returns></returns>
+        public static Func<bool> HasBeenCalledNTimesIn(int n, TimeSpan duration)
+        {
+            var queue = new FixedSizeQueue<DateTime>(n);
+            return () =>
+                {
+                    var now = DateTime.Now;
+                    var before = now.Subtract(duration);
+                    if (queue.Count == n && queue.All(dt => dt > before))
+                        return true;
+
+                    queue.Enqueue(now);
+                    return false;
+                };
+        }
 
         /// <summary>
         /// Transform a function into one taking one less argument by supplying a value

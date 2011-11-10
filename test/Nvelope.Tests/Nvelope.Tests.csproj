@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\FixedSizeQueueTests.cs" />
     <Compile Include="DictionaryListExtensionTests.cs" />
     <Compile Include="Web\AspExtensionTests.cs" />
     <Compile Include="BinaryExtensionTests.cs" />

@@ -258,5 +258,15 @@ namespace Nvelope.Tests
             Assert.AreNotEqual(int.MinValue, time);
         }
 
+        [Test]
+        public void HasBeenCalledNTimesIn()
+        {
+            var fn = FunctionExtensions.HasBeenCalledNTimesIn(3, TimeSpan.FromDays(100));
+            Assert.False(fn());
+            Assert.False(fn());
+            Assert.False(fn());
+            Assert.True(fn());
+        }
+
     }
 }
