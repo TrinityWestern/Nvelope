@@ -46,21 +46,27 @@ namespace Nvelope.Reflection
 
             Type type = source.GetType();
             var members = type.GetMember(fieldName, bindingFlags);
-            if (members.Count() == 0) {
+            if (members.Count() == 0)
+            {
                 throw new FieldNotFoundException("Missing field '" + fieldName + "'");
             }
-            if (members.Count() > 1) {
+            if (members.Count() > 1)
+            {
                 // TODO: test this
                 throw new Exception("Too many members found. Don't know what this means");
             }
             var member = members[0];
             var property = member as PropertyInfo;
-            if (property != null) {
+            if (property != null)
+            {
                 if (property.GetIndexParameters().Count() != 0)
                     throw new ArgumentException("Can't handle parameters with indexies");
-                try {
+                try
+                {
                     return property.GetValue(source, null);
-                } catch (TargetInvocationException) {
+                }
+                catch (TargetInvocationException)
+                {
                     // TODO: I don't think catching this exception
                     // is something I should be doing, but I'm just doing
                     // it because of invalid objects in the
@@ -71,9 +77,12 @@ namespace Nvelope.Reflection
             var field = member as FieldInfo;
             if (field != null)
             {
-                try {
+                try
+                {
                     return field.GetValue(source);
-                } catch (TargetInvocationException) {
+                }
+                catch (TargetInvocationException)
+                {
                     return null;
                 }
             }
@@ -131,10 +140,14 @@ namespace Nvelope.Reflection
         public static IEnumerable<MemberInfo> RemoveReadOnly(
             this IEnumerable<MemberInfo> members)
         {
-            foreach (var member in members) {
-                if (member is FieldInfo) {
+            foreach (var member in members)
+            {
+                if (member is FieldInfo)
+                {
                     yield return member;
-                } else if (member is PropertyInfo) {
+                }
+                else if (member is PropertyInfo)
+                {
                     if (((PropertyInfo)member).CanWrite)
                         yield return member;
                 }
@@ -157,7 +170,8 @@ namespace Nvelope.Reflection
             this IEnumerable<MemberInfo> members)
         {
             var dict = new Dictionary<string, Type>();
-            foreach (var member in members) {
+            foreach (var member in members)
+            {
                 if (member.Fieldlike())
                 {
                     dict.Add(member.Name, member.ReturnType());
@@ -255,7 +269,8 @@ namespace Nvelope.Reflection
 
             var members = source._GetMembers(include).Where(m => m.Fieldlike());
 
-            if (attributeType != null) {
+            if (attributeType != null)
+            {
                 var mi = typeof(ReflectionExtensions).GetMethod("FilterAttributeType");
                 var filterRef = mi.MakeGenericMethod(attributeType);
                 var args = new object[] { includeInheritedAttributes };
@@ -321,13 +336,16 @@ namespace Nvelope.Reflection
 
             var property = type.GetProperty(fieldName);
 
-            if (property != null) {
+            if (property != null)
+            {
                 if (value.CanConvertTo(property.PropertyType))
                     property.SetValue(source, value.ConvertTo(property.PropertyType), null);
                 else
                     throw new ConversionException("Error setting property '" + fieldName + "' - cannot convert to type '" + property.PropertyType.Name + "' from value '"
                         + (value == null ? "<null>" : value.ToString()) + "'");
-            } else { // Try a field
+            }
+            else
+            { // Try a field
                 var field = type.GetField(fieldName);
                 if (field != null)
                     if (value.CanConvertTo(field.FieldType))
@@ -337,7 +355,8 @@ namespace Nvelope.Reflection
                         (value == null ? "<null>" : value.ToString()) + "'");
 
 
-                else {
+                else
+                {
                     throw new FieldNotFoundException(
                         "Missing field '" + fieldName + "' in " + source.Print());
                 }
@@ -387,7 +406,9 @@ namespace Nvelope.Reflection
             if (dataDict != null)
             {
                 dataDict = dataDict.WhereKeys(f => fields.Contains(f));
-            } else {
+            }
+            else
+            {
                 dataDict = data._AsDictionary();
             }
 
@@ -429,7 +450,8 @@ namespace Nvelope.Reflection
             // Filter down to just the fields we were told to include
             if (caseSensitive)
                 data = data.WhereKeys(k => fields.Contains(k));
-            else {
+            else
+            {
                 // Use a lower-case comparison
                 fields = fields.Select(s => f(s));
                 data = data.WhereKeys(k => fields.Contains(f(k)));
@@ -532,6 +554,41 @@ namespace Nvelope.Reflection
             if (o is Type)
                 return o as Type;
             return o.GetType();
+        }
+
+        /// <summary>
+        /// Returns true if type implements the interface
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="interfaceType"></param>
+        /// <returns></returns>
+        public static bool Implements(this Type type, Type interfaceType)
+        {
+            // Because this is a potentially expensive operation, to be called
+            // potentially many times with a small number of possible parameters,
+            // this is an excellent candidate for caching. We use a memoized pointer
+            // to the underlying function to drastically improve performance, at the
+            // cost of some memory usage
+            return _implements(type, interfaceType);
+        }
+
+        private static Func<Type, Type, bool> _implements = 
+            new Func<Type, Type, bool>(_s_implements).Memoize();
+
+        private static bool _s_implements(Type type, Type interfaceType)
+        {
+            return type.GetInterfaces().Contains(interfaceType);
+        }
+
+        /// <summary>
+        /// Returns true if type implements the interface
+        /// </summary>
+        /// <typeparam name="TInterface"></typeparam>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static bool Implements<TInterface>(this Type type)
+        {
+            return Implements(type, typeof(TInterface));
         }
     }
 }

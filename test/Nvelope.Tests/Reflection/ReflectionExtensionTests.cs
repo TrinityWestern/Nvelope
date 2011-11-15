@@ -6,6 +6,7 @@ using System.Reflection;
 using NUnit.Framework;
 using Nvelope.Reflection;
 using System.Collections.Generic;
+using System.Collections;
 
 namespace Nvelope.Tests.Reflection
 {
@@ -186,6 +187,13 @@ namespace Nvelope.Tests.Reflection
             Assert.AreEqual(typeof(int), o._AsType());
             o = 1;
             Assert.AreEqual(typeof(int), o._AsType());
+        }
+
+        [Test]
+        public void Implements()
+        {
+            Assert.True(typeof(Dictionary<string, object>).Implements<IDictionary>());
+            Assert.False(typeof(int).Implements<IDictionary>());
         }
     }
 

@@ -24,10 +24,6 @@ namespace Nvelope
             foreach (string key in keys)
                 yield return key;
         }
-        public static string Print(this NameValueCollection collection)
-        {
-            return collection.ToDictionary().Print();
-        }
 
         public static bool ContainsKey(this NameValueCollection collection, string key)
         {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections;
 
 namespace Nvelope
 {
@@ -318,28 +319,6 @@ namespace Nvelope
                     return false;
 
             return true;
-        }
-
-        /// <summary>
-        /// Pretty-print a list
-        /// </summary>
-        public static string Print<T>(this IEnumerable<T> source)
-        {
-            return "(" + source.Select(t => t.Print()).Join(",") + ")";
-        }
-        /// <summary>
-        /// Pretty-print a list of lists
-        /// </summary>
-        public static string Print<T>(this IEnumerable<IEnumerable<T>> source)
-        {
-            return "(" + source.Select(t => t.Print()).Join(",") + ")";
-        }
-        /// <summary>
-        /// Pretty-print a list of list of dictionaries
-        /// </summary>
-        public static string Print<TKey, TValue>(this IEnumerable<Dictionary<TKey, TValue>> dictionaries)
-        {
-            return dictionaries.Select(d => d.Print()).Print();
         }
 
         /// <summary>
@@ -851,6 +830,17 @@ namespace Nvelope
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Converts anything that is IEnumerable to IEnumberable of object
+        /// </summary>
+        /// <param name="coll"></param>
+        /// <returns></returns>
+        public static IEnumerable<object> ToIEnumerableObj(this IEnumerable coll)
+        {
+            foreach (var item in coll)
+                yield return item;
         }
 
         #region Infinite sequences

@@ -2,11 +2,44 @@
 using System.Collections.Generic;
 using System.Linq;
 using Nvelope.Reflection;
+using System.Collections;
 
 namespace Nvelope
 {
     public static class DictionaryExtensions
     {
+        /// <summary>
+        /// Converts to a user-friendly representation
+        /// </summary>
+        public static string PrintDict(this IDictionary dict)
+        {
+            if (dict == null)
+                return "";
+
+            IEnumerable<DictionaryEntry> orderedDict = dict.ToIEnumerableDictEntry().ToList();
+            if (orderedDict.Any())
+            {
+                // We'll assume that if the first key is IComparable, all the other ones
+                // will be as well. Of course, if our keys are some supertype, there's no assurance
+                var asIComp = orderedDict.First().Key as IComparable;
+                if (asIComp != null) // If we can't convert to IComparable, we can't sort
+                    orderedDict = orderedDict.OrderBy(kv => kv.Key as IComparable);
+            }
+
+            return orderedDict.Select(kv => "[" + kv.Key.Print() + "," + kv.Value.Print() + "]").Print();
+        }
+
+        /// <summary>
+        /// Converts any IDictionary to a list of DictionaryEntry
+        /// </summary>
+        /// <param name="dict"></param>
+        /// <returns></returns>
+        public static IEnumerable<DictionaryEntry> ToIEnumerableDictEntry(this IDictionary dict)
+        {
+            foreach (var kv in dict)
+                yield return (DictionaryEntry)kv;
+        }
+
         /// <summary>
         /// Combines two dictionaries - if both dictionaries define the same key, second one wins
         /// </summary>
@@ -45,33 +78,7 @@ namespace Nvelope
             return dict.Values.Distinct().Count() == dict.Keys.Count();
         }
 
-        /// <summary>
-        /// Converts to a user-friendly representation
-        /// </summary>
-        public static string Print<TKey, TValue>(this Dictionary<TKey, TValue> dict)
-        {
-            if (dict == null)
-                return "";
-
-            IEnumerable<KeyValuePair<TKey, TValue>> orderedDict = dict;
-            // If we can order the keys, do so
-            if (dict.Any())
-            {
-                var asIComp = dict.Keys.First() as IComparable;
-                if (asIComp != null) // If we can't convert to IComparable, so we can't sort
-                    orderedDict = dict.OrderBy(kv => kv.Key);
-            }
-
-            return orderedDict.Select(kv => "[" + kv.Key.Print() + "," + kv.Value.Print() + "]").Print();
-        }
-
-        /// <summary>
-        /// Converts to a user-friendly representation
-        /// </summary>
-        public static string Print<TKey, TValue>(this Dictionary<TKey, List<TValue>> dict)
-        {
-            return dict.OrderBy(kv => kv.Key).Select(kv => "[" + kv.Key.Print() + "," + kv.Value.Print() + "]").Print();
-        }
+        
 
         public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> keyValues)
         {

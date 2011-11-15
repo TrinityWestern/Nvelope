@@ -8,13 +8,6 @@ namespace Nvelope
 {
     public static class StringExtensions
     {
-        /// <remarks>This exists so that the compiler doesn't get confused and call the IEnumerable[char] version of Print
-        /// on a string. Then you would get "(a,b)" from "ab".Print(), which is silly</remarks>
-        public static string Print(this string s)
-        {
-            return s.ToStringN();
-        }
-
         /// <summary>
         /// Returns a string array that contains the substrings in this string that are
         ///     delimited by elements of a specified string array. A parameter specifies

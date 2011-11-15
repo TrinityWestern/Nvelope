@@ -1,4 +1,12 @@
 ﻿using System;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Collections.Specialized;
+using System.Data;
+using Nvelope.Reflection;
+using System.Collections;
+using System.Collections.Generic;
+
 namespace Nvelope
 {
     public static class ObjectExtensions
@@ -34,6 +42,9 @@ namespace Nvelope
         /// Like ToString, but it handles nulls and gives nicer results for
         /// some objects.
         /// </summary>
+        /// <remarks>There should be no other implementations of Print, because we want the
+        /// thing to behave polymorphically, and there's no assurance of that unless
+        /// we centralize here</remarks>
         public static string Print(this object o)
         {
             // This function should also work polymorphically
@@ -42,10 +53,30 @@ namespace Nvelope
             // So we do shotgun polymorphism here to take care of that, since we can't 
             // hack into the original types to override their ToString methods
 
-            // Decimals don't do ToString in a reasonable way
-            // It's really irritating
-            if (o is decimal)
-                return ((decimal)o).Print();
+            if (o == null)
+                return o.ToStringN();
+
+            var type = o.GetType();
+
+            if (type == typeof(decimal))
+                return ((decimal)o).PrintDecimal(); // Decimals don't do ToString in a reasonable way
+            else if (type == typeof(string))
+                return o.ToStringN(); // This is to prevent the compiler from calling the IEnumerable<char> verison for strings
+            else if (type == typeof(NameValueCollection))
+                return ((NameValueCollection)o).ToDictionary().Print();
+            else if (type.Implements<IDictionary>())
+                return ((IDictionary)o).PrintDict();
+            else if (type.Implements<IEnumerable>())
+                return "(" + ((IEnumerable)o).ToIEnumerableObj().Select(t => t.Print()).Join(",") + ")";
+            else if (o is Match)
+                return ((Match)o).Groups.ToList().Print(); // Regex group
+            else if (o is Capture)
+                return ((Capture)o).Value; // Regex capture
+
+            else if (o is DataTable)
+                return "(" + ((DataTable)o).Rows.ToList().Select(l => l.Print()).Join(",") + ")";
+            else if (o is DataRow)
+                return ((DataRow)o).ToDictionary().Print();
             else
                 return o.ToStringN();
         }

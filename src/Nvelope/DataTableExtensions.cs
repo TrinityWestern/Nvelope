@@ -27,16 +27,6 @@ namespace Nvelope
                 yield return t;
         }
 
-        public static string Print(this DataRow dr)
-        {
-            return dr.ToDictionary().Print();
-        }
-
-        public static string Print(this DataTable dt)
-        {
-            return "(" +  dt.Rows.ToList().Select(l => l.Print()).Join(",") + ")";
-        }
-
         public static string Value(this DataTable dt, CellLoc loc)
         {
             return dt.Rows[loc.Row][loc.Col].ConvertTo<string>();

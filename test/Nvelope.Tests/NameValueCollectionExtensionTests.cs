@@ -21,9 +21,8 @@ namespace Nvelope.Tests
         }
 
         [Test]
-        public void Test()
+        public void Print()
         {
-
             var exclude = new List<string>() { "c", "e" };
 
             // Test Exclude

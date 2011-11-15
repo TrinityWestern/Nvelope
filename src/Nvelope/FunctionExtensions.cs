@@ -26,6 +26,28 @@ namespace Nvelope
         /// Return a new function that will cache the results of each call, so subsequent invocations don't
         /// have to re-execute the original function
         /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="U"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="func"></param>
+        /// <returns></returns>
+        public static Func<T, U, TResult> Memoize<T, U, TResult>(this Func<T, U, TResult> func)
+        {
+            Dictionary<T, Dictionary<U, TResult>> results = new Dictionary<T, Dictionary<U, TResult>>();
+            return (t, u) =>
+                {
+                    if (!results.ContainsKey(t))
+                        results.Add(t, new Dictionary<U, TResult>());
+                    if (!results[t].ContainsKey(u))
+                        results[t].Add(u, func(t, u));
+                    return results[t][u];
+                };
+        }
+
+        /// <summary>
+        /// Return a new function that will cache the results of each call, so subsequent invocations don't
+        /// have to re-execute the original function
+        /// </summary>
         /// <param name="useCacheFn">This function controls whether to use the cached value or not. 
         /// T means use the cached value, F means reload it</param>
         public static Func<T, TResult> Memoize<T, TResult>(this Func<T, TResult> func, Func<T, bool> useCacheFn)
