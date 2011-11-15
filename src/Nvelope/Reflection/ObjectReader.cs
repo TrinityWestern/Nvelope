@@ -87,9 +87,10 @@ namespace Nvelope.Reflection
         /// <param name="reader"></param>
         /// <param name="readerFields"></param>
         /// <returns></returns>
+        [CLSCompliant(false)]
         protected object _set(object instance, Dictionary<string, object> data)
         {
-
+            // TODO: Rename this method to make it CLS compliant
             var include = MemberTypes.Field | MemberTypes.Property;
             if (!this.SetFields)
                 include &= ~MemberTypes.Field;

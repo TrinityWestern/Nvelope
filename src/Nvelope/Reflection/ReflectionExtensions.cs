@@ -6,6 +6,8 @@ using Nvelope.Exceptions;
 
 namespace Nvelope.Reflection
 {
+    // TODO: Rename a bunch of these methods to make them CLS compliant.
+    [CLSCompliant(false)]
     public static class ReflectionExtensions
     {
         /// <summary>
