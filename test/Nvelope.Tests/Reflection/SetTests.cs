@@ -30,7 +30,7 @@ namespace Nvelope.Tests.Reflection
 
         class Foosums
         {
-            public int? Id;
+            public int? Id = null;
             public DateTime Date;
             public string Value;
         }
