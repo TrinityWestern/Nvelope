@@ -238,9 +238,10 @@ namespace Nvelope
         /// </summary>
         /// <remarks>Throws an exception if the string isn't well-formed. If you're unsure, use
         /// IsXml to check</remarks>
-        [Obsolete("This method assumes that xmlString isn't actually valid XML, but doesn't properly escape it")]
         public static XmlDocument ToXml(this string xmlString)
         {
+            // TODO: This method assumes that xmlString isn't actually valid XML, but doesn't properly escape it
+
             var doc = new XmlDocument();
             // Only replace & - if there's anything else malformed in the string, we're screwed
             doc.LoadXml(xmlString.ChopStart(Environment.NewLine).Replace("&", "&amp;"));

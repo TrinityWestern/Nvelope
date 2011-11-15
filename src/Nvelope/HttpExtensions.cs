@@ -128,26 +128,4 @@ namespace Nvelope
 
 
     }
-    /// <summary>
-    /// User defined functions, built to work with HttpRequestExtensions.HandleParam
-    /// 
-    /// These functions should be static and take one argument of type string.
-    /// </summary>
-    public static class HttpRequestHandlers
-    {
-        /// <summary>
-        /// Parameters separated by a ','
-        /// </summary>
-        /// <example>CommaList("1,2,3") == ["1", "2", "3"]</example>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        [Obsolete ("Use ParamList instead")]
-        public static IEnumerable<string> CommaList(string input)
-        {
-            var result = new List<string>();
-            if (input != null)
-                result.AddRange(input.Split(',').Select(s => s.Trim()));
-            return result;
-        }
-    }
 }

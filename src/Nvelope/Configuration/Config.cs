@@ -66,7 +66,7 @@ namespace Nvelope.Configuration
                 .FirstOr(defaultValue);
 
             if (throwIfMissing && res == null)
-                throw new ConfigurationException("The setting '" + name + "' was not found in the config file!");
+                throw new ConfigurationErrorsException("The setting '" + name + "' was not found in the config file!");
 
             return res;
         }

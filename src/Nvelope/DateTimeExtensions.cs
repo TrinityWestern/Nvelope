@@ -108,9 +108,9 @@ namespace Nvelope
         /// </summary>
         /// <param name="date"></param>
         /// <returns></returns>
-        [Obsolete("Locale specific. This should be renamed to ValidAmericanDate")]
         public static bool ValidDate(string date)
         {
+            // TODO: Locale specific. This should be renamed to ValidAmericanDate
             var format = new Regex(@"(\d+)/(\d+)/(\d+)");
             return format.IsMatch(date);
         }

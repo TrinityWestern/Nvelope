@@ -64,7 +64,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Collections\DictionaryMirror.cs" />
-    <Compile Include="Collections\SDictionary.cs" />
     <Compile Include="Collections\DirectedAcyclicGraph.cs">
       <SubType>Code</SubType>
     </Compile>

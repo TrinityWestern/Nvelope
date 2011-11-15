@@ -60,7 +60,7 @@ namespace Nvelope.Tests
             l.Add("1");
             l.Add("2");
             l.Add("3");
-            Assert.AreEqual(l, mock_handle.HandleParam("list", HttpRequestHandlers.CommaList));
+            Assert.AreEqual(l, mock_handle.ParamList<string>("list"));
         }
     }
 }
