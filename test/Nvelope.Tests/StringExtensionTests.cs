@@ -13,15 +13,6 @@ namespace Nvelope.Tests
         }
 
         [Test]
-        public void NumTimesCharacterRepeatsAtEndTest()
-        {
-            char quote = '\'';
-            Assert.AreEqual(1, "Kent'".NumTimesCharacterRepeatsAtEnd(quote));
-            Assert.AreEqual(2, "Kent\'\'".NumTimesCharacterRepeatsAtEnd(quote));
-            Assert.AreEqual(0, "kent' ".NumTimesCharacterRepeatsAtEnd(quote));
-        }
-
-        [Test]
         public void RemoveEndTest()
         {
             var str = "kent";
@@ -158,28 +149,6 @@ namespace Nvelope.Tests
         }
 
         [Test]
-        public void RetrieveIntInString()
-        {
-            string s = "This is a string with 10 in it";
-            string t = "This is a string with no numbers in it";
-            int intInString = StringExtensions.RetrieveIntInString(s); 
-            int noIntInString = StringExtensions.RetrieveIntInString(t);
-            Assert.AreEqual(10, intInString);
-            Assert.AreEqual(0, noIntInString);
-        }
-
-        [Test]
-        public void FindIntInString()
-        {
-            string s = "This is a string with 10 in it";
-            string t = "This is a string with no numbers in it";
-            string intInString = StringExtensions.FindIntInString(s);
-            string noIntInString = StringExtensions.FindIntInString(t);
-            Assert.AreEqual("10", intInString);
-            Assert.AreEqual("0", noIntInString);
-        }
-
-        [Test]
         public void SubstringBefore()
         {
             string s = "The quick brown fox jumped over the lazy dog.";
@@ -231,60 +200,6 @@ namespace Nvelope.Tests
             Assert.AreEqual("The quick brown fox  over the lazy .", s.Strip(v));
         }
 
-        [Test]
-        public void GetEmailInParanthesis()
-        {
-            string s = "The quick brown fox jumped over the lazy dog.";
-            string t = "Joe Sward (joe.sward@twu.ca)";
-            Assert.AreEqual(null, s.GetEmailInParenthesis());
-            Assert.AreEqual("joe.sward@twu.ca", t.GetEmailInParenthesis());
-        }
-
-        [Test]
-        public void GetIntegerInParenthesis()
-        {
-            string s = "The quick brown fox jumped over the lazy dog.";
-            string t = "Joe Sward (93237)";
-            Assert.AreEqual(null, s.GetIntegerInParenthesis());
-            Assert.AreEqual(93237, t.GetIntegerInParenthesis());
-        }
-
-        [Test]
-        public void ToDoubleAsStringOr0()
-        {
-            string s = "Some value = 1.35";
-            string t = "1.35";
-            Assert.AreEqual("0", StringExtensions.ToDoubleAsStringOr0(s));
-            Assert.AreEqual("1.35", StringExtensions.ToDoubleAsStringOr0(t));
-        }
-
-        [Test]
-        public void ToIntOr0()
-        {
-            string s = "Some value = 135";
-            string t = "135";
-            Assert.AreEqual(0, StringExtensions.ToIntOr0(s));
-            Assert.AreEqual(135, StringExtensions.ToIntOr0(t));
-        }
-
-        [Test]
-        public void SplitPair()
-        {
-            string s = "this is a string, separated by a comma";
-            string[] sout = { "this is a string", " separated by a comma" };
-            Assert.AreEqual(sout, s.SplitPair(","));
-        }
-
-        [Test]
-        public void SplitPairException()
-        {
-            string s = "this is a string, separated by a comma, with a third part thrown in";
-            var ex = Assert.Throws<Exception>(
-      () => s.SplitPair(","));
-            // this is a really annoying and not very helpful message
-            // but that's what we get for using string.Format
-            Assert.AreEqual("The pair was not specified correctly. A pair can only be two items and must be separated by a specified string. In this case, the specified string was ','.", ex.Message);
-        }
 
         [Test]
         public void Split()
@@ -292,13 +207,6 @@ namespace Nvelope.Tests
             string s = "this is a string, separated by a comma, with a third part thrown in";
             string[] sout = { "this is a string", " separated by a comma", " with a third part thrown in" };
             Assert.AreEqual(sout, s.Split(","));
-        }
-
-        [Test]
-        public void SemiClean()
-        {
-            string s = "<note> <to>Tove</to><from>Jani, \"Tina\"</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note>";
-            Assert.AreEqual("note toTove/tofromJani \"\"Tina\"\"/fromheadingReminder/headingbodyDon''t forget me this weekend!/body/note", StringExtensions.SemiClean(s));
         }
     }
 }

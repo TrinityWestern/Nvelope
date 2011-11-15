@@ -171,6 +171,8 @@ namespace Nvelope.Tests
         [Test]
         public void Cache()
         {
+            // TODO: This test relies on thread timing, and might fail randomly. Find a better way to write this
+
             // The function just returns the current time
             Func<int, DateTime> f = i => DateTime.Now;
 
