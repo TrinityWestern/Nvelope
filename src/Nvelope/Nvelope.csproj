@@ -53,10 +53,11 @@
     <Compile Include="CharListExtensions.cs" />
     <Compile Include="Collections\FixedSizeQueue.cs" />
     <Compile Include="DictionaryListExtensions.cs" />
-    <Compile Include="Encryption\CertificateNotFoundException.cs" />
-    <Compile Include="Encryption\Symmetric.cs" />
-    <Compile Include="Encryption\SymmetricPassword.cs" />
-    <Compile Include="Encryption\SymmetricCertificate.cs" />
+    <Compile Include="Security\CertificateNotFoundException.cs" />
+    <Compile Include="Security\Certificates.cs" />
+    <Compile Include="Security\ISymmetricCryptor.cs" />
+    <Compile Include="Security\PasswordCryptor.cs" />
+    <Compile Include="Security\CertificateCryptor.cs" />
     <Compile Include="English.cs" />
     <Compile Include="EnumExtras.cs" />
     <Compile Include="ICollectionExtensions.cs" />

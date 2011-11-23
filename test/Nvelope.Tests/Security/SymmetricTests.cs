@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Nvelope.Encryption;
+using Nvelope.Security;
 using NUnit.Framework;
 
 namespace Nvelope.Tests.Encryption
 {   
     public abstract class SymmetricTests
     {
-        public abstract ISymmetric GetCryptor();
+        public abstract ISymmetricCryptor GetCryptor();
 
         [Test(Description = "I'm not going to bother trying to check whether it gives the proper cyphertext for Rijndael or anything like that. " +
             "As long as it turns the plaintext into something else and changes it back again, I'll call it good")]

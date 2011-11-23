@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Nvelope.Encryption
+namespace Nvelope.Security
 {
     public class CertificateNotFoundException : Exception
     {

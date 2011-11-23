@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using Nvelope.Encryption;
+using Nvelope.Security;
 
 namespace Nvelope.Tests.Encryption
 {
     [TestFixture]
-    public class SymmetricPasswordTests : SymmetricTests
+    public class PasswordCryptorTests : SymmetricTests
     {
-        public override ISymmetric GetCryptor()
+        public override ISymmetricCryptor GetCryptor()
         {
-            return new SymmetricPassword("abc123");
+            return new PasswordCryptor("abc123");
         }
     }
 }

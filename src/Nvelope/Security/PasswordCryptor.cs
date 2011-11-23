@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Security.Cryptography;
 
-namespace Nvelope.Encryption
+namespace Nvelope.Security
 {
     /// <summary>
     /// Implements symmetric encryption using a password.
     /// </summary>
-    public class SymmetricPassword : ISymmetric
+    public class PasswordCryptor : ISymmetricCryptor
     {
-        public SymmetricPassword(string password)
+        public PasswordCryptor(string password)
         {
             _password = password;
             _salt = Encoding.Default.GetBytes("Rfc2898DeriveBytes needs the salt to always be constant" +
