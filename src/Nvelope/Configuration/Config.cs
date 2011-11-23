@@ -7,10 +7,6 @@ namespace Nvelope.Configuration
 {
     public static class Config
     {
-        // TODO: Remove this
-        // In order to do so, you need to add a DeploymentLocation environment variable to production
-        private const string PRODUCTION_MACHINE_CONFIG_SETTING_NAME = "IsTwuProduction";
-
         public const string DeploymentEnvironmentVariable = "DeploymentLocation";
 
         public static bool HasSetting(string name)
@@ -35,13 +31,6 @@ namespace Nvelope.Configuration
         {            
             // Check the machine.config for the setting
             // that indicates whether this machine is a production machine
-
-            // TODO: Deprecated. This setting is set to true on the machine.config on the production machines
-            // Instead, we should just use the DEPLOYMENT_ENV_VAR environment variable to set it instead
-            var isProduction = ConfigurationManager.AppSettings[PRODUCTION_MACHINE_CONFIG_SETTING_NAME].ConvertTo<bool?>() ?? false;                
-
-            if (isProduction)
-                return DeploymentLocation.Live;
 
             var loc = Environment.GetEnvironmentVariable(DeploymentEnvironmentVariable);
             if (loc.CanConvertTo<DeploymentLocation>())
