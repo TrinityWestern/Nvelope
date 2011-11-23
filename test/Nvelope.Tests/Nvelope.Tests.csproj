@@ -60,6 +60,9 @@
   <ItemGroup>
     <Compile Include="Collections\FixedSizeQueueTests.cs" />
     <Compile Include="DictionaryListExtensionTests.cs" />
+    <Compile Include="Encryption\SymmetricCertificateTests.cs" />
+    <Compile Include="Encryption\SymmetricPasswordTests.cs" />
+    <Compile Include="Encryption\SymmetricTests.cs" />
     <Compile Include="Web\AspExtensionTests.cs" />
     <Compile Include="BinaryExtensionTests.cs" />
     <Compile Include="CharListExtensionTests.cs" />
