@@ -18,15 +18,15 @@ namespace Nvelope.Security
             if (certificate == null)
                 throw new CertificateNotFoundException("The supplied certificate was null");
 
-            _certificate = certificate;
+            Certificate = certificate;
         }
 
-        private X509Certificate2 _certificate;
+        public X509Certificate2 Certificate;
 
         public string Decrypt(string cyphertext)
         {
             var sp = (RSACryptoServiceProvider)
-                (_certificate.HasPrivateKey ? _certificate.PrivateKey : _certificate.PublicKey.Key);
+                (Certificate.HasPrivateKey ? Certificate.PrivateKey : Certificate.PublicKey.Key);
 
             var input = Convert.FromBase64String(cyphertext);
             var output = sp.Decrypt(input, false);
@@ -35,7 +35,7 @@ namespace Nvelope.Security
 
         public string Encrypt(string plaintext)
         {
-            var sp = (RSACryptoServiceProvider)_certificate.PublicKey.Key;
+            var sp = (RSACryptoServiceProvider)Certificate.PublicKey.Key;
 
             var input = Encoding.Default.GetBytes(plaintext);
             var output = sp.Encrypt(input, false);
