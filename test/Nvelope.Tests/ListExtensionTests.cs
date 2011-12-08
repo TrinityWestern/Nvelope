@@ -212,6 +212,14 @@
         }
 
         [Test]
+        public void ElementOr()
+        {
+            var list = new int[] { 1, 2, 3 };
+            Assert.AreEqual(3, list.ElementOr(2, 42));
+            Assert.AreEqual(42, list.ElementOr(3, 42));
+        }
+
+        [Test]
         public void IsSameAs()
         {
             var list = new int[] { 1, 2, 3 };
