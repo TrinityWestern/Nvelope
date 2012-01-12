@@ -67,6 +67,34 @@ namespace Nvelope
             return phone != null ? phone.ToString() : str;
         }
 
+        /// <summary>
+        /// This method tries to format a simple string of digits to
+        /// match phone format
+        /// This method is just used to display the phone number in correct format.
+        /// It will return 0 if no
+        /// </summary>
+        /// <param name="str">alpha numeric string</param>
+        /// <returns>string of integers formated like a phone number</returns>
+        public static string FormatPhoneNumber(string str)
+        {
+            var strn = StringExtensions.RetrieveIntFromAString(str);
+            int len = strn.Length;
+            if (len == 11)
+            {
+                return Convert.ToInt64(strn).ToString("#-###-###-####");
+            }
+            if (len == 10)
+            {
+                return Convert.ToInt64(strn).ToString("###-###-####");
+            }
+            if (len == 7)
+            {
+                return Convert.ToInt64(strn).ToString("###-####");
+            }
+            else
+                return str;
+        }
+
         public override string ToString() {
             var result = Local;
             if (!string.IsNullOrEmpty(Area))      result = Area + "-" + result;

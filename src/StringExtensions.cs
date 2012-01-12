@@ -308,7 +308,7 @@ namespace Nvelope
             if (input == "") 
                 return "0";
             
-            Regex regexPattern = new Regex( @"([-+]?\d+\.?\d*|\.\d+$)");
+            Regex regexPattern = new Regex (@"([-+]?\d+\.?\d*|\.\d+$)");
             MatchCollection matchList = regexPattern.Matches(input);
             if (matchList.Count > 0)
             {
@@ -319,6 +319,38 @@ namespace Nvelope
                 return "0";
             }
             
+        }
+
+        /// <summary>
+        /// This method retrieves digits from a string
+        /// </summary>
+        /// <param name="input">anything in a string</param>
+        /// <returns>just int as string</returns>
+        public static string RetrieveIntFromAString(string input)
+        {
+            input = input.Trim();
+            if (input == "")
+                return "";
+
+            Regex regexPattern = new Regex(@"[0-9]*\d");
+            MatchCollection matchList = regexPattern.Matches(input);
+            if (matchList.Count > 0)
+            {
+                var list = new List<string>();
+                foreach (var match in matchList)
+                {
+
+                    list.Add(match.ToString());
+
+                }
+                string join = string.Join("", list);
+                return join;
+            }
+            else
+            {
+                return "";
+            }
+
         }
         /// <summary>
         /// Finds any number in a string and return it.
