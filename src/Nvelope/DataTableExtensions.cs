@@ -7,12 +7,35 @@ namespace Nvelope
 {
     public static class DataTableExtensions
     {
-        public static Dictionary<string, object> ToDictionary(this DataRow dr)
+        /// <summary>
+        /// Converts a DataRow to a dictionary
+        /// </summary>
+        /// <param name="dr"></param>
+        /// <param name="columnsToInclude"></param>
+        /// <returns></returns>
+        public static Dictionary<string, object> ToDictionary(this DataRow dr, IEnumerable<string> columnsToInclude = null)
         {
+            columnsToInclude = columnsToInclude ?? dr.Table.Columnnames();
+
             var res = new Dictionary<string, object>();
             foreach (DataColumn col in dr.Table.Columns)
-                res.Add(col.ColumnName, dr[col]);
+                if(columnsToInclude.Contains(col.ColumnName))
+                    res.Add(col.ColumnName, dr[col]);
             return res;
+        }
+
+        /// <summary>
+        /// Converts a Datatable to a list or Dictionaries
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="columnsToInclude"></param>
+        /// <returns></returns>
+        public static IEnumerable<Dictionary<string, object>> ToDictionaries(this DataTable dt, IEnumerable<string> columnsToInclude = null)
+        {
+            if (dt == null)
+                return new List<Dictionary<string, object>>();
+
+            return dt.Rows.ToList().Select(r => r.ToDictionary(columnsToInclude)).ToList();
         }
 
         public static IEnumerable<DataRow> ToList(this DataRowCollection dc)
@@ -21,10 +44,24 @@ namespace Nvelope
                 yield return row;
         }
 
+        public static IEnumerable<DataRow> Rows(this DataTable dt)
+        {
+            if (dt != null)
+                foreach (DataRow dr in dt.Rows)
+                    yield return dr;
+        }
+
         public static IEnumerable<DataTable> ToList(this DataTableCollection dt)
         {
             foreach (DataTable t in dt)
                 yield return t;
+        }
+
+        public static IEnumerable<DataTable> Tables(this DataSet ds)
+        {
+            if (ds != null)
+                foreach (DataTable dt in ds.Tables)
+                    yield return dt;
         }
 
         public static string Value(this DataTable dt, CellLoc loc)
@@ -40,6 +77,12 @@ namespace Nvelope
             return res;
         }
 
+        /// <summary>
+        /// Gets a table, if it exists in the dataset. If it doesn't exist, return null
+        /// </summary>
+        /// <param name="ds"></param>
+        /// <param name="tablename"></param>
+        /// <returns></returns>
         public static DataTable Table(this DataSet ds, string tablename)
         {
             if (ds.Tables.Contains(tablename))
