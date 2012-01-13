@@ -8,6 +8,28 @@ namespace Nvelope
     public static class FunctionExtensions
     {
         /// <summary>
+        /// Return a new function that will cache the results of the function, so subsequent invocations don't
+        /// have to re-execute the original function
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="func"></param>
+        /// <returns></returns>
+        public static Func<TResult> Memoize<TResult>(this Func<TResult> func)
+        {
+            bool hasVal = false;
+            TResult val = default(TResult);
+            return () =>
+                {
+                    if (!hasVal)
+                    {
+                        val = func();
+                        hasVal = true;
+                    }
+                    return val;
+                };
+        }
+
+        /// <summary>
         /// Return a new function that will cache the results of each call, so subsequent invocations don't
         /// have to re-execute the original function
         /// </summary>
