@@ -20,16 +20,7 @@ namespace Nvelope
             return list.All(t => !predicate(t));
         }
 
-        /// <summary>
-        /// Wrapper around new HashSet(list)
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
-        /// <returns></returns>
-        public static HashSet<T> ToSet<T>(this IEnumerable<T> list)
-        {
-            return new HashSet<T>(list);
-        }
+        
 
         /// <summary>
         /// Make a shallow copy of a list/enumeration
