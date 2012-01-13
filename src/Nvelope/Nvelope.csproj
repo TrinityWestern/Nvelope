@@ -53,6 +53,7 @@
     <Compile Include="CharListExtensions.cs" />
     <Compile Include="Collections\FixedSizeQueue.cs" />
     <Compile Include="DictionaryListExtensions.cs" />
+    <Compile Include="HashSetExtensions.cs" />
     <Compile Include="Security\CertificateNotFoundException.cs" />
     <Compile Include="Security\Certificates.cs" />
     <Compile Include="Security\ISymmetricCryptor.cs" />
