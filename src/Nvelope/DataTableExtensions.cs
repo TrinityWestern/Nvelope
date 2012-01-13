@@ -31,5 +31,29 @@ namespace Nvelope
         {
             return dt.Rows[loc.Row][loc.Col].ConvertTo<string>();
         }
+
+        public static HashSet<string> Tablenames(this DataSet ds)
+        {
+            var res = new HashSet<string>();
+            foreach (DataTable table in ds.Tables)
+                res.Add(table.TableName);
+            return res;
+        }
+
+        public static DataTable Table(this DataSet ds, string tablename)
+        {
+            if (ds.Tables.Contains(tablename))
+                return ds.Tables[tablename];
+            else
+                return null;
+        }
+
+        public static HashSet<string> Columnnames(this DataTable dt)
+        {
+            var res = new HashSet<string>();
+            foreach (DataColumn col in dt.Columns)
+                res.Add(col.ColumnName);
+            return res;
+        }
     }
 }
