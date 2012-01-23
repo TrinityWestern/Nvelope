@@ -136,6 +136,7 @@ namespace Nvelope.Tests
             number = "778 994 9199";
             Assert.AreEqual("778-994-9199", PhoneNumber.FormatPhoneNumber(number));
 
+            // Bit of a hack - should we really support this?
             number = "778adsas994 dadad9199";
             Assert.AreEqual("778-994-9199", PhoneNumber.FormatPhoneNumber(number));
         }
