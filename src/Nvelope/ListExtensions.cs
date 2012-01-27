@@ -147,6 +147,11 @@ namespace Nvelope
         /// </summary>
         public static IEnumerable<T> And<T>(this IEnumerable<T> source, IEnumerable<T> other)
         {
+            if (source == null)
+                return other;
+            if (other == null)
+                return source;
+
             return source.Concat(other);
         }
 
