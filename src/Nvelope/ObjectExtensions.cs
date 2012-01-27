@@ -69,7 +69,14 @@ namespace Nvelope
             else if (type.Implements<IEnumerable>())
                 return "(" + ((IEnumerable)o).ToIEnumerableObj().Select(t => t.Print()).Join(",") + ")";
             else if (o is Match)
-                return ((Match)o).Groups.ToList().Print(); // Regex group
+            {
+                var groups = ((Match)o).Groups.ToList().ToList();
+                return groups.Select(g => g.ToString()).Print();
+
+                // We can't do this, because the first group of a Match might be
+                // the Match itself - that would get us into an infinite loop
+                //return ((Match)o).Groups.ToList().Print(); // Regex group
+            }
             else if (o is Capture)
                 return ((Capture)o).Value; // Regex capture
 
