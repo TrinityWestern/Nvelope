@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="Collections\FixedSizeQueueTests.cs" />
     <Compile Include="DictionaryListExtensionTests.cs" />
+    <Compile Include="FnTests.cs" />
     <Compile Include="Security\CertificateCryptorTests.cs" />
     <Compile Include="Security\PasswordCryptorTests.cs" />
     <Compile Include="Security\SymmetricTests.cs" />
