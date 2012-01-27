@@ -38,6 +38,19 @@ namespace Nvelope
             return dt.Rows.ToList().Select(r => r.ToDictionary(columnsToInclude)).ToList();
         }
 
+        public static IEnumerable<DataColumn> ToList(this DataColumnCollection dc)
+        {
+            foreach (DataColumn c in dc)
+                yield return c;
+        }
+
+        public static IEnumerable<DataColumn> Columns(this DataTable dt)
+        {
+            if (dt != null)
+                foreach (DataColumn dc in dt.Columns)
+                    yield return dc;
+        }
+
         public static IEnumerable<DataRow> ToList(this DataRowCollection dc)
         {
             foreach (DataRow row in dc)
