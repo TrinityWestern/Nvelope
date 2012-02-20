@@ -75,6 +75,13 @@
         }
 
         [Test]
+        public void ExceptIndicies()
+        {
+            Assert.AreEqual("(a,b,d)", "abcd".ExceptIndicies(2).Print());
+            Assert.AreEqual("(a,b)", "abcd".ExceptIndicies(2, 3).Print());
+        }
+
+        [Test]
         public void Only()
         {
             Assert.AreEqual("(1,2,3)", 1.To(5).Only(1.To(3)).Print());

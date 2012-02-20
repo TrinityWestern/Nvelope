@@ -101,6 +101,19 @@ namespace Nvelope
             return source.Except(items as IEnumerable<T>);
         }
 
+        public static IEnumerable<T> ExceptIndicies<T>(this IEnumerable<T> source, params int[] indicies)
+        {
+            return ExceptIndicies(source, indicies.ToSet());
+        }
+
+        public static IEnumerable<T> ExceptIndicies<T>(this IEnumerable<T> source, IEnumerable<int> indicies)
+        {
+            int cur = 0;
+            foreach (T item in source)
+                if (!indicies.Contains(cur++))
+                    yield return item;
+        }
+
         /// <summary>
         /// Returns only those items in source that are in allowed
         /// </summary>
