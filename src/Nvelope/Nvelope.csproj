@@ -56,9 +56,11 @@
     <Compile Include="Equality.cs" />
     <Compile Include="Fn.cs" />
     <Compile Include="HashSetExtensions.cs" />
+    <Compile Include="IO\CommandLine.cs" />
     <Compile Include="Security\CertificateNotFoundException.cs" />
     <Compile Include="Security\Certificates.cs" />
     <Compile Include="Security\ISymmetricCryptor.cs" />
+    <Compile Include="Security\PassthroughCryptor.cs" />
     <Compile Include="Security\PasswordCryptor.cs" />
     <Compile Include="Security\CertificateCryptor.cs" />
     <Compile Include="English.cs" />
