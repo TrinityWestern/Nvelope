@@ -46,6 +46,15 @@ namespace Nvelope.Tests.Reflection
         }
 
         [Test]
+        public void FieldTypes()
+        {
+            var dh = new DollHouse();
+            var ft = dh._FieldTypes();
+            Assert.AreEqual("([Paint,System.Drawing.Color],[Rooms,System.String[]],[Size,System.Int32],[Spam,System.String])",
+                ft.Print());
+        }
+
+        [Test]
         public void GetNonGenericType()
         {
             Type i = typeof(int);

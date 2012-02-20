@@ -317,6 +317,16 @@ namespace Nvelope.Reflection
             return source._GetMembers().Names();
         }
 
+        /// <summary>
+        /// Shortcut method to access the structure of objects
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static Dictionary<string, Type> _FieldTypes(this object source)
+        {
+            return source._GetMembers().FieldDeclarations();
+        }
+
         public static T _ToObject<T>(this Dictionary<string, object> dict, ObjectReader reader = null)
         {
             if (reader == null) reader = new ObjectReader();
