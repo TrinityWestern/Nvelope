@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Nvelope;
+using System.IO;
 
 namespace Nvelope.IO
 {
@@ -46,7 +47,9 @@ namespace Nvelope.IO
                 .Select(s => paramNames.Contains(s.TrimStart('-')) ? s.TrimStart('-') : s);
 
             var suppliedFlags = parts.Intersect(flags);
-            var argsAndSwitches = parts.Except(flags).ToList();
+            // Don't use Except below - Except returns the Set difference, which implicitly performs
+            // a distinct on the sequence.
+            var argsAndSwitches = parts.Where(p => !flags.Contains(p)).ToList();
 
             // Which switches were actually supplied?
             var suppliedSwitches = argsAndSwitches.Intersect(switches.Keys);
@@ -68,7 +71,7 @@ namespace Nvelope.IO
 
             // The arguments are whatever is left after removing the switches and their values
             var args = argsAndSwitches.ExceptIndicies(switchLocs.And(switchValLocs));
-            // Figure out what the types of the args should be
+            // Figure out what the types of the args should be - if we don't have enough, pad with string
             argTypes = argTypes.Take(args.Count(), typeof(string));
             var typedArgs = args.Zip(argTypes, (val, type) => val.ConvertTo(type));
 
@@ -79,5 +82,6 @@ namespace Nvelope.IO
                 Switches = typedSwitchVals
             };
         }
+
     }
 }

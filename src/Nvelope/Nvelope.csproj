@@ -56,6 +56,7 @@
     <Compile Include="Equality.cs" />
     <Compile Include="Fn.cs" />
     <Compile Include="HashSetExtensions.cs" />
+    <Compile Include="IO\CommandContext.cs" />
     <Compile Include="IO\CommandLine.cs" />
     <Compile Include="Security\CertificateNotFoundException.cs" />
     <Compile Include="Security\Certificates.cs" />

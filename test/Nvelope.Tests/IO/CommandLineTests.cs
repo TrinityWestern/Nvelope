@@ -37,6 +37,14 @@ namespace Nvelope.Tests.IO
         }
 
         [Test]
+        public void ParseTwoInts()
+        {
+            var res = CommandLine.Parse("2 2", typeof(int).And(typeof(int)));
+            Assert.AreEqual("(2,2)", res.Args.Print());
+        }
+
+
+        [Test]
         public void ParseFlags()
         {
             var res = CommandLine.Parse("-flag1 --flag2", flags: "flag1".And("flag2"));
