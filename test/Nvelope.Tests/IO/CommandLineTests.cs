@@ -16,14 +16,14 @@ namespace Nvelope.Tests.IO
         public void Parse()
         {
             var res = CommandLine.Parse("a b c");
-            Assert.AreEqual("(a,b,c)", res.Args.Print());
+            Assert.AreEqual("([0,a],[1,b],[2,c])", res.Print());
         }
 
         [Test]
         public void ParseQuotedArgs()
         {
             var res = CommandLine.Parse("a \"arg with space\" c");
-            Assert.AreEqual("(a,arg with space,c)", res.Args.Print());
+            Assert.AreEqual("([0,a],[1,arg with space],[2,c])", res.Print());
         }
 
         [Test]

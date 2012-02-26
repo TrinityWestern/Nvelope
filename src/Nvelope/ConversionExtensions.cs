@@ -459,6 +459,25 @@ namespace Nvelope
         }
 
         /// <summary>
+        /// Like ConvertTo, but returns null on failure instead of throwing
+        /// an exception. Like the 'as' keyword.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static object ConvertAs(this object source, Type type)
+        {
+            try
+            {
+                return ConvertTo(source, type);
+            }
+            catch (ConversionException)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Like ConvertAs but for value types. Makes a nullable version of
         /// the value.
         /// </summary>

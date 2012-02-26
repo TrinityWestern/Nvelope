@@ -5,25 +5,34 @@ using System.Text;
 using System.IO;
 using System.Reflection;
 using Nvelope.Reflection;
+using Nvelope.Collections;
 
 namespace Nvelope.IO
 {
-    public struct CommandSchema
+    public struct CommandArg
     {
-        public List<Type> ArgTypes;
-        public Dictionary<string, Type> SwitchTypes;
-        public HashSet<string> FlagTypes;
+        public string Name;
+        public Type Type;
+        public bool IsOptional;
     }
 
-    public class CommandContext
+    //public struct CommandSchema
+    //{
+
+    //    public List<Type> ArgTypes;
+    //    public Dictionary<string, Type> SwitchTypes;
+    //    public HashSet<string> FlagTypes;
+    //}
+
+    public class CommandInterpreter
     {
-        public CommandContext(TextWriter output, TextWriter error)
+        public CommandInterpreter(TextWriter output, TextWriter error)
         {
             Output = output;
             Error = error;
         }
 
-        public CommandContext(TextWriter output, TextWriter error, object commandObject) : this(output, error)
+        public CommandInterpreter(TextWriter output, TextWriter error, object commandObject) : this(output, error)
         {
             Commands = DetermineCommands(commandObject).ToList();
         }
@@ -62,8 +71,8 @@ namespace Nvelope.IO
 
         public void AddCommand(string name, object obj, MethodInfo mi)
         {
-            var schema = GetSchema(mi);
-            var implementation = GetImplementation(schema, obj, mi);
+            var schema = CreateSchema(mi);
+            var implementation = CreateImplementation(schema, obj, mi);
             AddCommand(name, schema, implementation);
         }
 
@@ -78,7 +87,7 @@ namespace Nvelope.IO
             AddCommand(name, obj, name);
         }
 
-        public static CommandSchema GetSchema(MethodInfo mi)
+        public static CommandSchema CreateSchema(MethodInfo mi)
         {
             var schema = new CommandSchema();
             var paras = mi.GetParameters().OrderBy(pi => pi.Position);
@@ -105,7 +114,7 @@ namespace Nvelope.IO
             return schema;
         }
 
-        public Action<TextWriter, TextWriter, Command> GetImplementation(CommandSchema schema, object obj, MethodInfo mi)
+        public Action<TextWriter, TextWriter, Command> CreateImplementation(CommandSchema schema, object obj, MethodInfo mi)
         {
             var paras = mi.GetParameters().OrderBy(pi => pi.Position).ToList();
             
@@ -190,6 +199,52 @@ namespace Nvelope.IO
         {
             var implementation = Commands.Single(t => t.Item1 == commandName).Item3;
             implementation(Output, Error, command);
+        }
+
+        public bool HasCommand(string commandText)
+        {
+            var name = ParseCommandName(commandText);
+            return Commands.Any(c => c.Item1 == name);
+        }
+
+        private static IEnumerable<int> _badArgs(CommandSchema schema, string commandText)
+        {
+        }
+
+        private static IEnumerable<string> _invalidSwitches(CommandSchema schema, string commandText)
+        {
+        }
+
+        private static Dictionary<string, string> _badSwitches(CommandSchema schema, string commandText)
+        { 
+        }
+
+        private static IEnumerable<string> _invalidFlags(CommandSchema schema, string commandText)
+        {
+
+        }
+
+        public IEnumerable<string> ParseErrors(string commandText)
+        {
+            var commandName = ParseCommandName(commandText);
+            if (!HasCommand(commandName))
+            {
+                yield return ("Unknown command: '" + commandName + "'");
+                yield break;
+            }
+
+            var schema = Commands.First(c => c.Item1 == commandName).Item2;
+            foreach (var arg in _badArgs(schema, commandText))
+                yield return "Bad argument at position " + arg + ", expected a " + schema.ArgTypes[arg].Name;
+
+            foreach (var sw in _invalidSwitches(schema, commandText))
+                yield return "Unrecognized switch: " + sw;
+
+            foreach (var sw in _badSwitches(schema, commandText))
+                yield return "Bad switch value: " + sw.Key + ", expected a " + schema.SwitchTypes[sw.Key];
+
+            foreach (var flag in _invalidFlags(schema, commandText))
+                yield return "Unrecognized flag: " + flag;
         }
     }
 }

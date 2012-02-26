@@ -61,7 +61,7 @@
     <Compile Include="Collections\FixedSizeQueueTests.cs" />
     <Compile Include="DictionaryListExtensionTests.cs" />
     <Compile Include="FnTests.cs" />
-    <Compile Include="IO\CommandContextTests.cs" />
+    <Compile Include="IO\CommandInterpreterTests.cs" />
     <Compile Include="IO\CommandLineTests.cs" />
     <Compile Include="Reflection\ReflectionOnDictionaryTests.cs" />
     <Compile Include="Security\CertificateCryptorTests.cs" />

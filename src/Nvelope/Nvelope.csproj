@@ -53,10 +53,11 @@
     <Compile Include="CharListExtensions.cs" />
     <Compile Include="Collections\FixedSizeQueue.cs" />
     <Compile Include="DictionaryListExtensions.cs" />
+    <Compile Include="EnumeratorExtensions.cs" />
     <Compile Include="Equality.cs" />
     <Compile Include="Fn.cs" />
     <Compile Include="HashSetExtensions.cs" />
-    <Compile Include="IO\CommandContext.cs" />
+    <Compile Include="IO\CommandInterpreter.cs" />
     <Compile Include="IO\CommandLine.cs" />
     <Compile Include="Reading\TypeConversion.cs" />
     <Compile Include="Security\CertificateNotFoundException.cs" />
