@@ -58,6 +58,7 @@
     <Compile Include="HashSetExtensions.cs" />
     <Compile Include="IO\CommandContext.cs" />
     <Compile Include="IO\CommandLine.cs" />
+    <Compile Include="Reading\TypeConversion.cs" />
     <Compile Include="Security\CertificateNotFoundException.cs" />
     <Compile Include="Security\Certificates.cs" />
     <Compile Include="Security\ISymmetricCryptor.cs" />
