@@ -21,6 +21,9 @@ namespace Nvelope.Reading
         /// <returns></returns>
         public static Dictionary<TKey, TValue> Dict<TKey, TValue>(string printedDict)
         {
+            if (printedDict == null)
+                return new Dictionary<TKey, TValue>();
+
             var str = printedDict.ChopStart("(").ChopEnd(")");
             var pairs = str.Tokenize("^\\s*,?\\s*\\[([^\\]]*)\\]\\s*");
             var parsedPairs = pairs.Select(s => splitKeyValue(s));
@@ -44,6 +47,9 @@ namespace Nvelope.Reading
 
         public static List<T> List<T>(string printedList)
         {
+            if (printedList == null)
+                return new List<T>();
+
             var parts = printedList.ChopStart("(").ChopEnd(")")
                 .Split(new char[]{','}, StringSplitOptions.RemoveEmptyEntries);
 
