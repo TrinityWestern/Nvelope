@@ -6,3 +6,4 @@
 rakelog.txt
 MetricResults
 *.csproj.user
+*.nupkg
