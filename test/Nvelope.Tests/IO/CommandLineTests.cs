@@ -29,75 +29,141 @@ namespace Nvelope.Tests.IO
         [Test]
         public void ParseTypedArgs()
         {
-            var res = CommandLine.Parse("false 42 abc", typeof(bool).And(typeof(int)));
-            Assert.AreEqual("(False,42,abc)", res.Args.Print());
-            Assert.AreEqual(typeof(bool), res.Args.First().GetType());
-            Assert.AreEqual(typeof(int), res.Args.Second().GetType());
-            Assert.AreEqual(typeof(string), res.Args.Third().GetType());
+            var args = new CommandArg() { Name = "1", Type = typeof(bool), IsOptional = false }
+                .And(new CommandArg() { Name = "2", Type = typeof(int), IsOptional = false })
+                .And(new CommandArg() { Name = "3", Type = typeof(string), IsOptional = false });
+
+            var res = CommandLine.Parse("false 42 abc", args);
+            Assert.AreEqual("([1,False],[2,42],[3,abc])", res.Print());
+            Assert.AreEqual(typeof(bool), res["1"].GetType());
+            Assert.AreEqual(typeof(int), res["2"].GetType());
+            Assert.AreEqual(typeof(string), res["3"].GetType());
         }
 
         [Test]
         public void ParseTwoInts()
         {
-            var res = CommandLine.Parse("2 2", typeof(int).And(typeof(int)));
-            Assert.AreEqual("(2,2)", res.Args.Print());
+            var args = new CommandArg() { Name = "a", Type = typeof(int), IsOptional = false }
+                .And(new CommandArg() { Name = "b", Type = typeof(int), IsOptional = false });
+
+            var res = CommandLine.Parse("2 2", args);
+            Assert.AreEqual("([a,2],[b,2])", res.Print());
         }
 
 
         [Test]
         public void ParseFlags()
         {
-            var res = CommandLine.Parse("-flag1 --flag2", flags: "flag1".And("flag2"));
-            Assert.AreEqual("(flag1,flag2)", res.Flags.Print());
+            var args = new CommandArg() { Name = "flag1", Type = typeof(bool), IsOptional = true }
+                .And(new CommandArg() { Name = "flag2", Type = typeof(bool), IsOptional = true });
+
+            var res = CommandLine.Parse("-flag1 --flag2", args);
+            Assert.AreEqual("([flag1,True],[flag2,True])", res.Print());
         }
 
         [Test]
         public void ParseSwitches()
         {
-            var switches = new { s1 = "", s2 = false }._FieldTypes();
-            var res = CommandLine.Parse("-s1 val1 --s2 true", switches: switches);
-            Assert.AreEqual("([s1,val1],[s2,True])", res.Switches.Print());
-        }
+            var args = new CommandArg() { Name = "s1", Type = typeof(string), IsOptional = true }
+                .And(new CommandArg() { Name = "s2", Type = typeof(bool), IsOptional = true });
 
-        [Test]
-        public void ParseTypedSwitches()
-        {
-            var switches = new { s1 = typeof(string), s2 = typeof(bool), s3 = typeof(int) }._AsDictionary().SelectVals(o => o as Type);
-            var res = CommandLine.Parse("-s1 a -s2 false --s3 42", switches: switches);
-            Assert.AreEqual("([s1,a],[s2,False],[s3,42])", res.Switches.Print());
-            Assert.AreEqual(res.Switches["s2"].GetType(), typeof(bool));
-            Assert.AreEqual(res.Switches["s3"].GetType(), typeof(int));
+            var res = CommandLine.Parse("-s1 val1 --s2 true", args);
+            Assert.AreEqual("([s1,val1],[s2,True])", res.Print());
         }
 
         [Test]
         public void ParseQuotedSwitches()
         {
-            var switches = new { s1 = "", s2 = "" }._FieldTypes();
-            var res = CommandLine.Parse("-s1 abc -s2 \"switch with space\"", switches: switches);
-            Assert.AreEqual("([s1,abc],[s2,switch with space])", res.Switches.Print());
+            var args = new CommandArg() { Name = "s1", Type = typeof(string), IsOptional = true }
+                .And(new CommandArg() { Name = "s2", Type = typeof(string), IsOptional = true });
+
+            var res = CommandLine.Parse("-s1 abc -s2 \"switch with space\"", args);
+            Assert.AreEqual("([s1,abc],[s2,switch with space])", res.Print());
         }
 
         [Test]
         public void ParseArgsAndFlags()
         {
-            var res = CommandLine.Parse("a b --f1 c --f2", flags: "f1".And("f2"));
-            Assert.AreEqual("(a,b,c)", res.Args.Print());
-            Assert.AreEqual("(f1,f2)", res.Flags.Print());
+            var args = new CommandArg() { Name = "f1", Type = typeof(bool), IsOptional = true }
+                .And(new CommandArg() { Name = "f2", Type = typeof(bool), IsOptional = true })
+                .And(new CommandArg() { Type = typeof(string), IsOptional = false })
+                .And(new CommandArg() { Type = typeof(string), IsOptional = false });
+
+            var res = CommandLine.Parse("a b --f1 c --f2", args);
+            Assert.AreEqual("(a,b,c)", res.Print());
+            Assert.AreEqual("(f1,f2)", res.Print());
+        }
+
+        [Test]
+        public void ExtraParamsThrowError()
+        {
+            var args = new CommandArg() { Type = typeof(string) }.List();
+            Assert.Throws<ParseException>(() => CommandLine.Parse("a b", args));
+        }
+
+
+        [Test]
+        public void InterspersedFlagsDontClobberArgs()
+        {
+            var args = new CommandArg() { Name = "f1", Type = typeof(bool), IsOptional = true }
+                .And(new CommandArg() { Name = "f2", Type = typeof(bool), IsOptional = true })
+                .And(new CommandArg() { Type = typeof(string), IsOptional = false })
+                .And(new CommandArg() { Type = typeof(string), IsOptional = false });
+
+            var res = CommandLine.Parse("a --f1 b --f2", args);
+            Assert.AreEqual("[0,a],[1,b],[f1,True],[f2,True])", res.Print());
+        }
+
+        [Test]
+        public void BadTypeThrowsParseError()
+        {
+            var args = new CommandArg() { Name = "f1", Type = typeof(bool) }.List();
+
+            Assert.Throws<ParseException>(() => CommandLine.Parse("--f1 abcd", args));
         }
 
         [Test]
         public void ParseArgsSwitchesFlags()
         {
-            var switches = new { s1 = "", s2 = false }._FieldTypes();
-            var res = CommandLine.Parse("abc --f1 --s2 true 42 -s1 \"some text\" -f2",
-                typeof(string).And(typeof(int)),
-                switches,
-                "f1".And("f2"));
+            var args = new CommandArg() { Name = "f1", Type = typeof(bool), IsOptional = true }
+                .And(new CommandArg() { Name = "f2", Type = typeof(bool), IsOptional = true })
+                .And(new CommandArg() { Name = "s1", Type = typeof(string), IsOptional = true})
+                .And(new CommandArg() { Name = "s2", Type = typeof(bool), IsOptional = true});
 
-            Assert.AreEqual("(abc,42)", res.Args.Print());
-            Assert.AreEqual("([s1,some text],[s2,True])", res.Switches.Print());
-            Assert.AreEqual("(f1,f2)", res.Flags.Print());
+            var res = CommandLine.Parse("abc --f1 --s2 true 42 -s1 \"some text\" -f2", args);
+
+            Assert.AreEqual("(abc,42)", res.Print());
+            Assert.AreEqual("([s1,some text],[s2,True])", res.Print());
+            Assert.AreEqual("(f1,f2)", res.Print());
+        }
+    }
+
+    [TestFixture(Description="You should only need these tests if the CommandLineTests don't pass - they test specific sub-parts of CommandLine")]
+    public class CommandLineTestsDetailed
+    {
+        [Test]
+        public void ParseArgs()
+        {
+            var res = CommandLine.ParseArgs("a".And("b").And("c"));
+            Assert.AreEqual(3, res.Count());
         }
 
+        [Test]
+        public void AssignArgs()
+        {
+            var parsed = new KeyValuePair<string,string>(null, "a")
+                .And(new KeyValuePair<string, string>(null, "b"));
+
+            var res = CommandLine.AssignArgs(parsed, new CommandArg[]{});
+
+            Assert.AreEqual("([0, a],[1, b])", res.Print());
+        }
+
+        [Test]
+        public void TrimQuotesFromQuotedStrings()
+        {
+            var parsed = CommandLine.Lex("a \"arg with space\" c");
+            Assert.AreEqual("(a,arg with space,c)", parsed.Print());
+        }
     }
 }

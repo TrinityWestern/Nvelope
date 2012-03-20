@@ -904,8 +904,9 @@ namespace Nvelope
         public static IEnumerable<T> And<T>(this T source, IEnumerable<T> items)
         {
             yield return source;
-            foreach (var i in items)
-                yield return i;
+            if(items != null)
+                foreach (var i in items)
+                    yield return i;
         }
 
         /// <summary>

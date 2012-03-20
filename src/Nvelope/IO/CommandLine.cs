@@ -17,11 +17,29 @@ namespace Nvelope.IO
     //    public HashSet<string> Flags;
     //}
 
+    public struct CommandArg
+    {
+        public string Name;
+        public Type Type;
+        public bool IsOptional;
+
+        public override string ToString()
+        {
+            return Name.And(Type.Name).Join(" ")
+                + (IsOptional ? "*" : "");
+        }
+    }
+
     public struct ParseError
     {
         public CommandArg? Argument;
         public string ArgName;
         public object Value;
+
+        public override string ToString()
+        {
+            return ArgName;
+        }
     }
 
     public class ParseException : Exception
@@ -48,7 +66,7 @@ namespace Nvelope.IO
         /// <returns></returns>
         public static Dictionary<string, object> Parse(string commandText, IEnumerable<CommandArg> expectedArgs = null)
         {
-            expectedArgs = expectedArgs ?? new CommandArg[] { };
+            expectedArgs = SanitizeArgs(expectedArgs);
 
             var lexed = Lex(commandText);
             var lexErrors = LexErrors(lexed).ToList();
@@ -73,9 +91,17 @@ namespace Nvelope.IO
             return converted.ToDictionary();
         }
 
+        public static IEnumerable<CommandArg> SanitizeArgs(IEnumerable<CommandArg> args)
+        {
+            var nums = 0.Inc().Select(i => i.ToString()).GetEnumerator();
+            return args.Select(a => a.Name != null ? a : new CommandArg() { Name = nums.Pop(), IsOptional = a.IsOptional, Type = a.Type })
+                .ToList();
+        }
+
         public static IEnumerable<string> Lex(string commandText)
         {
-            return commandText.Tokenize("^\\s*(\"[^\"]*\"|[^\\s]+)");
+            return commandText.Tokenize("^\\s*(\"[^\"]*\"|[^\\s]+)")
+                .Select(s => s.Trim('"'));
         }
 
         public static IEnumerable<ParseError> LexErrors(
