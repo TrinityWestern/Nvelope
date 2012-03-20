@@ -4,10 +4,10 @@
     <id>$id$</id>
     <version>$version$</version>
     <title>$title$</title>
-    <authors>Brian DeJong</authors>
-    <owners>Trinity Western University</owners>
+    <authors>Trinity Western University</authors>
+    <owners>Brian DeJong</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>description</description>
+    <description>$description$</description>
     <releaseNotes></releaseNotes>
     <copyright>Copyright 2012</copyright>
     <tags></tags>

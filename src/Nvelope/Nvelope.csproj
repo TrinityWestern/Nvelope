@@ -125,9 +125,6 @@
     <Compile Include="Web\HtmlExtensions.cs" />
     <Compile Include="XmlExtensions.cs" />
     <None Include="keypair.snk" />
-    <Content Include="CodeAnalysisDictionary.xml">
-      <SubType>Designer</SubType>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
