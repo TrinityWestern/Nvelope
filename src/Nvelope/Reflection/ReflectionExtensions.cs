@@ -486,6 +486,15 @@ namespace Nvelope.Reflection
             foreach (var field in dataFields.Keys.Intersect(sourceFields.Keys))
                 source._Set(sourceFields[field], data[dataFields[field]]);
 
+            // Special case - if the object we're setting derives from Dictionary<string, object>,
+            // we'll add any extra keys that aren't properties on source
+            if (source is Dictionary<string, object>)
+            {
+                var dict = source as Dictionary<string, object>;
+                foreach (var field in dataFields.Keys.Except(sourceFields.Keys))
+                    dict[field] = data[dataFields[field]];
+            }
+
             return source;
         }
 

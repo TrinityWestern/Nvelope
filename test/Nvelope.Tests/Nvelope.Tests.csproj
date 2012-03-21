@@ -63,6 +63,7 @@
     <Compile Include="FnTests.cs" />
     <Compile Include="IO\CommandContextTests.cs" />
     <Compile Include="IO\CommandLineTests.cs" />
+    <Compile Include="Reflection\ReflectionOnDictionaryTests.cs" />
     <Compile Include="Security\CertificateCryptorTests.cs" />
     <Compile Include="Security\PasswordCryptorTests.cs" />
     <Compile Include="Security\SymmetricTests.cs" />
@@ -121,13 +122,13 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Nvelope\Nvelope.csproj">
-      <Project>{AC4A93B6-DDB6-4FE1-B528-665DE101052B}</Project>
-      <Name>Nvelope</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\..\src\Nvelope\Nvelope.csproj">
+      <Project>{70F679C0-16C8-49A9-8CD3-59E23FC6A4C6}</Project>
+      <Name>Nvelope</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
