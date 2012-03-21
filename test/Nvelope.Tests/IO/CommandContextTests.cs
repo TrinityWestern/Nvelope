@@ -13,12 +13,7 @@ namespace Nvelope.Tests.IO
     [TestFixture]
     public class CommandContextTests
     {
-        [Test]
-        public void DetermineSchemas()
-        {
-            Assert.Fail();
-        }
-
+       
         [Test]
         public void Eval()
         {
