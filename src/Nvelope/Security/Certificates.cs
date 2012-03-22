@@ -48,7 +48,9 @@ namespace Nvelope.Security
         /// <returns></returns>
         public static X509Certificate2 UserCert()
         {
-            return Find(c => true, StoreLocation.CurrentUser, false);
+            // Only find certificates that verify, otherwise you end up with a 
+            // CryptographicException "Bad Key" when decrypting
+            return Find(c => c.Verify(), StoreLocation.CurrentUser, false);
         }
     }
 
