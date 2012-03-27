@@ -21,6 +21,14 @@ namespace Nvelope.IO
         }
     }
 
+    public static class CommandArgExteions
+    {
+        public static bool IsFlag(this CommandArg arg)
+        {
+            return arg.IsOptional && arg.Type == typeof(bool);
+        }
+    }
+
     public struct ParseError
     {
         public CommandArg? Argument;
@@ -64,7 +72,7 @@ namespace Nvelope.IO
             if (lexErrors.Any())
                 throw new ParseException(lexErrors);
 
-            var flags = expectedArgs.Where(a => a.IsOptional && a.Type == typeof(bool)).Select(a => a.Name).ToSet();
+            var flags = expectedArgs.Where(a => a.IsFlag()).Select(a => a.Name).ToSet();
             var parsed = ParseArgs(lexed, flags);
             var parseErrors = ParseErrors(parsed).ToList();
             if (parseErrors.Any())
