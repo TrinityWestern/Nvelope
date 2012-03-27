@@ -21,7 +21,7 @@ namespace Nvelope.IO
         }
     }
 
-    public static class CommandArgExteions
+    public static class CommandArgExtensions
     {
         public static bool IsFlag(this CommandArg arg)
         {
