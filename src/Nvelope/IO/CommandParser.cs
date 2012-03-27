@@ -46,7 +46,7 @@ namespace Nvelope.IO
     /// <summary>
     /// Provides methods for implementing a command-line or REPL from C#, and related utilities
     /// </summary>
-    public class CommandLine
+    public class CommandParser
     {
         /// <summary>
         /// Convert a text command into a dict of arguments, based on the supplied expected arguments.

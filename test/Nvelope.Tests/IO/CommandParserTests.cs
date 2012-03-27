@@ -11,19 +11,19 @@ using Nvelope.Reading;
 namespace Nvelope.Tests.IO
 {
     [TestFixture]
-    public class CommandLineTests
+    public class CommandParserTests
     {
         [Test]
         public void Parse()
         {
-            var res = new CommandLine().Parse("a b c");
+            var res = new CommandParser().Parse("a b c");
             Assert.AreEqual("([0,a],[1,b],[2,c])", res.Print());
         }
 
         [Test]
         public void ParseQuotedArgs()
         {
-            var res = new CommandLine().Parse("a \"arg with space\" c");
+            var res = new CommandParser().Parse("a \"arg with space\" c");
             Assert.AreEqual("([0,a],[1,arg with space],[2,c])", res.Print());
         }
 
@@ -34,7 +34,7 @@ namespace Nvelope.Tests.IO
                 .And(new CommandArg() { Name = "2", Type = typeof(int), IsOptional = false })
                 .And(new CommandArg() { Name = "3", Type = typeof(string), IsOptional = false });
 
-            var res = new CommandLine().Parse("false 42 abc", args);
+            var res = new CommandParser().Parse("false 42 abc", args);
             Assert.AreEqual("([1,False],[2,42],[3,abc])", res.Print());
             Assert.AreEqual(typeof(bool), res["1"].GetType());
             Assert.AreEqual(typeof(int), res["2"].GetType());
@@ -47,7 +47,7 @@ namespace Nvelope.Tests.IO
             var args = new CommandArg() { Name = "a", Type = typeof(int), IsOptional = false }
                 .And(new CommandArg() { Name = "b", Type = typeof(int), IsOptional = false });
 
-            var res = new CommandLine().Parse("2 2", args);
+            var res = new CommandParser().Parse("2 2", args);
             Assert.AreEqual("([a,2],[b,2])", res.Print());
         }
 
@@ -58,7 +58,7 @@ namespace Nvelope.Tests.IO
             var args = new CommandArg() { Name = "flag1", Type = typeof(bool), IsOptional = true }
                 .And(new CommandArg() { Name = "flag2", Type = typeof(bool), IsOptional = true });
 
-            var res = new CommandLine().Parse("-flag1 --flag2", args);
+            var res = new CommandParser().Parse("-flag1 --flag2", args);
             Assert.AreEqual("([flag1,True],[flag2,True])", res.Print());
         }
 
@@ -68,7 +68,7 @@ namespace Nvelope.Tests.IO
             var args = new CommandArg() { Name = "s1", Type = typeof(string), IsOptional = true }
                 .And(new CommandArg() { Name = "s2", Type = typeof(bool), IsOptional = true });
 
-            var res = new CommandLine().Parse("-s1 val1 --s2 true", args);
+            var res = new CommandParser().Parse("-s1 val1 --s2 true", args);
             Assert.AreEqual("([s1,val1],[s2,True])", res.Print());
         }
 
@@ -78,7 +78,7 @@ namespace Nvelope.Tests.IO
             var args = new CommandArg() { Name = "s1", Type = typeof(string), IsOptional = true }
                 .And(new CommandArg() { Name = "s2", Type = typeof(string), IsOptional = true });
 
-            var res = new CommandLine().Parse("-s1 abc -s2 \"switch with space\"", args);
+            var res = new CommandParser().Parse("-s1 abc -s2 \"switch with space\"", args);
             Assert.AreEqual("([s1,abc],[s2,switch with space])", res.Print());
         }
 
@@ -90,7 +90,7 @@ namespace Nvelope.Tests.IO
                 .And(new CommandArg() { Type = typeof(string), IsOptional = false })
                 .And(new CommandArg() { Type = typeof(string), IsOptional = false });
 
-            var res = new CommandLine().Parse("a b --f1 c --f2", args);
+            var res = new CommandParser().Parse("a b --f1 c --f2", args);
             Assert.AreEqual("([0,a],[1,b],[f1,c],[f2,True])", res.Print());
         }
 
@@ -98,7 +98,7 @@ namespace Nvelope.Tests.IO
         public void ExtraParamsThrowError()
         {
             var args = new CommandArg() { Type = typeof(string) }.List();
-            Assert.Throws<ParseException>(() => new CommandLine().Parse("a b", args));
+            Assert.Throws<ParseException>(() => new CommandParser().Parse("a b", args));
         }
 
 
@@ -110,7 +110,7 @@ namespace Nvelope.Tests.IO
                 .And(new CommandArg() { Type = typeof(string), IsOptional = false })
                 .And(new CommandArg() { Type = typeof(string), IsOptional = false });
 
-            var res = new CommandLine().Parse("a --f1 b --f2", args);
+            var res = new CommandParser().Parse("a --f1 b --f2", args);
             Assert.AreEqual("([0,a],[1,b],[f1,True],[f2,True])", res.Print());
         }
 
@@ -119,7 +119,7 @@ namespace Nvelope.Tests.IO
         {
             var args = new CommandArg() { Name = "f1", Type = typeof(bool) }.List();
 
-            Assert.Throws<ParseException>(() => new CommandLine().Parse("--f1 abcd", args));
+            Assert.Throws<ParseException>(() => new CommandParser().Parse("--f1 abcd", args));
         }
 
         [Test]
@@ -132,7 +132,7 @@ namespace Nvelope.Tests.IO
                 .And(new CommandArg() { Name = "s1", Type = typeof(string), IsOptional = true})
                 .And(new CommandArg() { Name = "s2", Type = typeof(bool), IsOptional = true});
 
-            var res = new CommandLine().Parse("abc --f1 --s2 false 42 -s1 \"some text\" -f2", args);
+            var res = new CommandParser().Parse("abc --f1 --s2 false 42 -s1 \"some text\" -f2", args);
 
             Assert.AreEqual("([0,abc],[1,42],[f1,True],[f2,True],[s1,some text],[s2,False])", res.Print());
         }
@@ -144,7 +144,7 @@ namespace Nvelope.Tests.IO
         [Test]
         public void ParseArgs()
         {
-            var res = new CommandLine().ParseArgs("a".And("b").And("c"), new string[]{});
+            var res = new CommandParser().ParseArgs("a".And("b").And("c"), new string[]{});
             Assert.AreEqual(3, res.Count());
         }
 
@@ -154,7 +154,7 @@ namespace Nvelope.Tests.IO
             var parsed = new KeyValuePair<string,string>(null, "a")
                 .And(new KeyValuePair<string, string>(null, "b"));
 
-            var res = new CommandLine().AssignArgs(parsed, new CommandArg[]{});
+            var res = new CommandParser().AssignArgs(parsed, new CommandArg[]{});
 
             Assert.AreEqual("([0, a],[1, b])", res.Print());
         }
@@ -162,7 +162,7 @@ namespace Nvelope.Tests.IO
         [Test]
         public void TrimQuotesFromQuotedStrings()
         {
-            var parsed = new CommandLine().Lex("a \"arg with space\" c");
+            var parsed = new CommandParser().Lex("a \"arg with space\" c");
             Assert.AreEqual("(a,arg with space,c)", parsed.Print());
         }
 
@@ -170,7 +170,7 @@ namespace Nvelope.Tests.IO
         public void ParseFlags()
         {  
             var lexed = Read.List("(a,--f1,b,--f2)");
-            var parsed = new CommandLine().ParseArgs(lexed, "f1".And("f2"));
+            var parsed = new CommandParser().ParseArgs(lexed, "f1".And("f2"));
             Assert.AreEqual("([, a],[f1, ],[, b],[f2, ])", parsed.Print());
         }
     }
