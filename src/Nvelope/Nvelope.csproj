@@ -59,6 +59,7 @@
     <Compile Include="HashSetExtensions.cs" />
     <Compile Include="IO\CommandInterpreter.cs" />
     <Compile Include="IO\CommandParser.cs" />
+    <Compile Include="IO\MethodInfoExtensions.cs" />
     <Compile Include="Reading\TypeConversion.cs" />
     <Compile Include="Security\CertificateNotFoundException.cs" />
     <Compile Include="Security\Certificates.cs" />
