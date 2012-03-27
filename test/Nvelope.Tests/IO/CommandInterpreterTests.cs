@@ -10,29 +10,7 @@ using Nvelope.Reflection;
 
 namespace Nvelope.Tests.IO
 {
-    [TestFixture]
-    public class CommandInterpreterTests
-    {
-       
-        [Test]
-        public void GetParseErrors()
-        {
-            var interp = new CommandInterpreter(new StringWriter(), new StringWriter());
-            var schema = new CommandSchema() { ArgTypes = typeof(int).And(typeof(int)).ToList() };
-            interp.AddCommand<int, int, int>("plus", (i, j) => i + j);
 
-            var errors = interp.ParseErrors("plus 2 abc");
-            Assert.AreEqual(1, errors.Count());
-
-        }
-
-        [Test]
-        public void Eval()
-        {
-            var io = new StringWriter();
-            var interp = new CommandInterpreter(io, io);
-            var schema = new CommandSchema() { ArgTypes = typeof(int).And(typeof(int)).ToList() };
-            interp.AddCommand("plus", schema, (o, e, c) => o.WriteLine(c.Args[0].ConvertTo<int>() + c.Args[1].ConvertTo<int>()));
     //[TestFixture]
     //public class CommandInterpreterTests
     //{
