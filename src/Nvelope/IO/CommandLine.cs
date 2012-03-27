@@ -131,14 +131,18 @@ namespace Nvelope.IO
             var name = firstName ? ToName(tokens.First()) : null;
             var firstFlag = firstName && flags.Contains(name);
             var secondVal = tokens.AtLeast(2) && firstName && !IsName(tokens.Second());
+            var secondBool = secondVal && tokens.Second().CanConvertTo<bool>();
             
             // If first token is a name, and the second token is a value, second is the value
             // If first token is a name, and the second token isn't a value, the value is ""
             // If the first token is a value, that's the value
-            // IF the first token is a flag, then the value is ""
+            // IF the first token is a flag, then the value is "", unless the second token is a bool
             string val = null;
             if (firstFlag)
-                val = null;
+                if(secondBool)
+                    val = tokens.Second();
+                else
+                    val = null;
             else if (firstName)
                 if (secondVal)
                     val = tokens.Second();

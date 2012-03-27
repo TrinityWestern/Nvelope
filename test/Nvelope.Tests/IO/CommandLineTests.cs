@@ -85,7 +85,7 @@ namespace Nvelope.Tests.IO
         [Test]
         public void ParseArgsAndFlags()
         {
-            var args = new CommandArg() { Name = "f1", Type = typeof(bool), IsOptional = true }
+            var args = new CommandArg() { Name = "f1", Type = typeof(string), IsOptional = true }
                 .And(new CommandArg() { Name = "f2", Type = typeof(bool), IsOptional = true })
                 .And(new CommandArg() { Type = typeof(string), IsOptional = false })
                 .And(new CommandArg() { Type = typeof(string), IsOptional = false });
@@ -125,16 +125,16 @@ namespace Nvelope.Tests.IO
         [Test]
         public void ParseArgsSwitchesFlags()
         {
-            var args = new CommandArg() { Name = "f1", Type = typeof(bool), IsOptional = true }
+            var args = new CommandArg() { Type = typeof(string)}
+                .And(new CommandArg() { Type = typeof(int)})
+                .And(new CommandArg() { Name = "f1", Type = typeof(bool), IsOptional = true })
                 .And(new CommandArg() { Name = "f2", Type = typeof(bool), IsOptional = true })
                 .And(new CommandArg() { Name = "s1", Type = typeof(string), IsOptional = true})
                 .And(new CommandArg() { Name = "s2", Type = typeof(bool), IsOptional = true});
 
-            var res = CommandLine.Parse("abc --f1 --s2 true 42 -s1 \"some text\" -f2", args);
+            var res = CommandLine.Parse("abc --f1 --s2 false 42 -s1 \"some text\" -f2", args);
 
-            Assert.AreEqual("(abc,42)", res.Print());
-            Assert.AreEqual("([s1,some text],[s2,True])", res.Print());
-            Assert.AreEqual("(f1,f2)", res.Print());
+            Assert.AreEqual("([0,abc],[1,42],[f1,True],[f2,True],[s1,some text],[s2,False])", res.Print());
         }
     }
 
