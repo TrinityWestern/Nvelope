@@ -143,8 +143,10 @@ namespace Nvelope.IO
         {
             var requiredArgs = expectedArgs.Where(a => !a.IsOptional);
             // An infinite sequence of arg names to assign to the args that have no names
-            var argNames = requiredArgs.Select(a => a.Name)
-                .And(0.Inc().Select(i => i.ToString())).GetEnumerator();
+            var reqArgNames = requiredArgs.Select(a => a.Name);
+            var argNames = reqArgNames
+                .And(0.Inc().Select(i => i.ToString()).Except(reqArgNames)) // Start at 0, but don't use any names that requiredArgs have
+                .GetEnumerator();
 
             foreach(var kv in parsedArgs)
                 if(kv.Key == null)
