@@ -18,11 +18,16 @@ namespace Nvelope.Reflection
         /// <returns></returns>
         public static Type GetNonGenericType(this Type type)
         {
-            if (type.IsGenericType && type.GetGenericTypeDefinition().Name == "Nullable`1")
+            if (type.IsNullable())
                 // try to convert to the underlying base type instead
                 type = type.GetGenericArguments()[0];
 
             return type;
+        }
+
+        public static bool IsNullable(this Type type)
+        {
+            return type.IsGenericType && type.GetGenericTypeDefinition().Name == "Nullable`1";
         }
 
 

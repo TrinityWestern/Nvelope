@@ -276,7 +276,7 @@ namespace Nvelope
             var sourceString = source as string;
 
             // Handle nullable types
-            if (type.IsGenericType && type.GetGenericTypeDefinition().Name == "Nullable`1")
+            if (Reflection.ReflectionExtensions.IsNullable(type))
             {
                 // If we're trying to set to null, perfect!
                 if (source == null)
