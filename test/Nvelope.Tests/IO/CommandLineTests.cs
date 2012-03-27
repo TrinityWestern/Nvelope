@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Nvelope.IO;
 using Nvelope;
 using Nvelope.Reflection;
+using Nvelope.Reading;
 
 namespace Nvelope.Tests.IO
 {
@@ -90,8 +91,7 @@ namespace Nvelope.Tests.IO
                 .And(new CommandArg() { Type = typeof(string), IsOptional = false });
 
             var res = CommandLine.Parse("a b --f1 c --f2", args);
-            Assert.AreEqual("(a,b,c)", res.Print());
-            Assert.AreEqual("(f1,f2)", res.Print());
+            Assert.AreEqual("([0,a],[1,b],[f1,c],[f2,True])", res.Print());
         }
 
         [Test]
@@ -111,7 +111,7 @@ namespace Nvelope.Tests.IO
                 .And(new CommandArg() { Type = typeof(string), IsOptional = false });
 
             var res = CommandLine.Parse("a --f1 b --f2", args);
-            Assert.AreEqual("[0,a],[1,b],[f1,True],[f2,True])", res.Print());
+            Assert.AreEqual("([0,a],[1,b],[f1,True],[f2,True])", res.Print());
         }
 
         [Test]
@@ -144,7 +144,7 @@ namespace Nvelope.Tests.IO
         [Test]
         public void ParseArgs()
         {
-            var res = CommandLine.ParseArgs("a".And("b").And("c"));
+            var res = CommandLine.ParseArgs("a".And("b").And("c"), new string[]{});
             Assert.AreEqual(3, res.Count());
         }
 
@@ -164,6 +164,14 @@ namespace Nvelope.Tests.IO
         {
             var parsed = CommandLine.Lex("a \"arg with space\" c");
             Assert.AreEqual("(a,arg with space,c)", parsed.Print());
+        }
+
+        [Test]
+        public void ParseFlags()
+        {  
+            var lexed = Read.List("(a,--f1,b,--f2)");
+            var parsed = CommandLine.ParseArgs(lexed, "f1".And("f2"));
+            Assert.AreEqual("([, a],[f1, ],[, b],[f2, ])", parsed.Print());
         }
     }
 }

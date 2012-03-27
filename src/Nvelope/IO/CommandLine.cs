@@ -73,7 +73,8 @@ namespace Nvelope.IO
             if (lexErrors.Any())
                 throw new ParseException(lexErrors);
 
-            var parsed = ParseArgs(lexed);
+            var flags = expectedArgs.Where(a => a.IsOptional && a.Type == typeof(bool)).Select(a => a.Name).ToSet();
+            var parsed = ParseArgs(lexed, flags);
             var parseErrors = ParseErrors(parsed).ToList();
             if (parseErrors.Any())
                 throw new ParseException(parseErrors);
@@ -93,6 +94,9 @@ namespace Nvelope.IO
 
         public static IEnumerable<CommandArg> SanitizeArgs(IEnumerable<CommandArg> args)
         {
+            if (args == null)
+                return new CommandArg[] { };
+
             var nums = 0.Inc().Select(i => i.ToString()).GetEnumerator();
             return args.Select(a => a.Name != null ? a : new CommandArg() { Name = nums.Pop(), IsOptional = a.IsOptional, Type = a.Type })
                 .ToList();
@@ -110,26 +114,44 @@ namespace Nvelope.IO
             yield break;
         }
 
-        public static IEnumerable<KeyValuePair<string, string>> ParseArgs(IEnumerable<string> tokens)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tokens"></param>
+        /// <param name="flags">The names of fields that don't require a value</param>
+        /// <returns></returns>
+        public static IEnumerable<KeyValuePair<string, string>> ParseArgs(IEnumerable<string> tokens, IEnumerable<string> flags)
         {
             if (!tokens.Any())
                 return null;
 
             // If first is a switchname, see if the second is value. If so, take that too
             var firstName = IsName(tokens.First());
-            var secondVal = tokens.AtLeast(2) && firstName && !IsName(tokens.Second());
             // If the first token is a name, that's the name, otherwise the name is ""
             var name = firstName ? ToName(tokens.First()) : null;
+            var firstFlag = firstName && flags.Contains(name);
+            var secondVal = tokens.AtLeast(2) && firstName && !IsName(tokens.Second());
+            
             // If first token is a name, and the second token is a value, second is the value
             // If first token is a name, and the second token isn't a value, the value is ""
-            // If ther first token is a value, that's the value
-            var val = firstName ? (secondVal ? tokens.Second() : null) : tokens.First();
+            // If the first token is a value, that's the value
+            // IF the first token is a flag, then the value is ""
+            string val = null;
+            if (firstFlag)
+                val = null;
+            else if (firstName)
+                if (secondVal)
+                    val = tokens.Second();
+                else
+                    val = null;
+            else
+                val = tokens.First();
 
             var numTaken = name.And(val).Count(s => s != null);
             var remainder = tokens.Skip(numTaken);
 
             return new KeyValuePair<string, string>(name, val)
-                .And(ParseArgs(remainder));
+                .And(ParseArgs(remainder, flags));
         }
 
         public static IEnumerable<ParseError> ParseErrors(
