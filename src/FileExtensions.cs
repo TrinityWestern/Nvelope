@@ -17,5 +17,19 @@ namespace Nvelope
             var bytes = md5.ComputeHash(stream);
             return bytes.ToHexString();
         }
+
+        /// <summary>
+        /// This method returns fileextension based on the filename
+        /// </summary>
+        /// <param name="name">file name eg hello.html</param>
+        /// <returns>file extension eg .html</returns>
+        public static string GetExtension(string name)
+        {
+            if (name.IndexOf(".") > -1)
+            {
+                return name.Substring(name.IndexOf(".")).ToLower();
+            }
+            return "";
+        }
     }
 }
