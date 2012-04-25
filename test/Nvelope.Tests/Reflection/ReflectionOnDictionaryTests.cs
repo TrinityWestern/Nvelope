@@ -18,6 +18,17 @@ namespace Nvelope.Tests.Reflection
 
             Assert.AreEqual("([Val1,7],[Val2,abc])", t._SetFrom(dict).Print());
         }
+
+        [Test]
+        public void FieldsGetsKeysAndProperties()
+        {
+            var t = new TestObj();
+            Assert.AreEqual("(Val1)", t._Fields().Print());
+            t.Val1 = 1;
+            Assert.AreEqual("(Val1)", t._Fields().Print());
+            t.Add("Val2", 2);
+            Assert.AreEqual("(Val1,Val2)", t._Fields().Print());
+        }
     }
 
     public class TestObj : Dictionary<string, object>

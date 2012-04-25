@@ -310,16 +310,28 @@ namespace Nvelope.Reflection
         }
 
         /// <summary>
+        /// These are the properties that exist on Dictionary - when we're doing certain things
+        /// we like to be able to ignore these
+        /// </summary>
+        private static IEnumerable<string> _dictionaryProperties = new Dictionary<string, object>()._GetMembers().Names().ToSet();
+
+        /// <summary>
         /// Get the names of the fields of the object, or the keys if it's a dictionary
         /// </summary>
+        /// <remarks>If the class derives from Dictionary, any properties that are not in Dictionary base class will also be included</remarks>
         /// <param name="source"></param>
         /// <returns></returns>
         public static IEnumerable<string> _Fields(this object source)
         {
-            if (source is Dictionary<string, object>)
-                return (source as Dictionary<string, object>).Keys;
+            var members = source._GetMembers().Names();
 
-            return source._GetMembers().Names();
+            // If it's a dictionary, include the keys, and only include the properties
+            // that don't come from Dictionary base class
+            if (source is Dictionary<string, object>)
+                return (source as Dictionary<string,object>).Keys
+                    .Union(members.Except(_dictionaryProperties)).ToList();
+
+            return members;
         }
 
         /// <summary>
