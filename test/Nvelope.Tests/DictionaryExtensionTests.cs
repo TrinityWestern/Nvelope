@@ -314,6 +314,17 @@ namespace Nvelope.Tests
         }
 
         [Test]
+        public void IsSameAsDifferentTypes()
+        {
+            var a = new Dictionary<string, object>();
+            var b = new Dictionary<string, object>();
+            a.Add("A", 1);
+            b.Add("A", "1");
+            Assert.False(a.IsSameAs(b));
+            Assert.True(a.IsSameAs(b, a.Keys, ObjectExtensions.LazyEq));
+        }
+
+        [Test]
         public void Diff()
         {
             var a = new Dictionary<string, int>() { { "A", 1 }, { "B", 2 }, {"C", 3}};

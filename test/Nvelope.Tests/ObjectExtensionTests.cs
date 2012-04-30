@@ -21,6 +21,16 @@ namespace Nvelope.Tests
         }
 
         [Test]
+        public void LazyEq()
+        {
+            object a = 1;
+            object b = 1;
+            Assert.True(a.LazyEq(b));
+            b = "1";
+            Assert.True(a.LazyEq(b));
+        }
+
+        [Test]
         public void Neq()
         {
             object a = 1;

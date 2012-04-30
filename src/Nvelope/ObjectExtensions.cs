@@ -38,6 +38,35 @@ namespace Nvelope
             return !obj.Eq(other);
         }
 
+        public static bool LazyEq(this object obj, object other)
+        {
+            // Handle nulls
+            if (obj == null)
+                return (other == null);
+
+            if (other == null)
+                return false;
+
+            var typeObj = obj.GetType();
+            var typeOther = other.GetType();
+
+            if (typeObj == typeOther)
+                return obj.Eq(other);
+
+            if (obj.CanConvertTo(typeOther))
+                return obj.ConvertTo(typeOther).Eq(other);
+
+            if (other.CanConvertTo(typeObj))
+                return obj.Eq(other.ConvertTo(typeObj));
+
+            throw new InvalidOperationException("Could not compare the two objects: " + obj + " and " + other);
+        }
+
+        public static bool LazyNeq(this object obj, object other)
+        {
+            return !obj.LazyEq(other);
+        }
+
         /// <summary>
         /// Like ToString, but it handles nulls and gives nicer results for
         /// some objects.

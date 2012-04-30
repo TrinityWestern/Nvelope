@@ -523,7 +523,7 @@ namespace Nvelope.Reflection
             IEnumerable<string> fieldNames = null)
         {
             if (fieldNames == null) fieldNames = source._GetMembers().Names();
-            return source._AsDictionary(true).IsSameAs(other._AsDictionary(true), fieldNames);
+            return source._AsDictionary(true).IsSameAs(other._AsDictionary(true), fieldNames, null);
         }
 
         /// <summary>
