@@ -15,7 +15,7 @@ namespace Nvelope.Reading
         /// <returns></returns>
         public static Type GuessType(string strVal)
         {
-            if (strVal == "NULL")
+            if (strVal == "NULL" || strVal == null)
                 return null;
 
             var type = _infervertConversions.First(r => r.Key.IsMatch(strVal)).Value;
