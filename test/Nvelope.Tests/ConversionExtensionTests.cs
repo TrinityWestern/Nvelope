@@ -18,6 +18,12 @@ namespace Nvelope.Tests
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-CA");
         }
 
+        [Test]
+        public void ConvertsNull()
+        {
+            object obj = null;
+            Assert.AreEqual(null, obj.ConvertTo(null));
+        }
 
         [Test]
         public void Print()
