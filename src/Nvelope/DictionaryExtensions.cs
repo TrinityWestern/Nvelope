@@ -164,7 +164,7 @@ namespace Nvelope
         /// <param name="comparisonKeys"></param>
         /// <returns></returns>
         public static bool IsSameAs<TKey, TValue>(this IDictionary<TKey, TValue> dict, IDictionary<TKey, TValue> other, 
-            IEnumerable<TKey> comparisonKeys, Func<TValue,TValue,bool> comparer)
+            IEnumerable<TKey> comparisonKeys, Func<TValue,TValue,bool> comparer = null)
         {
             var myKeys = dict.Keys.Where(k => comparisonKeys.Contains(k));
             var otherKeys = other.Keys.Where(k => comparisonKeys.Contains(k));
@@ -202,7 +202,7 @@ namespace Nvelope
         /// <param name="other"></param>
         /// <param name="comparisonKeys"></param>
         /// <returns></returns>
-        public static bool IsSameAs<TKey, TValue>(this IDictionary<TKey, TValue> dict, IDictionary<TKey, TValue> other, params string[] comparisonKeys)
+        public static bool IsSameAs<TKey, TValue>(this IDictionary<TKey, TValue> dict, IDictionary<TKey, TValue> other, params TKey[] comparisonKeys)
         {
             return IsSameAs(dict, other, comparisonKeys as IEnumerable<TKey>, null);
         }
