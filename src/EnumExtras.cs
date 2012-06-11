@@ -2,10 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
 
-    public static class EnumExtras
+	public static class EnumExtras
     {
         public static List<T> ToList<T>(){
             var t = typeof(T);

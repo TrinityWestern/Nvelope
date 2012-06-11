@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
-using Nvelope.Reflection;
 using Nvelope.Reading;
+using Nvelope.Reflection;
 
 namespace Nvelope.Tests.Reflection
 {

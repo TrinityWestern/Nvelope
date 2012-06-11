@@ -8,9 +8,8 @@ namespace Nvelope.Exceptions
 {
     using System;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
 
-    /// <summary>
+	/// <summary>
     /// Indicates that reflection couldn't find a field
     /// </summary>
     [Serializable]

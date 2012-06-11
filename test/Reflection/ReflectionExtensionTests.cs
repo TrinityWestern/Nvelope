@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 using Nvelope.Reflection;
-using System.Collections.Generic;
 
 namespace Nvelope.Tests.Reflection
 {

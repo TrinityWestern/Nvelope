@@ -8,10 +8,8 @@ namespace Nvelope.Exceptions
 {
     using System;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
-    using Nvelope;
 
-    /// <summary>
+	/// <summary>
     /// Indicates that an error has occured while doing a type conversion
     /// </summary>
     [Serializable]

@@ -9,9 +9,8 @@ namespace Nvelope.Exceptions
     using System;
     using System.IO;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
 
-    /// <summary>
+	/// <summary>
     /// Tried to over-write a file but the file alreay exists
     /// </summary>
     [Serializable]
