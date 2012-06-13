@@ -136,6 +136,18 @@ namespace Nvelope.Tests.IO
             Assert.AreEqual("6\r\n", interp.Output.ToString());
         }
 
+        [Test]
+        public void EvalWithNullDefaults()
+        {
+            var io = new StringWriter();
+            var interp = new CommandInterpreter(io, io);
+            var commandObj = new CommandObj();
+            interp.AddCommand("join", commandObj, "Join");
+
+            interp.Eval("join");
+            Assert.AreEqual("ab\r\n", io.ToString());
+        }
+
     }
 
     public class CommandObj
@@ -163,6 +175,13 @@ namespace Nvelope.Tests.IO
         public void AsyncArgless(TextWriter output)
         {
             output.Write("hi");
+        }
+
+        public string Join(string a = null, string b = null)
+        {
+            a = a ?? "a";
+            b = b ?? "b";
+            return a + b;
         }
     }
 }

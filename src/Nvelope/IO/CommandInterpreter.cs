@@ -438,7 +438,7 @@ namespace Nvelope.IO
             if (command.ContainsKey(pi.Name))
                 return command[pi.Name].ConvertTo(pi.ParameterType);
 
-            if (pi.DefaultValue != DBNull.Value && pi.DefaultValue != null)
+            if (pi.Attributes.HasFlag(ParameterAttributes.HasDefault))
                 return pi.DefaultValue;
 
             if (pi.ParameterType.IsNullable())
