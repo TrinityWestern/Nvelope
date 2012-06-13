@@ -84,6 +84,18 @@ namespace Nvelope.Tests.IO
         [Test]
         public void EvalArgless()
         {
+            var interp = new CommandInterpreter();
+            int ran = 0;
+            interp.AddCommand("run", new Action(() => ran++));
+
+            interp.Eval("run");
+            Assert.AreEqual(1, ran);
+        }
+
+
+        [Test]
+        public void EvalAsyncArgless()
+        {
             var io = new StringWriter();
             var interp = new CommandInterpreter(io, io);
             var obj = new CommandObj();

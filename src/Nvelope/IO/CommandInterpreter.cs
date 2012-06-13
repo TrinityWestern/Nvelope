@@ -191,6 +191,30 @@ namespace Nvelope.IO
             AddCommand(name, args, impl);
         }
 
+        public void AddCommand(string name, Action fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                fn());
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
+        public void AddCommand(string name, Action<TextWriter> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                fn(o));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
+        public void AddCommand(string name, Action<TextWriter, TextWriter> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                fn(o, e));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
         public void AddCommand<T1>(string name, Action<T1> fn)
         {
             var impl = new Action<TextWriter, TextWriter, Dictionary<string,object>>((o,e,c) =>
