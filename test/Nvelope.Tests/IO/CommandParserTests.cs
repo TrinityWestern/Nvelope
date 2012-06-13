@@ -14,6 +14,27 @@ namespace Nvelope.Tests.IO
     public class CommandParserTests
     {
         [Test]
+        public void ParseNull()
+        {
+            var res = new CommandParser().Parse(null);
+            Assert.AreEqual("()", res.Print());
+        }
+
+        [Test]
+        public void ParseEmptyString()
+        {
+            var res = new CommandParser().Parse("");
+            Assert.AreEqual("()", res.Print());
+        }
+
+        [Test]
+        public void ParseSingleWord()
+        {
+            var res = new CommandParser().Parse("say");
+            Assert.AreEqual("([0,say])", res.Print());
+        }
+
+        [Test]
         public void Parse()
         {
             var res = new CommandParser().Parse("a b c");

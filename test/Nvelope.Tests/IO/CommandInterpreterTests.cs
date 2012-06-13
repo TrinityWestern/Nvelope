@@ -81,6 +81,17 @@ namespace Nvelope.Tests.IO
             Assert.AreEqual("4", io.ToString());
         }
 
+        [Test]
+        public void EvalArgless()
+        {
+            var io = new StringWriter();
+            var interp = new CommandInterpreter(io, io);
+            var obj = new CommandObj();
+            interp.AddCommand("say", new Action<TextWriter>(obj.AsyncArgless));
+
+            interp.Eval("say");
+            Assert.AreEqual("hi", io.ToString());
+        }
 
         [Test]
         public void EvalWithFlag()
@@ -112,6 +123,7 @@ namespace Nvelope.Tests.IO
             interp.Eval("plus 2 2 -c 2");
             Assert.AreEqual("6\r\n", interp.Output.ToString());
         }
+
     }
 
     public class CommandObj
@@ -134,6 +146,11 @@ namespace Nvelope.Tests.IO
         public int PlusSwitch(int a, int b, int c = 1)
         {
             return a + b + c;
+        }
+
+        public void AsyncArgless(TextWriter output)
+        {
+            output.Write("hi");
         }
     }
 }

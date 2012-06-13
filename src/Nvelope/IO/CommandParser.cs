@@ -103,6 +103,9 @@ namespace Nvelope.IO
 
         public IEnumerable<string> Lex(string commandText)
         {
+            if (commandText.IsNullOrEmpty())
+                return new string[] { };
+
             return commandText.Tokenize("^\\s*(\"[^\"]*\"|[^\\s]+)")
                 .Select(s => s.Trim('"'));
         }
@@ -122,7 +125,7 @@ namespace Nvelope.IO
         public IEnumerable<KeyValuePair<string, string>> ParseArgs(IEnumerable<string> tokens, IEnumerable<string> flags)
         {
             if (!tokens.Any())
-                return null;
+                return new KeyValuePair<string,string>[]{};
 
             // If first is a switchname, see if the second is value. If so, take that too
             var firstName = IsName(tokens.First());
