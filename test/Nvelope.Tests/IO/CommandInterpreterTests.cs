@@ -69,6 +69,18 @@ namespace Nvelope.Tests.IO
             Assert.AreEqual("4", io.ToString());
         }
 
+        [Test]
+        public void EvalFromAction()
+        {
+            var io = new StringWriter();
+            var interp = new CommandInterpreter(io, io);
+            var obj = new CommandObj();
+            interp.AddCommand("plus", new Action<TextWriter, int, int>(obj.AsyncPlus));
+
+            interp.Eval("plus 2 2");
+            Assert.AreEqual("4", io.ToString());
+        }
+
 
         [Test]
         public void EvalWithFlag()

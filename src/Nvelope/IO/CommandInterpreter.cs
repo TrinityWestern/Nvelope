@@ -36,10 +36,50 @@ namespace Nvelope.IO
             Commands.Add(Tuple.Create(name, args.ToList() as IEnumerable<CommandArg>, implementation));
         }
 
+        public void AddCommand<T1>(string name, Func<T1> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string,object>>((o,e,c) =>
+                o.WriteLine(fn().Print()));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
+        public void AddCommand<T1>(string name, Func<TextWriter, T1> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o,e,c) =>
+                fn(o));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
+        public void AddCommand<T1>(string name, Func<TextWriter, TextWriter, T1> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                fn(o, e));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
         public void AddCommand<T1, T2>(string name, Func<T1, T2> fn)
         {
             var impl = new Action<TextWriter, TextWriter, Dictionary<string,object>>((o, e, c) =>
                 o.WriteLine(fn(c.First().Value.ConvertTo<T1>()).Print()));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
+        public void AddCommand<T1, T2>(string name, Func<TextWriter, T1, T2> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                fn(o, c.First().Value.ConvertTo<T1>()));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
+        public void AddCommand<T1, T2>(string name, Func<TextWriter, TextWriter, T1, T2> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                fn(o, e, c.First().Value.ConvertTo<T1>()));
             var args = GetArgs(fn.Method);
             AddCommand(name, args, impl);
         }
@@ -52,12 +92,264 @@ namespace Nvelope.IO
             AddCommand(name, args, impl);
         }
 
+        public void AddCommand<T1, T2, T3>(string name, Func<TextWriter, T1, T2, T3> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                fn(o, c.First().Value.ConvertTo<T1>(), c.Second().Value.ConvertTo<T2>()));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
+        public void AddCommand<T1, T2, T3>(string name, Func<TextWriter, TextWriter, T1, T2, T3> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                fn(o, e, c.First().Value.ConvertTo<T1>(), c.Second().Value.ConvertTo<T2>()));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
         public void AddCommand<T1, T2, T3, T4>(string name, Func<T1, T2, T3, T4> fn)
         {
             var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
                 o.WriteLine(fn(c.First().Value.ConvertTo<T1>(), c.Second().Value.ConvertTo<T2>(), c.Third().Value.ConvertTo<T3>()).Print()));
             var schema = GetArgs(fn.Method);
             AddCommand(name, schema, impl);
+        }
+
+        public void AddCommand<T1, T2, T3, T4>(string name, Func<TextWriter, T1, T2, T3, T4> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                fn(o, c.First().Value.ConvertTo<T1>(), c.Second().Value.ConvertTo<T2>(),
+                c.Third().Value.ConvertTo<T3>()));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
+        public void AddCommand<T1, T2, T3, T4>(string name, Func<TextWriter, TextWriter, T1, T2, T3, T4> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                fn(o, e, c.First().Value.ConvertTo<T1>(), c.Second().Value.ConvertTo<T2>(),
+                c.Third().Value.ConvertTo<T3>()));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
+        public void AddCommand<T1, T2, T3, T4, T5>(string name, Func<T1, T2, T3, T4, T5> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                o.WriteLine(fn(c.First().Value.ConvertTo<T1>(), c.Second().Value.ConvertTo<T2>(), 
+                c.Third().Value.ConvertTo<T3>(), c.Fourth().Value.ConvertTo<T4>()).Print()));
+            var schema = GetArgs(fn.Method);
+            AddCommand(name, schema, impl);
+        }
+
+        public void AddCommand<T1, T2, T3, T4, T5>(string name, Func<TextWriter, T1, T2, T3, T4, T5> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                fn(o, c.First().Value.ConvertTo<T1>(), c.Second().Value.ConvertTo<T2>(),
+                c.Third().Value.ConvertTo<T3>(), c.Fourth().Value.ConvertTo<T4>()));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
+        public void AddCommand<T1, T2, T3, T4, T5>(string name, Func<TextWriter, TextWriter, T1, T2, T3, T4, T5> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                fn(o, e, c.First().Value.ConvertTo<T1>(), c.Second().Value.ConvertTo<T2>(),
+                c.Third().Value.ConvertTo<T3>(), c.Fourth().Value.ConvertTo<T4>()));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
+        public void AddCommand<T1, T2, T3, T4, T5, T6>(string name, Func<T1, T2, T3, T4, T5, T6> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                o.WriteLine(fn(c.First().Value.ConvertTo<T1>(), c.Second().Value.ConvertTo<T2>(),
+                c.Third().Value.ConvertTo<T3>(), c.Fourth().Value.ConvertTo<T4>(),
+                c.Fifth().Value.ConvertTo<T5>()).Print()));
+            var schema = GetArgs(fn.Method);
+            AddCommand(name, schema, impl);
+        }
+
+        public void AddCommand<T1, T2, T3, T4, T5, T6>(string name, Func<TextWriter, T1, T2, T3, T4, T5, T6> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                fn(o, c.First().Value.ConvertTo<T1>(), c.Second().Value.ConvertTo<T2>(),
+                c.Third().Value.ConvertTo<T3>(), c.Fourth().Value.ConvertTo<T4>(),
+                c.Fifth().Value.ConvertTo<T5>()));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
+        public void AddCommand<T1, T2, T3, T4, T5, T6>(string name, Func<TextWriter, TextWriter, T1, T2, T3, T4, T5, T6> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                fn(o, e, c.First().Value.ConvertTo<T1>(), c.Second().Value.ConvertTo<T2>(),
+                c.Third().Value.ConvertTo<T3>(), c.Fourth().Value.ConvertTo<T4>(),
+                c.Fifth().Value.ConvertTo<T5>()));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
+        public void AddCommand<T1>(string name, Action<T1> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string,object>>((o,e,c) =>
+                fn(c.First().Value.ConvertTo<T1>()));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
+        public void AddCommand<T1>(string name, Action<TextWriter, T1> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                fn(o, c.First().Value.ConvertTo<T1>()));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
+        public void AddCommand<T1>(string name, Action<TextWriter, TextWriter, T1> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                fn(o, e, c.First().Value.ConvertTo<T1>()));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
+        public void AddCommand<T1, T2>(string name, Action<T1, T2> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                fn(c.First().Value.ConvertTo<T1>(), c.Second().Value.ConvertTo<T2>()));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
+        public void AddCommand<T1, T2>(string name, Action<TextWriter, T1, T2> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                fn(o, c.First().Value.ConvertTo<T1>(), c.Second().Value.ConvertTo<T2>()));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
+        public void AddCommand<T1, T2>(string name, Action<TextWriter, TextWriter, T1, T2> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                fn(o, e, c.First().Value.ConvertTo<T1>(), c.Second().Value.ConvertTo<T2>()));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
+        public void AddCommand<T1, T2, T3>(string name, Action<T1, T2, T3> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                fn(c.First().Value.ConvertTo<T1>(), c.Second().Value.ConvertTo<T2>(), c.Third().Value.ConvertTo<T3>()));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
+        public void AddCommand<T1, T2, T3>(string name, Action<TextWriter, T1, T2, T3> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                fn(o, c.First().Value.ConvertTo<T1>(), c.Second().Value.ConvertTo<T2>(),
+                c.Third().Value.ConvertTo<T3>()));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
+        public void AddCommand<T1, T2, T3>(string name, Action<TextWriter, TextWriter, T1, T2, T3> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                fn(o, e, c.First().Value.ConvertTo<T1>(), c.Second().Value.ConvertTo<T2>(),
+                c.Third().Value.ConvertTo<T3>()));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
+        public void AddCommand<T1,T2,T3,T4>(string name, Action<T1,T2,T3,T4> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                fn(c.First().Value.ConvertTo<T1>(), c.Second().Value.ConvertTo<T2>(),
+                    c.Third().Value.ConvertTo<T3>(), c.Fourth().Value.ConvertTo<T4>()));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
+        public void AddCommand<T1, T2, T3, T4>(string name, Action<TextWriter, T1, T2, T3, T4> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                fn(o, c.First().Value.ConvertTo<T1>(), c.Second().Value.ConvertTo<T2>(),
+                c.Third().Value.ConvertTo<T3>(), c.Fourth().Value.ConvertTo<T4>()));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
+        public void AddCommand<T1, T2, T3, T4>(string name, Action<TextWriter, TextWriter, T1, T2, T3, T4> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                fn(o, e, c.First().Value.ConvertTo<T1>(), c.Second().Value.ConvertTo<T2>(),
+                c.Third().Value.ConvertTo<T3>(), c.Fourth().Value.ConvertTo<T4>()));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
+        public void AddCommand<T1, T2, T3, T4, T5>(string name, Action<T1, T2, T3, T4, T5> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                fn(c.First().Value.ConvertTo<T1>(), c.Second().Value.ConvertTo<T2>(),
+                    c.Third().Value.ConvertTo<T3>(), c.Fourth().Value.ConvertTo<T4>(),
+                    c.Fifth().Value.ConvertTo<T5>()));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
+        public void AddCommand<T1, T2, T3, T4, T5>(string name, Action<TextWriter, T1, T2, T3, T4, T5> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                fn(o, c.First().Value.ConvertTo<T1>(), c.Second().Value.ConvertTo<T2>(),
+                c.Third().Value.ConvertTo<T3>(), c.Fourth().Value.ConvertTo<T4>(),
+                c.Fifth().Value.ConvertTo<T5>()));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
+        public void AddCommand<T1, T2, T3, T4, T5>(string name, Action<TextWriter, TextWriter, T1, T2, T3, T4, T5> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                fn(o, e, c.First().Value.ConvertTo<T1>(), c.Second().Value.ConvertTo<T2>(),
+                c.Third().Value.ConvertTo<T3>(), c.Fourth().Value.ConvertTo<T4>(),
+                c.Fifth().Value.ConvertTo<T5>()));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
+        public void AddCommand<T1, T2, T3, T4, T5, T6>(string name, Action<T1, T2, T3, T4, T5, T6> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                fn(c.First().Value.ConvertTo<T1>(), c.Second().Value.ConvertTo<T2>(),
+                    c.Third().Value.ConvertTo<T3>(), c.Fourth().Value.ConvertTo<T4>(),
+                    c.Fifth().Value.ConvertTo<T5>(), c.ElementAt(5).Value.ConvertTo<T6>()));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
+        public void AddCommand<T1, T2, T3, T4, T5, T6>(string name, Action<TextWriter, T1, T2, T3, T4, T5, T6> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o, e, c) =>
+                fn(o, c.First().Value.ConvertTo<T1>(), c.Second().Value.ConvertTo<T2>(),
+                c.Third().Value.ConvertTo<T3>(), c.Fourth().Value.ConvertTo<T4>(),
+                c.Fifth().Value.ConvertTo<T5>(), c.ElementAt(5).Value.ConvertTo<T6>()));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
+        }
+
+        public void AddCommand<T1,T2,T3,T4,T5,T6>(string name, Action<TextWriter, TextWriter, T1,T2,T3,T4,T5,T6> fn)
+        {
+            var impl = new Action<TextWriter, TextWriter, Dictionary<string, object>>((o,e,c) =>
+                fn(o,e,c.First().Value.ConvertTo<T1>(), c.Second().Value.ConvertTo<T2>(),
+                c.Third().Value.ConvertTo<T3>(), c.Fourth().Value.ConvertTo<T4>(),
+                c.Fifth().Value.ConvertTo<T5>(), c.ElementAt(5).Value.ConvertTo<T6>()));
+            var args = GetArgs(fn.Method);
+            AddCommand(name, args, impl);
         }
 
         public void AddCommand(MethodInfo mi, object obj, string name = null)
