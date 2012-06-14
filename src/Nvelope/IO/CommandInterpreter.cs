@@ -417,7 +417,8 @@ namespace Nvelope.IO
                     // If the method has a first parameter that is a TextWriter,
                     // we don't need to write anything to the Output - since the method took Output as
                     // a parameter, it is presumably able to handle that itself.
-                    if (paraList.Any() && !(paraList.First() is TextWriter))
+                    var firstParaIsOutput = paraList.FirstOr(null) is TextWriter;
+                    if (!firstParaIsOutput)
                         output.WriteLine(res.Print());
                 });
         }
