@@ -419,8 +419,19 @@ namespace Nvelope.IO
                     // a parameter, it is presumably able to handle that itself.
                     var firstParaIsOutput = paraList.FirstOr(null) is TextWriter;
                     if (!firstParaIsOutput)
-                        output.WriteLine(res.Print());
+                        _printOutput(output, res);
                 });
+        }
+
+        protected void _printOutput(TextWriter output, object val)
+        {
+            if (val is IEnumerable<string>)
+            {
+                var strs = val as IEnumerable<string>;
+                strs.Each(str => output.WriteLine(str));
+            }
+            else
+                output.WriteLine(val.Print());
         }
 
         public object[] GetParameters(IEnumerable<ParameterInfo> paras, Dictionary<string,object> command)
