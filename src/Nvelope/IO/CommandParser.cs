@@ -169,9 +169,11 @@ namespace Nvelope.IO
         public IEnumerable<KeyValuePair<string,string>> AssignArgs(
             IEnumerable<KeyValuePair<string,string>> parsedArgs, IEnumerable<CommandArg> expectedArgs)
         {
-            var requiredArgs = expectedArgs.Where(a => !a.IsOptional);
+            // We assume here that all of the non-optional args come first in the list, otherwise
+            // wierd assignment outcomes may result.
+
             // An infinite sequence of arg names to assign to the args that have no names
-            var reqArgNames = requiredArgs.Select(a => a.Name);
+            var reqArgNames = expectedArgs.Select(a => a.Name);
             var argNames = reqArgNames
                 .And(0.Inc().Select(i => i.ToString()).Except(reqArgNames)) // Start at 0, but don't use any names that requiredArgs have
                 .GetEnumerator();

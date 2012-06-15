@@ -106,10 +106,10 @@ namespace Nvelope.Tests.IO
         [Test]
         public void ParseArgsAndFlags()
         {
-            var args = new CommandArg() { Name = "f1", Type = typeof(string), IsOptional = true }
-                .And(new CommandArg() { Name = "f2", Type = typeof(bool), IsOptional = true })
+            var args = new CommandArg() { Type = typeof(string), IsOptional = false }
                 .And(new CommandArg() { Type = typeof(string), IsOptional = false })
-                .And(new CommandArg() { Type = typeof(string), IsOptional = false });
+                .And(new CommandArg() { Name = "f1", Type = typeof(string), IsOptional = true })
+                .And(new CommandArg() { Name = "f2", Type = typeof(bool), IsOptional = true });
 
             var res = new CommandParser().Parse("a b --f1 c --f2", args);
             Assert.AreEqual("([0,a],[1,b],[f1,c],[f2,True])", res.Print());
@@ -126,10 +126,10 @@ namespace Nvelope.Tests.IO
         [Test]
         public void InterspersedFlagsDontClobberArgs()
         {
-            var args = new CommandArg() { Name = "f1", Type = typeof(bool), IsOptional = true }
-                .And(new CommandArg() { Name = "f2", Type = typeof(bool), IsOptional = true })
+            var args = new CommandArg() { Type = typeof(string), IsOptional = false }
                 .And(new CommandArg() { Type = typeof(string), IsOptional = false })
-                .And(new CommandArg() { Type = typeof(string), IsOptional = false });
+                .And(new CommandArg() { Name = "f1", Type = typeof(bool), IsOptional = true })
+                .And(new CommandArg() { Name = "f2", Type = typeof(bool), IsOptional = true });
 
             var res = new CommandParser().Parse("a --f1 b --f2", args);
             Assert.AreEqual("([0,a],[1,b],[f1,True],[f2,True])", res.Print());
@@ -156,6 +156,16 @@ namespace Nvelope.Tests.IO
             var res = new CommandParser().Parse("abc --f1 --s2 false 42 -s1 \"some text\" -f2", args);
 
             Assert.AreEqual("([0,abc],[1,42],[f1,True],[f2,True],[s1,some text],[s2,False])", res.Print());
+        }
+
+        [Test]
+        public void ParseOptionalArgsPositionally()
+        {
+            var args = new CommandArg() { Type = typeof(string), Name = "dbname", IsOptional = true }.List();
+
+            var res = new CommandParser().Parse("foosums", args);
+
+            Assert.AreEqual("([dbname,foosums])", res.Print());
         }
     }
 
