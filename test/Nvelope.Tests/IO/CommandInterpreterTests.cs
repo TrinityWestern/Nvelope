@@ -148,6 +148,15 @@ namespace Nvelope.Tests.IO
             Assert.AreEqual("ab\r\n", io.ToString());
         }
 
+        [Test]
+        public void EvalWithStringListArg()
+        {
+            var io = new StringWriter();
+            var interp = new CommandInterpreter(io, io, new CommandParser(), new CommandObj());
+            interp.Eval("ListArg 1 2 --c test,more-text");
+            Assert.AreEqual("(test,more-text)\r\n", io.ToString());
+        }
+
     }
 
     public class CommandObj
@@ -182,6 +191,11 @@ namespace Nvelope.Tests.IO
             a = a ?? "a";
             b = b ?? "b";
             return a + b;
+        }
+
+        public string ListArg(int a, int b, IEnumerable<string> c = null)
+        {
+            return c.Print();
         }
     }
 }

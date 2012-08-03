@@ -376,6 +376,10 @@ namespace Nvelope
             catch (OverflowException) { }
             catch (ArgumentNullException) { }
 
+            // If the type is assignable, we can just do a cast
+            if (type.IsAssignableFrom(sourceType))
+                return source;
+
             // Last ditch effort - look at the constructors for the class, and see if there's a 
             // constructor that takes our input type
             ConstructorInfo constructor = null;

@@ -219,6 +219,10 @@ namespace Nvelope.IO
                 var isOptional = arg.Select(a => a.IsOptional).FirstOr(true);
                 var value = kv.Value == null? null : kv.Value.ConvertAs(type);
 
+                // Special case: if the arg is a list of strings, we can convert that
+                if(!kv.Value.IsNullOrEmpty() && type == typeof(IEnumerable<string>) || type == typeof(List<string>))
+                    value = kv.Value.Tokenize("^\\,*(\"[^\"]*\"|[^\\,]+)").Select(s => s.Trim('"'));
+
                 // Special case: if the arg is optional and a bool, and no value is specified, we treat
                 // it as a flag - just by being present it assumes the value true
                 // If there's no corresponding arg, and the value is null, it's also a flag
@@ -240,7 +244,7 @@ namespace Nvelope.IO
             foreach (var kv in convertedArgs)
             {
                 var arg = expectedArgs.Single(a => a.Name == kv.Key);
-                if (kv.Value != null && kv.Value.GetType() != arg.Type)
+                if (kv.Value != null && !(arg.Type.IsAssignableFrom(kv.Value.GetType())))
                     yield return new ParseError() { Argument = arg, ArgName = kv.Key, Value = kv.Value };
 
                 // If the argument is required, and it's null, that's an error too

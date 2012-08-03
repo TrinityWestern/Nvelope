@@ -169,23 +169,23 @@ namespace Nvelope.Tests.IO
         }
     }
 
-    [TestFixture(Description="You should only need these tests if the CommandLineTests don't pass - they test specific sub-parts of CommandLine")]
+    [TestFixture(Description = "You should only need these tests if the CommandLineTests don't pass - they test specific sub-parts of CommandLine")]
     public class CommandLineTestsDetailed
     {
         [Test]
         public void ParseArgs()
         {
-            var res = new CommandParser().ParseArgs("a".And("b").And("c"), new string[]{});
+            var res = new CommandParser().ParseArgs("a".And("b").And("c"), new string[] { });
             Assert.AreEqual(3, res.Count());
         }
 
         [Test]
         public void AssignArgs()
         {
-            var parsed = new KeyValuePair<string,string>(null, "a")
+            var parsed = new KeyValuePair<string, string>(null, "a")
                 .And(new KeyValuePair<string, string>(null, "b"));
 
-            var res = new CommandParser().AssignArgs(parsed, new CommandArg[]{});
+            var res = new CommandParser().AssignArgs(parsed, new CommandArg[] { });
 
             Assert.AreEqual("([0, a],[1, b])", res.Print());
         }
@@ -199,7 +199,7 @@ namespace Nvelope.Tests.IO
 
         [Test]
         public void ParseFlags()
-        {  
+        {
             var lexed = Read.List("(a,--f1,b,--f2)");
             var parsed = new CommandParser().ParseArgs(lexed, "f1".And("f2"));
             Assert.AreEqual("([, a],[f1, ],[, b],[f2, ])", parsed.Print());
