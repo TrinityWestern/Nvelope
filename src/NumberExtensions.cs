@@ -140,5 +140,33 @@ namespace Nvelope
             else
                 return parts.First() + "." + Regex.Replace(parts.Second(), "0*$", ""); // trim off trailing 0s
         }
+
+        /// <summary>
+        /// Converts 1 to 1st, 2 to 2nd, etc
+        /// </summary>
+        public static string ToOrdinal(this int i)
+        {
+            // From: http://stackoverflow.com/questions/20156/is-there-an-easy-way-to-create-ordinals-in-c
+
+            switch(i % 100)
+            {
+                    case 11:
+                    case 12:
+                    case 13:
+                            return i + "th";
+            }
+
+            switch(i % 10)
+            {
+                    case 1:
+                            return i + "st";
+                    case 2:
+                            return i + "nd";
+                    case 3:
+                            return i + "rd";
+                    default:
+                            return i + "th";
+            }
+        }
     }
 }
