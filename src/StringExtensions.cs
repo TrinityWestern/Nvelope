@@ -54,6 +54,19 @@ namespace Nvelope
         }
 
         /// <summary>
+        /// Assuming that your string in PowerShell is wrapped in double quotes, this will escape all of the 
+        /// characters in your sentence so that you can have things like passwords with back-ticks, ampersands, single-quotes, etc.
+        /// </summary>
+        public static string EscapePowerShell(this string sentence)
+        {
+            sentence.Replace("`", "``");    // Escape back-ticks
+            sentence.Replace("\"", "`\"");  // Escape double-quotes
+            sentence.Replace("$", "`$");    // Escape Dollar sign
+            sentence.Replace("&", "`&");    // Escape ampersand
+            return sentence;
+        }
+
+        /// <summary>
         /// Tries to parse the string as an integer, returning 0 if there's a problem
         /// </summary>
         [Obsolete("This method hids errors, use ConvertTo on an int?")]
