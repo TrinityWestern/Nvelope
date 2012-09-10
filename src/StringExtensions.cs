@@ -59,10 +59,10 @@ namespace Nvelope
         /// </summary>
         public static string EscapePowerShell(this string sentence)
         {
-            sentence.Replace("`", "``");    // Escape back-ticks
-            sentence.Replace("\"", "`\"");  // Escape double-quotes
-            sentence.Replace("$", "`$");    // Escape Dollar sign
-            sentence.Replace("&", "`&");    // Escape ampersand
+            sentence = sentence.Replace("`", "``");    // Escape back-ticks
+            sentence = sentence.Replace("\"", "`\"");  // Escape double-quotes
+            sentence = sentence.Replace("$", "`$");    // Escape Dollar sign
+            sentence = sentence.Replace("&", "`&");    // Escape ampersand
             return sentence;
         }
 
