@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nvelope", "src\Nvelope.csproj", "{AC4A93B6-DDB6-4FE1-B528-665DE101052B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nvelope", "src\Nvelope.csproj", "{70F679C0-16C8-49A9-8CD3-59E23FC6A4C6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nvelope.Tests", "test\Nvelope.Tests.csproj", "{4F16F9CA-016C-4DBD-B090-52B2FB8DED6A}"
 EndProject
@@ -13,12 +13,12 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{AC4A93B6-DDB6-4FE1-B528-665DE101052B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AC4A93B6-DDB6-4FE1-B528-665DE101052B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AC4A93B6-DDB6-4FE1-B528-665DE101052B}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{AC4A93B6-DDB6-4FE1-B528-665DE101052B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AC4A93B6-DDB6-4FE1-B528-665DE101052B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AC4A93B6-DDB6-4FE1-B528-665DE101052B}.Release|x86.ActiveCfg = Release|Any CPU
+		{70F679C0-16C8-49A9-8CD3-59E23FC6A4C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70F679C0-16C8-49A9-8CD3-59E23FC6A4C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70F679C0-16C8-49A9-8CD3-59E23FC6A4C6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{70F679C0-16C8-49A9-8CD3-59E23FC6A4C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70F679C0-16C8-49A9-8CD3-59E23FC6A4C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70F679C0-16C8-49A9-8CD3-59E23FC6A4C6}.Release|x86.ActiveCfg = Release|Any CPU
 		{4F16F9CA-016C-4DBD-B090-52B2FB8DED6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4F16F9CA-016C-4DBD-B090-52B2FB8DED6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F16F9CA-016C-4DBD-B090-52B2FB8DED6A}.Debug|x86.ActiveCfg = Debug|Any CPU
