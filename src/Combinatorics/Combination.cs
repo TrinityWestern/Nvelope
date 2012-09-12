@@ -1,13 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Nvelope.Combinatorics
 {
     public class Combination
     {
-        //// Use case 1: generating and printing random combinations based on an input array of integers
+        // This class was adapted from one written and published by Dr. James McCaffrey on the following websites:
+        // http://msdn.microsoft.com/en-gb/magazine/cc163957.aspx
+        // http://msdn.microsoft.com/en-us/library/aa289166.aspx
+
+        //// Use case 1: generating and printing all possible poker hands
+        //string[] deck = new string[] { "Ac", "Ad", "Ah", "As", "Kc", (...) };
+        //Combination c = new Combination(52,5); // 52 cards, 5 at a time
+        //string[] pokerHand = new string[5];
+        //while (c != null)
+        //{
+        //  pokerHand = c.ApplyTo(deck);
+        //  PrintHand(pokerHand);
+        //  c = c.Successor();
+        //}
+
+        //// Use case 2: generating and printing random combinations based on an input array of integers
         //Console.WriteLine("\nThe random combinations are:");
         //// New method: for each combo, pick k distinct numbers in 0..n-1 that will
         //// be the indices into our array of real keno numbers. Allow duplicate combos at this time.
@@ -19,29 +32,18 @@ namespace Nvelope.Combinatorics
         //    Console.WriteLine(i + 1 + ": " + c.ToString());
         //}
 
-        //// Use case 2: generating and printing in-order combinations based on an input array of integers
+        //// Use case 3: generating and printing in-order combinations based on an input array of integers
         //Console.WriteLine("\nThe in-order combinations are:");
         //Combination c = new Combination(n, k);
         //for (int i = 0; i < numCombosToDisplay; i++)
         //{
+        //    if (c == null) break;
         //    // Since the MapTo() function will change c, we must make a copy of c so we can call Successor() on the
         //    // right combination
         //    Combination cCopy = new Combination(c);
         //    c.MapTo(inputNumbers);
         //    Console.WriteLine(i + 1 + ": " + c.ToString());
         //    c = cCopy.Successor();
-        //}
-
-        //// Use case 3: generating and printing all possible poker hands
-        //string[] deck = new string[] { "Ac", "Ad", "Ah", "As", "Kc", (...) };
-        //Combination c = new Combination(52,5); // 52 cards, 5 at a time
-        //string[] pokerHand = new string[5];
-        
-        //while (c != null)
-        //{
-        //  pokerHand = c.ApplyTo(deck);
-        //  PrintHand(pokerHand);
-        //  c = c.Successor();
         //}
 
         private long n = 0;
@@ -224,28 +226,19 @@ namespace Nvelope.Combinatorics
             return ans;
         } // Random()
         
-        // Returns a random Int64, or dies trying. Function currently does not return satisfactorily random values.
+        /// <summary>
+        /// Returns a random Int64, or dies trying. This method is not yet fully implemented, as it currently does not
+        /// return satisfactorily random values and ignores min/max input parameters.
+        /// </summary>
+        /// <param name="rnd"></param>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
         public static long RandomInt64(Random rnd, long min, long max)
         {
             byte[] buffer = new byte[sizeof(Int64)];
             rnd.NextBytes(buffer);
-            /*Console.Write("Byte array: ");
-            for (int i = 0; i < buffer.Length; i++)
-            {
-                Console.Write(buffer[i]);
-            }
-            Console.WriteLine();*/
-            long r = BitConverter.ToInt64(buffer, 0);
-            /*while (r < min || r > max)
-            {
-                rnd.NextBytes(buffer);
-                r = BitConverter.ToInt64(buffer, 0);
-            }*/
-            if (min > 0 && r < 0) // If r is negative and we want positive, convert r to positive
-            {
-                r *= -1;
-            }
-            return r;
+            return BitConverter.ToInt64(buffer, 0);
         }
 
         public static long Choose(long n, long k)
