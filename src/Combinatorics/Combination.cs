@@ -8,7 +8,11 @@ namespace Nvelope.Combinatorics
         // This class was adapted from one written and published by Dr. James McCaffrey on the following websites:
         // http://msdn.microsoft.com/en-gb/magazine/cc163957.aspx
         // http://msdn.microsoft.com/en-us/library/aa289166.aspx
-
+        // This class stores only one combination. Upon creation, a combination C(n,k) will be initialized to the first
+        // combination in the sequence: { 1,2,..,k-1,k }. You can iterate over all possible combinations by calling
+        // Successor(), which will increment the combination to the next one in the sequence:
+        // { 1,2,..,k-1,k+1 } { 1,2,..,k-1,k+2 } ... { 1,2,..,k-1,n } { 1,2,..,k,n } { 1,2,..,k+1,n } etc
+        
         //// Use case 1: generating and printing all possible poker hands
         //string[] deck = new string[] { "Ac", "Ad", "Ah", "As", "Kc", (...) };
         //Combination c = new Combination(52,5); // 52 cards, 5 at a time
@@ -22,8 +26,7 @@ namespace Nvelope.Combinatorics
 
         //// Use case 2: generating and printing random combinations based on an input array of integers
         //Console.WriteLine("\nThe random combinations are:");
-        //// New method: for each combo, pick k distinct numbers in 0..n-1 that will
-        //// be the indices into our array of real keno numbers. Allow duplicate combos at this time.
+        //// Allow duplicate random combinations for now.
         //Random rand = new Random();
         //for (int i = 0; i < numCombosToDisplay; i++)
         //{
