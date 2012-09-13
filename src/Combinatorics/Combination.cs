@@ -230,15 +230,15 @@ namespace Nvelope.Combinatorics
         } // Random()
         
         /// <summary>
-        /// Returns a random Int64, or dies trying. This method is not yet fully implemented, as it currently does not
-        /// return satisfactorily random values and ignores min/max input parameters.
+        /// Returns a random Int64.
         /// </summary>
         /// <param name="rnd"></param>
         /// <param name="min"></param>
         /// <param name="max"></param>
         /// <returns></returns>
-        public static long RandomInt64(Random rnd, long min, long max)
+        public static long RandomInt64(Random rnd)
         {
+            // This method is based on the solution at http://stackoverflow.com/questions/677373/generate-random-values-in-c-sharp 
             byte[] buffer = new byte[sizeof(Int64)];
             rnd.NextBytes(buffer);
             return BitConverter.ToInt64(buffer, 0);
