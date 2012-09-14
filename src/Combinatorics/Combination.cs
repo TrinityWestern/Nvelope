@@ -43,10 +43,52 @@ namespace Nvelope.Combinatorics
         //    if (c == null) break;
         //    // Since the MapTo() function will change c, we must make a copy of c so we can call Successor() on the
         //    // right combination
-        //    Combination cCopy = new Combination(c);
-        //    c.MapTo(inputNumbers);
-        //    Console.WriteLine(i + 1 + ": " + c.ToString());
-        //    c = cCopy.Successor();
+        //    Combination kenoNumbers = new Combination(n, minkn, c.ApplyTo(inputNumbers));
+        //    Console.WriteLine(i + 1 + ": " + kenoNumbers.ToString());
+        //    c = c.Successor();
+        //}
+
+        // Use case 4:
+        /// <summary>
+        /// Generates and prints all n-digit combinations of 0 and 1
+        /// </summary>
+        /// <param name="n"></param>
+        //private static void GenerateAndPrintAllBooleanCombos(int n)
+        //{
+        //    for (int k = 0; k <= n; k++)
+        //    {
+        //        Combination c = new Combination(n, k);
+
+        //        // Define our Boolean combo array. Any given index in this array will be FALSE unless that index
+        //        // number is in the combination, in which case it will be set to TRUE
+        //        bool[] b = new bool[n]; // initializes to false by default
+
+        //        Console.WriteLine();
+        //        Console.WriteLine("Choose({0},{1}):", n, k);
+        //        while (c != null)
+        //        {
+        //            // Initialize boolean array to false
+        //            for (int i = 0; i < n; i++)
+        //            {
+        //                b[i] = false;
+        //            }
+
+        //            long[] data = c.GetData(); // the k indices we have chosen to be TRUE
+        //            for (int i = 0; i < k; i++)
+        //            {
+        //                b[data[i]] = true;
+        //            }
+
+        //            // Print contents of b[]
+        //            for (int i = 0; i < n; i++)
+        //            {
+        //                Console.Write(b[i] ? 1 : 0);
+        //            }
+        //            Console.WriteLine();
+
+        //            c = c.Successor();
+        //        }
+        //    }
         //}
 
         private long n = 0;
@@ -175,7 +217,7 @@ namespace Nvelope.Combinatorics
             if (!this.IsValid())
                 throw new Exception("Calling Successor() on invalid combination object");
 
-            if (this.data[0] == this.n - this.k)
+            if (this.data.Length == 0 || this.data[0] == this.n - this.k)
                 return null;
 
             Combination ans = new Combination(this.n, this.k);
