@@ -292,7 +292,7 @@ namespace Nvelope.Combinatorics
                 throw new Exception("Invalid negative parameter in Choose()");
             if (n < k)
                 return 0;  // special case
-            if (n == k)
+            if (n == k || k == 0)
                 return 1;
 
             long delta, iMax;
