@@ -25,7 +25,7 @@ namespace Nvelope.Reading
                 return new Dictionary<TKey, TValue>();
 
             var str = printedDict.ChopStart("(").ChopEnd(")");
-            var pairs = str.Tokenize("^\\s*,?\\s*\\[([^\\]]*)\\]\\s*");
+            var pairs = str.Tokenize("^\\s*,?\\s*\\[(((?<BR>\\[)|(?<-BR>\\])|[^\\]\\[])+)\\]\\s*");
             var parsedPairs = pairs.Select(s => splitKeyValue(s));
 
             return parsedPairs.ToDictionary(t => t.Item1.ConvertTo<TKey>(), t => t.Item2.ConvertTo<TValue>());
