@@ -40,6 +40,13 @@ namespace Nvelope.Reading
                 return Tuple.Create(parts.First(), parts.Rest().Join(","));
         }
 
+        public static Dictionary<string, object> ConvertDict(string printedDict)
+        {
+            var strDict = Dict(printedDict);
+            var res = strDict.SelectVals(v => v.ConvertTo(TypeConversion.GuessType(v)));
+            return res;
+        }
+
         public static List<string> List(string printedList)
         {
             return List<string>(printedList);

@@ -89,5 +89,14 @@ namespace Nvelope.Tests.Reading
             Assert.AreEqual("1", res["A"]);
             Assert.AreEqual("([Id,1", res["B"]);
         }
+
+        [Test]
+        public void ConvertDict()
+        {
+            var res = Read.ConvertDict("([A,1],[B,false],[C,asdf])");
+            Assert.AreEqual(1, res["A"]);
+            Assert.AreEqual(false, res["B"]);
+            Assert.AreEqual("asdf", res["C"]);
+        }
     }
 }
