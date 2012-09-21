@@ -20,7 +20,7 @@ namespace Nvelope.Combinatorics
         //string[] pokerHand = new string[5];
         //while (c != null)
         //{
-        //  pokerHand = c.MapTo(deck);
+        //  pokerHand = c.ApplyTo(deck);
         //  PrintHand(pokerHand);
         //  c = c.Successor();
         //}
