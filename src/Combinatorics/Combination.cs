@@ -11,7 +11,8 @@ namespace Nvelope.Combinatorics
         // This class stores only one combination. Upon creation, a combination C(n,k) will be initialized to the first
         // combination in the sequence: { 1,2,..,k-1,k }. You can iterate over all possible combinations by calling
         // Successor(), which will increment the combination to the next one in the sequence:
-        // { 1,2,..,k-1,k+1 } { 1,2,..,k-1,k+2 } ... { 1,2,..,k-1,n } { 1,2,..,k,n } { 1,2,..,k+1,n } etc
+        // { 1,2,..,k-1,k+1 } { 1,2,..,k-1,k+2 } ... { 1,2,..,k-1,n }
+        // { 1,2,..,k,k+1 } { 1,2,..,k,k+2 } ... { 1,2,..,k,n } etc
         
         //// Use case 1: generating and printing all possible poker hands
         //string[] deck = new string[] { "Ac", "Ad", "Ah", "As", "Kc", (...) };
@@ -19,7 +20,7 @@ namespace Nvelope.Combinatorics
         //string[] pokerHand = new string[5];
         //while (c != null)
         //{
-        //  pokerHand = c.ApplyTo(deck);
+        //  pokerHand = c.MapTo(deck);
         //  PrintHand(pokerHand);
         //  c = c.Successor();
         //}
@@ -41,10 +42,9 @@ namespace Nvelope.Combinatorics
         //for (int i = 0; i < numCombosToDisplay; i++)
         //{
         //    if (c == null) break;
-        //    // Since the MapTo() function will change c, we must make a copy of c so we can call Successor() on the
-        //    // right combination
-        //    Combination kenoNumbers = new Combination(n, minkn, c.ApplyTo(inputNumbers));
-        //    Console.WriteLine(i + 1 + ": " + kenoNumbers.ToString());
+        //
+        //    Combination numbers = new Combination(n, k, c.ApplyTo(inputNumbers));
+        //    Console.WriteLine(i + 1 + ": " + numbers.ToString());
         //    c = c.Successor();
         //}
 
