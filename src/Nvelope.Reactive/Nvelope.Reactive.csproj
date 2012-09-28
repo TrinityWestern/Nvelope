@@ -33,9 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Nvelope, Version=1.0.1.13, Culture=neutral, PublicKeyToken=6713b367eb0b228d, processorArchitecture=MSIL">
+    <Reference Include="Nvelope, Version=1.0.1.14, Culture=neutral, PublicKeyToken=6713b367eb0b228d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Lasy\packages\Nvelope.1.0.1.13\lib\net40\Nvelope.dll</HintPath>
+      <HintPath>..\..\..\Lasy\packages\Nvelope.1.0.1.14\lib\net40\Nvelope.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
