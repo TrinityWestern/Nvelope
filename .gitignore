@@ -8,3 +8,4 @@ MetricResults
 *.csproj.user
 *.nupkg
 test/Nvelope.VisualState.xml
+test/TestResult.xml

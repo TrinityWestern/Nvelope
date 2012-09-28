@@ -255,8 +255,8 @@ namespace Nvelope
         /// <exception cref="ConversionException">The conversion somehow failed.</exception>
         public static object ConvertTo(this object source, Type type)
         {
-            if (source == null && type == null)
-                return source;
+            if (type == null && (source == null || (source as string) == "NULL"))
+                return null;
 
             Type sourceType = null;
 
