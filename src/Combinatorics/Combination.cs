@@ -127,26 +127,41 @@ namespace Nvelope.Combinatorics
         } // Combination(n,k,a)
 
         /// <summary>
-        /// Constructs a random combination of k non-repeating integers between 0 and n-1 (inclusive).
+        /// Constructs a random combination using one of two methods:
+        /// Old way: generate k non-repeating integers between 0 and n-1 (inclusive) as the combination data.
         /// The combination will most likely not be in lexicographic order and will fail IsValid().
         /// So don't call Successor() on it.
-        /// TODO: Add boolean flag to put data in lexicographic order or not.
-        /// TODO: Change this random method to just pick one random combination element between 1 and Choose(n,k) and
-        /// return that element (once we have a random function that works well for longs)
+        /// New way: generate a random combination element number between 0 and Choose(n,k)-1 and return that element
+        /// Combinations generated in this manner will be in lexicographic order.
         /// </summary>
         /// <param name="n"></param>
         /// <param name="k"></param>
         /// <param name="rand"></param>
-        public Combination(long n, long k, Random rand)
+        public Combination(long n, long k, Random rand, bool oldWay = false)
         {
             Validate(n, k);
             this.n = n;
             this.k = k;
 
             this.data = new long[k];
-            long[] a = Random((int)n, (int)k, rand);
-            for (long i = 0; i < a.Length; ++i)
-                this.data[i] = a[i];
+            if (oldWay)
+            {
+                /// TODO: Add boolean flag to put data in lexicographic order or not.
+                long[] a = Random((int)n, (int)k, rand);
+                for (long i = 0; i < a.Length; ++i)
+                    this.data[i] = a[i];
+            }
+            else
+            {
+                // Get a random element number, convert it to the range [0, Choose(n,k)-1] and assign this.data to that
+                // element. TODO: Change element function to be a static function taking n, k, m, and returning long[]
+                long newMin = 0;
+                long newMax = Combination.Choose(n, k) - 1;
+
+                long r = Combination.RandomInt64(rand);
+                Combination c = new Combination(n, k);
+                this.data = c.Element(Combination.ConvertBetweenRanges(r, Int64.MinValue, Int64.MaxValue, newMin, newMax)).data;
+            }
         }
 
         /// <summary>
@@ -278,12 +293,39 @@ namespace Nvelope.Combinatorics
         /// <param name="min"></param>
         /// <param name="max"></param>
         /// <returns></returns>
-        public static long RandomInt64(Random rnd)
+        public static long RandomInt64(Random rnd, bool positive = false)
         {
             // This method is based on the solution at http://stackoverflow.com/questions/677373/generate-random-values-in-c-sharp 
             byte[] buffer = new byte[sizeof(Int64)];
             rnd.NextBytes(buffer);
-            return BitConverter.ToInt64(buffer, 0);
+            long r = BitConverter.ToInt64(buffer, 0);
+            return positive && r < 0 ? r * -1 : r;
+        }
+
+        /// <summary>
+        /// Converts oldValue in the old range to a new value in the new range, maintaining ratio
+        /// </summary>
+        /// <param name="oldValue"></param>
+        /// <param name="oldMin"></param>
+        /// <param name="oldMax"></param>
+        /// <param name="newMin"></param>
+        /// <param name="newMax"></param>
+        /// <returns></returns>
+        public static long ConvertBetweenRanges(long oldValueL, long oldMinL, long oldMaxL, long newMinL, long newMaxL)
+        {
+            // This method is based on the solution at http://stackoverflow.com/questions/929103/convert-a-number-range-to-another-range-maintaining-ratio
+            if (oldValueL < oldMinL || oldValueL > oldMaxL)
+                throw new Exception("oldValue out of range when converting between ranges");
+
+            // Convert all longs to doubles before proceeding so we don't get any weird math errors
+            double oldValue = (double)oldValueL;
+            double oldMin = (double)oldMinL;
+            double oldMax = (double)oldMaxL;
+            double newMin = (double)newMinL;
+            double newMax = (double)newMaxL;
+
+            double d = ((oldValue - oldMin) / (oldMax - oldMin)) * (newMax - newMin) + newMin;
+            return (long)Math.Round(d, 0);
         }
 
         public static long Choose(long n, long k)
