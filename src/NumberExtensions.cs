@@ -17,6 +17,37 @@ namespace Nvelope
         {
             return !num.IsEven();
         }
+
+        /// <summary>
+        /// Returns the passed-in value that is smallest. If both values are the same returns the first
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        public static int LesserOf(int first, int second)
+        {
+            if (first < second)
+                return first;
+            else if (second < first)
+                return second;
+            else 
+                return first;
+        }
+
+        /// <summary>
+        /// Returns the passed-in value that is greatest. If both values are the same returns the first
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        public static int GreaterOf(int first, int second)
+        {
+            if (first > second)
+                return first;
+            else if (second > first)
+                return second;
+            else
+                return first;
+        }
+
         /// <summary>
         /// The  integer modulo where the divisor's sign is maintained,
         /// not the the dividends.

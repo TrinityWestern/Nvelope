@@ -231,5 +231,19 @@ namespace Nvelope.Tests
             Assert.LessOrEqual(age, d.Age());
             Assert.GreaterOrEqual(age + minSpeed, d.Age());
         }
+
+        [Test]
+        public void AddMonthsMatchDay()
+        {
+            var jan = new DateTime(2008, 1, 31);
+            
+            var feb = jan.AddMonthsMatchDay(1, 31);
+            var march = feb.AddMonthsMatchDay(1, 31);
+            var april = march.AddMonthsMatchDay(1, 31);
+
+            Assert.AreEqual(29, feb.Day, "Failed to pick the max day of the month for February 2008");
+            Assert.AreEqual(31, march.Day, "Failed to pick the match day for March 2008");
+            Assert.AreEqual(30, april.Day, "Failed to pick the max day of the month for April 2008");
+        }
     }
 }

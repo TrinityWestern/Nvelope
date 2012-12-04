@@ -122,5 +122,21 @@ namespace Nvelope.Tests
             i.Times(act);
             Assert.AreEqual(5, val); 
         }
+
+        [Test]
+        public void LesserOf()
+        {
+            int first = 1;
+            int second = 7;
+            Assert.AreEqual(first, NumberExtensions.LesserOf(first, second));
+        }
+
+        [Test]
+        public void GreaterOf()
+        {
+            int first = 8;
+            int second = 7;
+            Assert.AreEqual(first, NumberExtensions.GreaterOf(first, second));
+        }
     }
 }

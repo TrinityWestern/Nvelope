@@ -50,6 +50,14 @@ namespace Nvelope
         }
 
         /// <summary>
+        /// Returns the .NET ToShortTimeString() value but works with null values returning a blank string
+        /// </summary>
+        public static string ToShortTimeString(this DateTime? source)
+        {
+            return source.HasValue ? source.Value.ToShortTimeString() : "";
+        }
+
+        /// <summary>
         /// Returns the ISO formatted date, using a space instead of a T for the seperator
         /// </summary>
         public static string ToIsoDateTime(this DateTime source)
@@ -192,6 +200,7 @@ namespace Nvelope
             return yearDiff * 12 + monthDiff;
         }
 
+
         public static int DaysInYear(this DateTime dt)
         {
             if (System.DateTime.IsLeapYear(dt.Year))
@@ -200,15 +209,43 @@ namespace Nvelope
                 return 365;
         }
 
+        /// <summary>
+        /// Returns the number of days in the month of this DateTime instance
+        /// </summary>
         public static int DaysInMonth(this DateTime dt)
         {
             return System.DateTime.DaysInMonth(dt.Year, dt.Month);
         }
 
+        /// <summary>
+        /// Determines if this instance of a DateTime object is the last day in the month
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
         public static bool IsEndOfMonth(this DateTime dt)
         {
             return dt.AddDays(1).Month != dt.Month;
         }
 
+        /// <summary>
+        /// Adds the specified number of months to a DateTime. Also sets the day of the month to match what you pass in, or
+        /// the max day of the month, whichever is lesser. This function is useful when iterating through months and you
+        /// initially start on the 31st and then in subsequent months get moved to 28 but then later want to return to the 31st.
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="numMonths"></param>
+        /// <param name="dayToMatch"></param>
+        /// <returns></returns>
+        public static DateTime AddMonthsMatchDay(this DateTime dt, int numMonths, int dayToMatch)
+        {
+            // Add the number of months to our original date
+            var newDate = dt.AddMonths(numMonths);
+
+            // Find which is less, the day to match or the number of days in the month
+            var lesser = NumberExtensions.LesserOf(dayToMatch, newDate.DaysInMonth());
+
+            // Add/Remove the number of days to match what was picked in the previous line as the lesser day
+            return newDate.AddDays(lesser - newDate.Day);
+        }
     }
 }
