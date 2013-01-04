@@ -115,7 +115,7 @@ namespace Nvelope.Tests.IO
 
             interp.Eval("plus 2 2");
             Assert.AreEqual("4\r\n", io.ToString());
-            
+
             interp.Output = new StringWriter();
             interp.Eval("plus 2 2 --invert");
             Assert.AreEqual("-4\r\n", interp.Output.ToString());
@@ -157,6 +157,14 @@ namespace Nvelope.Tests.IO
             Assert.AreEqual("(test,more-text)\r\n", io.ToString());
         }
 
+        [Test]
+        public void EvalWithQuotedCommandName()
+        {
+            var io = new StringWriter();
+            var interp = new CommandInterpreter(io, io, new CommandParser(), new CommandObj());
+            interp.Eval("\"Plus\" 1 2");
+            Assert.AreEqual("3\r\n", io.ToString());
+        }
     }
 
     public class CommandObj

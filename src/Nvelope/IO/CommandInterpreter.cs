@@ -467,7 +467,8 @@ namespace Nvelope.IO
         public string ParseCommandName(string text)
         {
             // Chop off the first word and use it as a command name
-            return text.SubstringBefore(" ") ?? text;
+            var res = text.SubstringBefore(" ") ?? text;
+            return res.Trim('"');
         }
 
         public string ParseCommandText(string text)
