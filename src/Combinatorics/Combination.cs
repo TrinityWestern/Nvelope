@@ -158,9 +158,10 @@ namespace Nvelope.Combinatorics
                 long newMin = 0;
                 long newMax = Combination.Choose(n, k) - 1;
 
-                long r = Combination.RandomInt64(rand);
                 Combination c = new Combination(n, k);
-                this.data = c.Element(Combination.ConvertBetweenRanges(r, Int64.MinValue, Int64.MaxValue, newMin, newMax)).data;
+                long r = Combination.RandomInt64(rand);
+                long m = Combination.ConvertBetweenRanges(r, Int64.MinValue, Int64.MaxValue, newMin, newMax);
+                this.data = Combination.Element(n, k, m);
             }
         }
 
@@ -361,15 +362,15 @@ namespace Nvelope.Combinatorics
         } // Choose()
 
         // return the mth lexicographic element of combination C(n,k)
-        public Combination Element(long m)
+        public static long[] Element(long n, long k, long m)
         {
-            long[] ans = new long[this.k];
+            long[] ans = new long[k];
 
-            long a = this.n;
-            long b = this.k;
-            long x = (Choose(this.n, this.k) - 1) - m; // x is the "dual" of m
+            long a = n;
+            long b = k;
+            long x = (Choose(n, k) - 1) - m; // x is the "dual" of m
 
-            for (long i = 0; i < this.k; ++i)
+            for (long i = 0; i < k; ++i)
             {
                 ans[i] = LargestV(a, b, x); // largest value v, where v < a and vCb < x    
                 x = x - Choose(ans[i], b);
@@ -377,15 +378,15 @@ namespace Nvelope.Combinatorics
                 b = b - 1;
             }
 
-            for (long i = 0; i < this.k; ++i)
+            for (long i = 0; i < k; ++i)
             {
                 ans[i] = (n - 1) - ans[i];
             }
 
-            Combination c = new Combination(this.n, this.k, ans);
+            Combination c = new Combination(n, k, ans);
             if (!c.IsValid())
                 throw new Exception("Bad value from array");
-            return c;
+            return c.data;
         } // Element()
 
         // return largest value v where v < a and  Choose(v,b) <= x
