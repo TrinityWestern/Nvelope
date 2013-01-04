@@ -128,8 +128,12 @@ namespace Nvelope.Tests
             Assert.AreEqual("2008-02-28", d.ToFriendlyDate());
             Assert.AreEqual(f, e.ToFriendlyDate());
 
+            // This only works if d has the same year as the current year as ToString("m") returns the full month name
+            // and the date of the month when the date is in the current year. During the first few weeks of January this
+            // date will be in the previous year and be printed out differently
             d = DateTime.Now.AddDays(-20);
-            Assert.AreEqual(d.ToString("m"), d.ToFriendlyDate());
+            if (d.Year == DateTime.Now.Year)
+                Assert.AreEqual(d.ToString("m"), d.ToFriendlyDate());
         }
 
         [Test]
