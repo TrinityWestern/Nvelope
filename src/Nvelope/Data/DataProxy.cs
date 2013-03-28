@@ -56,16 +56,31 @@ namespace Nvelope.Data
         {
             get
             {
-                name = name.ToUpperInvariant();
-                var matchingKeys = Overrides.Keys.Where(k => k.ToUpperInvariant() == name);
+                var upperName = name.ToUpperInvariant();
+                var matchingKeys = Overrides.Keys.Where(k => k.ToUpperInvariant() == upperName);
 
+                // If our overrides contain a matching key, return its value
                 if (matchingKeys.Any())
                     return Overrides[matchingKeys.First()];
-                else if (Source._GetMembers().Names().Select(s => s.ToUpperInvariant()).Contains(name))
+
+                // We have to treat dictionaries different than other objects to get the keys
+                var isDictionary = Source.GetType() == typeof(Dictionary<string, object>);
+
+                var sourceKeys = new List<string>();
+                if (isDictionary)
+                    sourceKeys = Source._AsDictionary().Select(d => d.Key.ToUpperInvariant()).ToList();
+                else
+                    sourceKeys = Source._GetMembers().Names().Select(s => s.ToUpperInvariant()).ToList();
+
+                if (sourceKeys.Contains(upperName))
                 {
                     if (ReturnNullForExceptions) {
                         try {
-                            return Source.GetFieldValue(name, false).ConvertTo<TValue>();
+                            if (isDictionary)
+                                // Here we don't want the upper-case name as it won't match the keys passed in necessarily
+                                return Source._AsDictionary()[name].ConvertTo<TValue>();
+                            else
+                                return Source.GetFieldValue(upperName, false).ConvertTo<TValue>();
                         } catch (FieldNotFoundException) {
                             return default(TValue);
                         } catch (ArgumentException) {
@@ -73,8 +88,13 @@ namespace Nvelope.Data
                         } catch (ConversionException) {
                             return default(TValue);
                         }
-                    } else
-                        return Source.GetFieldValue(name, false).ConvertTo<TValue>();
+                    } else {
+                        if (isDictionary)
+                            // Here we don't want the upper-case name as it won't match the keys passed in necessarily
+                            return Source._AsDictionary()[name].ConvertTo<TValue>();
+                        else
+                            return Source.GetFieldValue(upperName, false).ConvertTo<TValue>();
+                    }
                 } else if (ReturnDefaultIfMissing)
                     return default(TValue);
                 else
