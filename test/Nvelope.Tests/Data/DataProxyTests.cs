@@ -75,5 +75,23 @@ namespace Nvelope.Tests.Data
             string res = "";
             Assert.Throws(typeof(KeyNotFoundException),() => res = d["Foobar"]);
         }
+
+        [Test (Description="Verifies that the DataProxy class can correctly handle a Dictionary")]
+        public void Dictionary()
+        {
+            var data = new Dictionary<string, object>(){
+                { "FirstName", "Bruce" },
+                { "LastName", "Wayne" },
+                { "Age", 42 }
+            };
+
+            var overrides = new Dictionary<string, string>();
+            overrides.Add("FirstName", "Batman");
+
+            var d = new DataProxy(overrides, data);
+            Assert.AreEqual("Batman", d["FirstName"]);
+            Assert.AreEqual("Wayne", d["LastName"]);
+            Assert.AreEqual("42", d["Age"]);
+        }
     }
 }
