@@ -178,6 +178,21 @@ namespace Nvelope
         }
 
         /// <summary>
+        /// Converts to string, but handles null gracefully (converts to "")
+        /// </summary>
+        /// <param name="source">A nullable DateTime</param>
+        /// <param name="format">A .NET DateTime formatting string</param>
+        /// <returns></returns>
+        public static string ToString(this DateTime? source, string format)
+        {
+            if (source == null)
+                return string.Empty;
+            else
+                return source.Value.ToString(format);
+        }
+
+
+        /// <summary>
         /// Is this datetime from the current calendar day?
         /// </summary>
         /// <param name="source"></param>
