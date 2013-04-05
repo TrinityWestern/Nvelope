@@ -272,7 +272,7 @@ namespace Nvelope.Tests
             string noTime = "Not a valid time";
             Assert.IsTrue(DateTimeExtensions.IsValidTime(time), time + " should be valid but is not valid.");
             Assert.IsTrue(DateTimeExtensions.IsValidTime(time3), time3 + " should be valid but is not valid.");
-            Assert.IsFalse(DateTimeExtensions.IsValidTime(time4), time4 + " cannot append AM or PM to time.");
+            Assert.IsTrue(DateTimeExtensions.IsValidTime(time4), time4 + " should be valid but is not valid.");
 
             Assert.IsFalse(DateTimeExtensions.IsValidTime(time2), time2 + " Time enter is not in correct format");
 

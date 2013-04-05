@@ -185,7 +185,7 @@ namespace Nvelope
         /// <returns></returns>
         public static string ToString(this DateTime? source, string format)
         {
-            if (source == null)
+            if(source == null)
                 return string.Empty;
             else
                 return source.Value.ToString(format);
@@ -304,6 +304,7 @@ namespace Nvelope
         /// <returns></returns>
         public static bool IsValidTime(string enteredTime)
         {
+            enteredTime = Regex.Replace(enteredTime, "[A-Za-z]", "");
             Regex checkTime = new Regex(@"^(?:[01]?[0-9]|2[0-3]):[0-5][0-9]$");
 
             return checkTime.IsMatch(enteredTime);
