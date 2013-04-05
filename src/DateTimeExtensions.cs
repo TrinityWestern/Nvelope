@@ -15,13 +15,13 @@ namespace Nvelope
         {
             int months = ((int)age.TotalDays) / 30;
 
-            if (months > 0)
+            if(months > 0)
                 return months + " " + (months > 1 ? "Months" : "Month");
-            else if (age.TotalDays > 2)
+            else if(age.TotalDays > 2)
                 return (int)age.TotalDays + " " + (age.TotalDays > 1 ? "Days" : "Day");
-            else if (age.TotalHours > 2)
+            else if(age.TotalHours > 2)
                 return (int)age.TotalHours + " " + (age.TotalHours > 1 ? "Hrs" : "Hour");
-            else if (age.TotalMinutes > 1)
+            else if(age.TotalMinutes > 1)
                 return (int)age.TotalMinutes + " " + (age.TotalMinutes > 1 ? "Mins" : "Min");
             else
                 return (int)age.TotalSeconds + " " + (age.TotalSeconds > 1 ? "Secs" : "Sec");
@@ -128,7 +128,7 @@ namespace Nvelope
         /// </summary>
         public static string ToFriendlyDate(this DateTime date, IFormatProvider provider = null)
         {
-            if (provider == null)
+            if(provider == null)
             {
                 provider = CultureInfo.CurrentCulture;
             }
@@ -136,31 +136,31 @@ namespace Nvelope
             DateTime now = DateTime.Now;
             bool showTime = true;
             string day = date.ToIsoDate();
-            if (date.Hour == 0 && date.Minute == 0 && date.Second == 0)
+            if(date.Hour == 0 && date.Minute == 0 && date.Second == 0)
                 showTime = false;
 
-            if (date.Date == now.Date)
+            if(date.Date == now.Date)
                 day = "Today";
 
-            else if (date.Date == now.AddDays(-1).Date)
+            else if(date.Date == now.AddDays(-1).Date)
                 day = "Yesterday";
 
-            else if (date.Date == now.AddDays(1).Date)
+            else if(date.Date == now.AddDays(1).Date)
                 day = "Tomorrow";
 
-            else if (date < now) //past
+            else if(date < now) //past
             {
                 showTime = false;
-                if (date > now.AddDays(-5))
+                if(date > now.AddDays(-5))
                     day = date.DayOfWeek.ToString();
 
-                else if (date.Date.Year == now.Year)
+                else if(date.Date.Year == now.Year)
                     day = date.ToString("m", provider);
             }
 
-            else if (date > now) //future
+            else if(date > now) //future
             {
-                if (date < now.AddDays(6))
+                if(date < now.AddDays(6))
                     day = "This " + date.DayOfWeek;
                 else
                     showTime = false;
@@ -194,7 +194,8 @@ namespace Nvelope
             int monthDiff = end.Month - start.Month;
             // If the end day is less than start day, then less
             // than a full month has passed
-            if (end.Day < start.Day) {
+            if(end.Day < start.Day)
+            {
                 monthDiff -= 1;
             }
             return yearDiff * 12 + monthDiff;
@@ -203,7 +204,7 @@ namespace Nvelope
 
         public static int DaysInYear(this DateTime dt)
         {
-            if (System.DateTime.IsLeapYear(dt.Year))
+            if(System.DateTime.IsLeapYear(dt.Year))
                 return 366;
             else
                 return 365;
@@ -246,6 +247,51 @@ namespace Nvelope
 
             // Add/Remove the number of days to match what was picked in the previous line as the lesser day
             return newDate.AddDays(lesser - newDate.Day);
+        }
+
+
+        /// <summary>
+        /// This method check if given time is in within given time range
+        /// </summary>
+        /// <param name="time">Time to be valided</param>
+        /// <param name="startTime">Start Time Range</param>
+        /// <param name="endTime">End Time Range</param>
+        /// <returns></returns>
+        public static bool IsEnteredTimeWithTimeRange(TimeSpan enteredTime, TimeSpan startTime, TimeSpan endTime)
+        {
+            if(endTime == startTime)
+            {
+                return true;
+            }
+            else if(endTime < startTime)
+            {
+                if(enteredTime <= endTime || enteredTime >= startTime)
+                {
+                    return true;
+                }
+                return false;
+            }
+            else
+            {
+                if(enteredTime >= startTime && enteredTime <= endTime)
+                {
+                    return true;
+                }
+                return false;
+            }
+
+        }
+
+        /// <summary>
+        /// This Method validates a give time.
+        /// </summary>
+        /// <param name="thetime">the time 21:00</param>
+        /// <returns></returns>
+        public static bool IsValidTime(string enteredTime)
+        {
+            Regex checkTime = new Regex(@"^(?:[01]?[0-9]|2[0-3]):[0-5][0-9]$");
+
+            return checkTime.IsMatch(enteredTime);
         }
     }
 }

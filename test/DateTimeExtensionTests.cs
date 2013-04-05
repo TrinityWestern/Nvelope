@@ -67,7 +67,7 @@ namespace Nvelope.Tests
         public void MonthsDifference()
         {
             Assert.AreEqual(0, new DateTime(2011, 2, 2).MonthsDifference(new DateTime(2011, 3, 1)));
-            Assert.AreEqual(1, new DateTime(2011, 2, 2).MonthsDifference(new DateTime(2011, 3, 2)));            
+            Assert.AreEqual(1, new DateTime(2011, 2, 2).MonthsDifference(new DateTime(2011, 3, 2)));
             Assert.AreEqual(1, new DateTime(2011, 2, 2).MonthsDifference(new DateTime(2011, 3, 3)));
             Assert.AreEqual(1, new DateTime(2011, 1, 30).MonthsDifference(new DateTime(2011, 3, 1)));
 
@@ -132,7 +132,7 @@ namespace Nvelope.Tests
             // and the date of the month when the date is in the current year. During the first few weeks of January this
             // date will be in the previous year and be printed out differently
             d = DateTime.Now.AddDays(-20);
-            if (d.Year == DateTime.Now.Year)
+            if(d.Year == DateTime.Now.Year)
                 Assert.AreEqual(d.ToString("m"), d.ToFriendlyDate());
         }
 
@@ -207,7 +207,7 @@ namespace Nvelope.Tests
             DateTime d = DateTime.Now;
             var time = d.TimeOfDay;
             var militaryHours = d.ToString("HH");
-            if (militaryHours[0] == '0')
+            if(militaryHours[0] == '0')
             {
                 militaryHours = militaryHours.Substring(1) + " Hrs";
             }
@@ -240,7 +240,7 @@ namespace Nvelope.Tests
         public void AddMonthsMatchDay()
         {
             var jan = new DateTime(2008, 1, 31);
-            
+
             var feb = jan.AddMonthsMatchDay(1, 31);
             var march = feb.AddMonthsMatchDay(1, 31);
             var april = march.AddMonthsMatchDay(1, 31);
@@ -248,6 +248,35 @@ namespace Nvelope.Tests
             Assert.AreEqual(29, feb.Day, "Failed to pick the max day of the month for February 2008");
             Assert.AreEqual(31, march.Day, "Failed to pick the match day for March 2008");
             Assert.AreEqual(30, april.Day, "Failed to pick the max day of the month for April 2008");
+        }
+
+        [Test]
+        public void IsEnteredTimeWithTimeRange()
+        {
+            TimeSpan entertedTime1 = "21:00".ConvertTo<DateTime>().TimeOfDay;
+            TimeSpan entertedTime2 = "9:00".ConvertTo<DateTime>().TimeOfDay;
+            TimeSpan startTime = "8:00AM".ConvertTo<DateTime>().TimeOfDay;
+            TimeSpan endTime = "5:00PM".ConvertTo<DateTime>().TimeOfDay;
+            Assert.IsFalse(DateTimeExtensions.IsEnteredTimeWithTimeRange(entertedTime1, startTime, endTime), entertedTime1 + " exceeds the valid range");
+            Assert.IsTrue(DateTimeExtensions.IsEnteredTimeWithTimeRange(entertedTime2, startTime, endTime), entertedTime1 + " exceeds the valid range");
+
+        }
+
+        [Test]
+        public void IsValidTime()
+        {
+            string time = "21:00";
+            string time2 = "2100";
+            string time3 = "00:00";
+            string time4 = "8:00AM";
+            string noTime = "Not a valid time";
+            Assert.IsTrue(DateTimeExtensions.IsValidTime(time), time + " should be valid but is not valid.");
+            Assert.IsTrue(DateTimeExtensions.IsValidTime(time3), time3 + " should be valid but is not valid.");
+            Assert.IsFalse(DateTimeExtensions.IsValidTime(time4), time4 + " cannot append AM or PM to time.");
+
+            Assert.IsFalse(DateTimeExtensions.IsValidTime(time2), time2 + " Time enter is not in correct format");
+
+            Assert.IsFalse(DateTimeExtensions.IsValidTime(noTime), noTime + " should be a string with digits but it is not.");
         }
     }
 }
