@@ -304,7 +304,7 @@ namespace Nvelope
         /// <returns></returns>
         public static bool IsValidTime(string enteredTime)
         {
-            enteredTime = Regex.Replace(enteredTime, "[A-Za-z]", "");
+            enteredTime = Regex.Replace(enteredTime, "[A-Za-z]", "").Trim();
             Regex checkTime = new Regex(@"^(?:[01]?[0-9]|2[0-3]):[0-5][0-9]$");
 
             return checkTime.IsMatch(enteredTime);
