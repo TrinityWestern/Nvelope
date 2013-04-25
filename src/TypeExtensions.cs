@@ -6,8 +6,10 @@
 namespace Nvelope
 {
     using System;
+    using System.Collections.Generic;
     using System.Globalization;
     using System.Reflection;
+    using System.Linq;
 
     /// <summary>
     /// Some helpers for casting objects using built-in CLR casting operators
@@ -89,6 +91,28 @@ namespace Nvelope
             }
 
             return meth.Invoke(null, new object[] { value });
+        }
+
+        /// <summary>
+        /// Thank you Jon Skeet. http://stackoverflow.com/questions/7889228/how-to-prevent-reflectiontypeloadexception-when-calling-assembly-gettypes
+        /// Calling GetTypes() on an assembly that inherits from a non-referenced assembly will throw exceptions.
+        /// This extension method will only get the types from the assembly that we actually can load.
+        /// </summary>
+        /// <param name="assembly"></param>
+        /// <returns></returns>
+        public static IEnumerable<Type> GetLoadableTypes(this Assembly assembly)
+        {
+            if (assembly == null) 
+                throw new ArgumentNullException("assembly");
+
+            try
+            {
+                return assembly.GetTypes();
+            }
+            catch (ReflectionTypeLoadException e)
+            {
+                return e.Types.Where(t => t != null);
+            }
         }
     }
 }
