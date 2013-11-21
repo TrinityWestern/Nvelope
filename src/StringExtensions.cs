@@ -407,6 +407,21 @@ namespace Nvelope
         }
 
         /// <summary>
+        /// Truncates a string down to the specified maxLength
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="maxChars"></param>
+        /// <returns></returns>
+        public static string Truncate(this string source, int maxLength)
+        {
+            if (maxLength < 0)
+                throw new ArgumentException("maxLength cannot be negative.");
+            if (source == null)
+                return source;
+            return source.Length <= maxLength ? source : source.Substring(0, maxLength);
+        }
+
+        /// <summary>
         /// Converts to string, but handles null gracefully (converts to "")
         /// </summary>
         /// <param name="source"></param>
