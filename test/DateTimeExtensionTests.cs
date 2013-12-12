@@ -262,6 +262,30 @@ namespace Nvelope.Tests
 
         }
 
+
+        [Test]
+        public void IsEntereddateWithTimeRange()
+        {
+            DateTime entertedDate1 = "2013/12/12".ConvertTo<DateTime>().Date; //false
+            DateTime entertedDate2 = "2014/01/05".ConvertTo<DateTime>().Date; //true
+            DateTime entertedDate3 = "2014/01/06".ConvertTo<DateTime>().Date; //false
+            DateTime entertedDate4 = "2013/12/13".ConvertTo<DateTime>().Date; //true
+            DateTime entertedDate5 = "2013/12/14".ConvertTo<DateTime>().Date; //true
+            DateTime entertedDate6 = "2014/01/04".ConvertTo<DateTime>().Date; //true
+
+
+            DateTime startDate = "2013/12/13".ConvertTo<DateTime>().Date;
+            DateTime endDate = "2014/01/05".ConvertTo<DateTime>().Date;
+            Assert.IsFalse(DateTimeExtensions.IsEnteredDateWithinDateRange(entertedDate1, startDate, endDate), entertedDate1 + " exceeds the valid range");
+            Assert.IsTrue(DateTimeExtensions.IsEnteredDateWithinDateRange(entertedDate2, startDate, endDate), entertedDate2 + " exceeds the valid range");
+            Assert.IsFalse(DateTimeExtensions.IsEnteredDateWithinDateRange(entertedDate3, startDate, endDate), entertedDate3 + " exceeds the valid range");
+            Assert.IsTrue(DateTimeExtensions.IsEnteredDateWithinDateRange(entertedDate4, startDate, endDate), entertedDate4 + " exceeds the valid range");
+            Assert.IsTrue(DateTimeExtensions.IsEnteredDateWithinDateRange(entertedDate5, startDate, endDate), entertedDate5 + " exceeds the valid range");
+            Assert.IsTrue(DateTimeExtensions.IsEnteredDateWithinDateRange(entertedDate6, startDate, endDate), entertedDate6 + " exceeds the valid range");
+
+        }
+
+
         [Test]
         public void IsValidTime()
         {

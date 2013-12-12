@@ -298,6 +298,39 @@ namespace Nvelope
         }
 
         /// <summary>
+        /// This method check if given date is in within given date range. This method is inclusive, which means it includes start and enddate as well to check
+        /// the date range.
+        /// </summary>
+        /// <param name="time">Date to be valided</param>
+        /// <param name="startTime">Start Date Range</param>
+        /// <param name="endTime">End Date Range</param>
+        /// <returns></returns>
+        public static bool IsEnteredDateWithinDateRange(this DateTime enteredDate, DateTime startDate, DateTime endDate)
+        {
+            if(endDate == startDate)
+            {
+                return true;
+            }
+            else if(endDate < startDate)
+            {
+                if(enteredDate <= endDate || enteredDate >= startDate)
+                {
+                    return true;
+                }
+                return false;
+            }
+            else
+            {
+                if(enteredDate >= startDate && enteredDate <= endDate)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+
+        /// <summary>
         /// This Method validates a give time.
         /// </summary>
         /// <param name="thetime">the time 21:00</param>
