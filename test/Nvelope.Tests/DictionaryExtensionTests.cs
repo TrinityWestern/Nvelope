@@ -324,6 +324,52 @@ namespace Nvelope.Tests
             Assert.True(a.IsSameAs(b, a.Keys, ObjectExtensions.LazyEq));
         }
 
+        [Test(Description="When a comparer is passed in, we should be able to conflate values")]
+        public void IsSameAsWithComparer()
+        {
+            var a = new Dictionary<string, object>();
+            var b = new Dictionary<string, object>();
+            var c = new Dictionary<string, object>();
+            a.Add("A", null);
+            b.Add("A", DBNull.Value);
+            c.Add("A", "");
+            Assert.False(a.IsSameAs(b));
+            Assert.False(a.IsSameAs(b, a.Keys, ObjectExtensions.LazyEq));
+            Assert.False(a.IsSameAs(c));
+            Assert.False(a.IsSameAs(c, a.Keys, ObjectExtensions.LazyEq));
+
+            // Conflate null and DBNull.
+            Func<object, object, bool> Comparer = (x, y) =>
+            {
+                x = (x == DBNull.Value ? null : x);
+                y = (y == DBNull.Value ? null : y);
+                if (x == null && y != null)
+                    return false;
+                else if (x != null && y == null)
+                    return false;
+                else if (x.Neq(y))
+                    return false;
+                return true;
+            };
+            Assert.True(a.IsSameAs(b, a.Keys, Comparer));
+            Assert.False(a.IsSameAs(c, a.Keys, Comparer));
+
+            // Conflate null and DBNull and "".
+            Comparer = (x, y) =>
+            {
+                x = (x == DBNull.Value || x == "" ? null : x);
+                y = (y == DBNull.Value || y == "" ? null : y);
+                if (x == null && y != null)
+                    return false;
+                else if (x != null && y == null)
+                    return false;
+                else if (x.Neq(y))
+                    return false;
+                return true;
+            };
+            Assert.True(a.IsSameAs(c, a.Keys, Comparer));
+        }
+
         [Test]
         public void Diff()
         {
