@@ -178,15 +178,15 @@ namespace Nvelope
                     return false;
                 else if (!myKeys.Contains(key))
                     return false;
-                else if (dict[key] == null && other[key] != null)
-                    return false;
-                else if (dict[key] != null && other[key] == null)
-                    return false;
                 else if (comparer != null)
                 {
                     if(!comparer(dict[key], other[key]))
                         return false;
                 }
+                else if (dict[key] == null && other[key] != null)
+                    return false;
+                else if (dict[key] != null && other[key] == null)
+                    return false;
                 else if(dict[key].Neq(other[key]))
                     return false;
 
