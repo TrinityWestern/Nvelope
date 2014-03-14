@@ -357,8 +357,8 @@ namespace Nvelope.Tests
             // Conflate null and DBNull and "".
             Comparer = (x, y) =>
             {
-                x = (x == DBNull.Value || x == "" ? null : x);
-                y = (y == DBNull.Value || y == "" ? null : y);
+                x = (x == DBNull.Value || (string)x == "" ? null : x);
+                y = (y == DBNull.Value || (string)y == "" ? null : y);
                 if (x == null && y != null)
                     return false;
                 else if (x != null && y == null)

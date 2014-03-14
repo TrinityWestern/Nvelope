@@ -419,11 +419,11 @@ namespace Nvelope.IO
                     // a parameter, it is presumably able to handle that itself.
                     var firstParaIsOutput = paraList.FirstOr(null) is TextWriter;
                     if (!firstParaIsOutput)
-                        _printOutput(output, res);
+                        printOutput(output, res);
                 });
         }
 
-        protected void _printOutput(TextWriter output, object val)
+        protected void printOutput(TextWriter output, object val)
         {
             if (val is IEnumerable<string>)
             {
