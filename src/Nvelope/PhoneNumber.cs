@@ -31,6 +31,12 @@ namespace Nvelope
             Area = match.Groups["area"].Value;
             Local = match.Groups["local"].Value;
             Extension = match.Groups["extension"].Value;
+
+            if (Area.IsNullOrEmpty() && !Country.IsNullOrEmpty())
+            {
+                Area = Country;
+                Country = "";
+            }
         }
 
         /// <summary>
