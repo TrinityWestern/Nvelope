@@ -9,3 +9,4 @@ MetricResults
 *.nupkg
 test/Nvelope.VisualState.xml
 test/TestResult.xml
+TestResult.xml
