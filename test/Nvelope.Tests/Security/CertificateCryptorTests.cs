@@ -5,6 +5,7 @@ using System.Text;
 using NUnit.Framework;
 using Nvelope.Security;
 using System.Security.Cryptography.X509Certificates;
+using Nvelope.IO;
 
 namespace Nvelope.Tests.Encryption
 {
@@ -13,7 +14,9 @@ namespace Nvelope.Tests.Encryption
     {
         public override ISymmetricCryptor GetCryptor()
         {
-            return new CertificateCryptor(Certificates.UserCert());
+            var cert = Certificates.FromPFXFile("cert\\nvelope.pfx", "Nvelope");
+            //var cert = Certificates.Find(c => c.Verify(), StoreLocation.LocalMachine, true);
+            return new CertificateCryptor(cert);
         }
 
         [Test]

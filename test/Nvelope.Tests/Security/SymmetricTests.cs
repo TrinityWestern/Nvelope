@@ -26,5 +26,18 @@ namespace Nvelope.Tests.Encryption
             var decrypted = cryptor.Decrypt(cyphertext);
             Assert.AreEqual(plaintext, decrypted);
         }
+
+        [Test]
+        public void HandlesEmptyInput()
+        {
+            var plaintext = "";
+            var cryptor = GetCryptor();
+            var cyphertext = cryptor.Encrypt(plaintext);
+            Assert.AreNotEqual(plaintext, cyphertext);
+            Assert.AreNotEqual("", cyphertext);
+
+            var decrypted = cryptor.Decrypt(cyphertext);
+            Assert.AreEqual(plaintext, decrypted);
+        }
     }
 }

@@ -52,6 +52,18 @@ namespace Nvelope.Security
             // CryptographicException "Bad Key" when decrypting
             return Find(c => c.Verify(), StoreLocation.CurrentUser, false);
         }
+
+        /// <summary>
+        /// Load a certificate from a pfx file
+        /// </summary>
+        /// <param name="pfxFile"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public static X509Certificate2 FromPFXFile(string pfxFile, string password)
+        {
+            X509Certificate2 certificate = new X509Certificate2(pfxFile, password);
+            return certificate;
+        }
     }
 
     public static class CertificateCollectionExtensions

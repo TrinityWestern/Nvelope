@@ -126,6 +126,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="cert\nvelope.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
