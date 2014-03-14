@@ -96,6 +96,9 @@ namespace Nvelope.Tests
         [Test]
         public void ConvertsMonth()
         {
+            Assert.AreEqual(Month.April, "April".ConvertTo<Month>());
+            Assert.AreEqual(Month.April, "Apr".ConvertTo<Month>());
+            Assert.AreEqual(Month.April, 4.ConvertTo<Month>());
             Assert.AreEqual(Month.March, "March".ConvertTo<Month>());
             Assert.AreEqual(Month.March, "Mar".ConvertTo<Month>());
             Assert.AreEqual(Month.March, 3.ConvertTo<Month>());
@@ -174,13 +177,16 @@ namespace Nvelope.Tests
         public void Int_to_Enum()
         {
             Assert.AreEqual(TestEnum.One, 1.ConvertTo<TestEnum>());
+            Assert.Throws(typeof(ConversionException), () => 7.ConvertTo<TestEnum>());
         }
 
         [Test]
         public void CanConvertTo_Enum()
         {
             Assert.True("One".CanConvertTo<TestEnum>());
+            Assert.True(1.CanConvertTo<TestEnum>());
             Assert.False("asdfadsf".CanConvertTo<TestEnum>());
+            Assert.False(7.CanConvertTo<TestEnum>());
         }
 
         [Test]

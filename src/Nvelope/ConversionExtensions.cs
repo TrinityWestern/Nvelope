@@ -253,6 +253,28 @@ namespace Nvelope
             return doc;
         }
 
+        public static object TryEnum(Type type, object source)
+        {
+            if (!type.IsEnum)
+                return null;
+
+            object res;
+            if (Enum.GetUnderlyingType(type) == typeof(int) && source.CanConvertTo<int>())
+                res = Enum.ToObject(type, source.ConvertTo<int>());
+            else
+                if (type == typeof(Month))
+                    return source.ToStringN().ToMonth();
+                else
+                    res = Enum.Parse(type, source.ToStringN());
+
+            if (Enum.IsDefined(type, res))
+                return res;
+            else
+                throw new ConversionException("Tried to convert '" + source.ToStringN() + "' to type '" + type.Name +
+                            "', but there was no value in " + type.Name + " matching that value.");
+            
+        }
+
         /// <summary>
         /// Convert to another type intelligently
         /// </summary>
@@ -279,7 +301,6 @@ namespace Nvelope
             // If we're trying to convert to object, just return the thing
             if (type == typeof(object))
                 return source;
-
 
             var sourceString = source as string;
 
@@ -318,26 +339,15 @@ namespace Nvelope
                     return source.ToString().ToBoolFriendly();
             }
 
+            var enumRes = TryEnum(type, source);
+            if (enumRes != null)
+                return enumRes;
+
             if (sourceString != null)
             {
                 if (type == typeof(DateTime))
                 {
                     return sourceString.ToDateTimeFriendly();
-                }
-                if (type == typeof(Month))
-                    return sourceString.ToMonth();
-                if (type.IsEnum)
-                {
-                    if (Enum.GetUnderlyingType(type) == typeof(int))
-                    {
-                        int number;
-                        // If the result is numeric, convert to an int and cast to the enum
-                        if (Int32.TryParse(sourceString, out number))
-                            return number;
-                    }
-
-                    // Otherwise, try to parse the enum name
-                    return Enum.Parse(type, sourceString);
                 }
                 else if (type == typeof(Guid))
                     return new Guid(sourceString);
@@ -349,17 +359,6 @@ namespace Nvelope
                     if (Regex.IsMatch(sourceString, "^\\d+\\.\\d+E\\-?\\d+$"))
                         return sourceString.ConvertTo<double>().ConvertTo<decimal>();
                 }
-            }
-
-            // If it's an int-based enumeration, then try to convert by converting
-            // the int to the enum
-            // NOTE: I don't think this will work with Flag enumerations, since they
-            // might have values that aren't defined in the list - ie, they can be made up
-            // of a combination of values |'ed together
-            if (source is int && type.IsEnum && Enum.GetUnderlyingType(type) == typeof(int))
-            {
-                var i = (int)source;
-                return Enum.ToObject(type, i);
             }
 
             // Handle parsing a byte array to a string
