@@ -101,9 +101,10 @@ namespace Nvelope
         public static DateTime? ToDateTimeNullable(this string source)
         {
             DateTime res = DateTime.MinValue;
+
             if (DateTime.TryParse(
                 source,
-                CultureInfo.CurrentCulture,
+                CultureInfo.GetCultureInfo("en-US"),
                 DateTimeStyles.AllowWhiteSpaces,
                 out res))
             {
@@ -118,13 +119,17 @@ namespace Nvelope
                 // otherwise, default to dd/mm/yyyy
                 var a = match.Groups[1].Value.ConvertTo<int>();
                 var b = match.Groups[2].Value.ConvertTo<int>();
-                if (b > 12) {
-                    day = b;
-                    month = a;
-                } else {
+                if (a > 12)
+                {
                     day = a;
                     month = b;
                 }
+                else
+                {
+                    day = b;
+                    month = a;
+                }
+
                 // Group 3 is year
                 year = match.Groups[3].Value.ConvertTo<int>();
                 if (year < 100)

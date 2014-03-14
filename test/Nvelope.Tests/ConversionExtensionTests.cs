@@ -73,23 +73,23 @@ namespace Nvelope.Tests
             Assert.AreEqual("1982-06-25 23:12:13", Fn("25-06-1982 11:12:13 PM"));
             Assert.AreEqual("1982-06-25 00:00:00", Fn("25-06-1982"));
             Assert.AreEqual("1982-06-25 00:00:00", Fn("25/06/1982"));
-            Assert.AreEqual("1982-06-05 00:00:00", Fn("5/6/1982"));
-            Assert.AreEqual("1982-06-05 00:00:00", Fn("5-6-1982"));
+            Assert.AreEqual("1982-06-05 00:00:00", Fn("6/5/1982"));
+            Assert.AreEqual("1982-06-05 00:00:00", Fn("6-5-1982"));
             
             Assert.AreEqual("2006-07-01 11:09:23", Fn("2006-07-01 11:09:23"));
             
             // two-digit years should be in this decade, the next one, or in the last 8
-            Assert.AreEqual("1982-06-05 00:00:00", Fn("5/6/82"));
-            Assert.AreEqual("2002-06-05 00:00:00", Fn("5-6-02"));
-            Assert.AreEqual("1982-06-05 00:00:00", Fn("5\\6\\82"));
-            Assert.AreEqual("2002-06-05 11:12:13", Fn("5/6/02 11:12:13"));
+            Assert.AreEqual("1982-06-05 00:00:00", Fn("6/5/82"));
+            Assert.AreEqual("2002-06-05 00:00:00", Fn("6-5-02"));
+            Assert.AreEqual("1982-06-05 00:00:00", Fn("6\\5\\82"));
+            Assert.AreEqual("2002-06-05 11:12:13", Fn("6/5/02 11:12:13"));
             // next decade
-            Assert.AreEqual("2017-06-05 00:00:00", Fn("5/6/17"));
-            Assert.AreEqual("2017-06-05 23:12:00", Fn("5-6-17 11:12PM"));
+            Assert.AreEqual("2017-06-05 00:00:00", Fn("6/5/17"));
+            Assert.AreEqual("2017-06-05 23:12:00", Fn("6-5-17 11:12PM"));
             if (DateTime.Now.Year < 2020) // this test won't work after this - it will assume 2031
             {
-                Assert.AreEqual("1931-06-05 00:00:00", Fn("5/6/31"));
-                Assert.AreEqual("1931-06-05 11:12:00", Fn("5/6/31 11:12"));
+                Assert.AreEqual("1931-06-05 00:00:00", Fn("6/5/31"));
+                Assert.AreEqual("1931-06-05 11:12:00", Fn("6/5/31 11:12"));
             }
         }
 
