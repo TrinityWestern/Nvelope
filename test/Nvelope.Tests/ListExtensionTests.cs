@@ -5,6 +5,7 @@
     using System.Linq;
     using NUnit.Framework;
     using Nvelope;
+    using Nvelope.Reading;
 
     [TestFixture]
     public class ListExtensionTests
@@ -530,6 +531,19 @@
             Assert.AreEqual("(2,42)", objs.Distinct(o => o.B).Print());
             Assert.AreEqual("(1)", objs.Distinct(o => o.A).Print());
 
+        }
+
+        [TestCase("(a,b,|,d,e)", Result="(|,d,e)")]
+        [TestCase("(a,b,|)", Result = "(|)")]
+        [TestCase("(|,d,e)", Result = "(|,d,e)")]
+        [TestCase("(|)", Result = "(|)")]
+        [TestCase("()", Result = "()")]
+        [TestCase("(a)", Result = "()")]
+        [TestCase("(a,b)", Result = "()")]
+        public string SkipUntil(string inputStr)
+        {
+            var input = Read.List(inputStr);
+            return input.SkipUntil(s => s == "|").Print();
         }
     }
 }

@@ -852,6 +852,21 @@ namespace Nvelope
                 yield return item;
         }
 
+        public static IEnumerable<T> SkipUntil<T>(this IEnumerable<T> list, Func<T, bool> predicate)
+        {
+            var found = false;
+            foreach(var item in list)
+            {
+                if(found)
+                    yield return item;
+                else if(predicate(item))
+                {
+                    found = true;
+                    yield return item;
+                }
+            }
+        }
+
         #region Infinite sequences
         /// <summary>
         /// Repeats the sequence forever. WARNING: Generates an infinite sequence - 
