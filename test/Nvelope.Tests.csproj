@@ -107,6 +107,7 @@
     <Compile Include="TimeSpanExtensionTests.cs" />
     <Compile Include="TupleExtensionTests.cs" />
     <Compile Include="Web\HtmlExtensionTests.cs" />
+    <Compile Include="Web\UriExtensionsTests.cs" />
     <Compile Include="XmlExtensionTests.cs" />
   </ItemGroup>
   <ItemGroup>
