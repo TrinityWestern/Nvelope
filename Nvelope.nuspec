@@ -13,9 +13,9 @@
     <dependencies />
   </metadata>
   <files>
-    <file src="bin\Release\Nvelope.dll" target="lib\net451\Nvelope.dll" />
-    <file src="bin\Release\Nvelope.xml" target="lib\net451\Nvelope.xml" />
-    <file src="..\Nvelope-net4\bin\Release\Nvelope.dll" target="lib\net40\Nvelope.dll" />
-    <file src="..\Nvelope-net4\bin\Release\Nvelope.xml" target="lib\net40\Nvelope.xml" />
+    <file src="src\Nvelope\bin\Release\Nvelope.dll" target="lib\net451\Nvelope.dll" />
+    <file src="src\Nvelope\bin\Release\Nvelope.xml" target="lib\net451\Nvelope.xml" />
+    <file src="src\Nvelope-net4\bin\Release\Nvelope.dll" target="lib\net40\Nvelope.dll" />
+    <file src="src\Nvelope-net4\bin\Release\Nvelope.xml" target="lib\net40\Nvelope.xml" />
   </files>
 </package>
