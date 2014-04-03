@@ -26,5 +26,25 @@ namespace Nvelope
 
             return cur;
         }
+
+        public static Func<TResult> Curry<A, TResult>(Func<A, TResult> fn, A a)
+        {
+            return fn.Curry(a);
+        }
+
+        public static Func<B, TResult> Curry<A, B, TResult>(Func<A, B, TResult> fn, A a)
+        {
+            return fn.Curry(a);
+        }
+
+        public static Func<B, C, TResult> Curry<A, B, C, TResult>(Func<A, B, C, TResult> fn, A a)
+        {
+            return fn.Curry(a);
+        }
+
+        public static Func<B, C, D, TResult> Curry<A, B, C, D, TResult>(Func<A, B, C, D, TResult> fn, A a)
+        {
+            return fn.Curry(a);
+        }
     }
 }
