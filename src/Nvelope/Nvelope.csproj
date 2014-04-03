@@ -73,7 +73,6 @@
     <Compile Include="EnumExtras.cs" />
     <Compile Include="ICollectionExtensions.cs" />
     <Compile Include="SerializationExtensions.cs" />
-    <Compile Include="HtmlExtensions.cs" />
     <Compile Include="Interval.cs" />
     <Compile Include="Collections\OrderedSequential.cs" />
     <Compile Include="Collections\IDirectedGraph.cs">
