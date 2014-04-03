@@ -7,5 +7,6 @@ rakelog.txt
 MetricResults
 *.csproj.user
 *.nupkg
+*.zip
 Nvelope.VisualState.xml
 TestResult.xml
