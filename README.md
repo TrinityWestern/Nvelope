@@ -4,4 +4,4 @@ Nvelope is a set of language extensions for C# - a Batman utility belt to make M
 
 -----
 
-[Trinity Western University](http://twu.ca)
+[Trinity Western University](http://twu.ca) [Software Develoment](http://twu.ca/dev)
