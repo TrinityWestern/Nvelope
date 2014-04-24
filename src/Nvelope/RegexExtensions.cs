@@ -10,15 +10,5 @@ namespace Nvelope
             foreach (var g in coll)
                 yield return g as Group;
         }
-
-        public static string Print(this Capture capture)
-        {
-            return capture.Value;
-        }
-
-        public static string Print(this Match match)
-        {
-            return match.Groups.ToList().Print();
-        }
     }
 }

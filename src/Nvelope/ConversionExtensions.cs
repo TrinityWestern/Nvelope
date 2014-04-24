@@ -119,15 +119,15 @@ namespace Nvelope
                 // otherwise, default to dd/mm/yyyy
                 var a = match.Groups[1].Value.ConvertTo<int>();
                 var b = match.Groups[2].Value.ConvertTo<int>();
-                if (a > 12)
-                {
-                    day = a;
-                    month = b;
-                }
-                else
+                if (b > 12)
                 {
                     day = b;
                     month = a;
+                }
+                else
+                {
+                    day = a;
+                    month = b;
                 }
 
                 // Group 3 is year

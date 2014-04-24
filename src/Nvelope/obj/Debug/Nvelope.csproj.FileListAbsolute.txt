@@ -1,0 +1,4 @@
+C:\GitHub\Nvelope\src\Nvelope\bin\Debug\Nvelope.dll
+C:\GitHub\Nvelope\src\Nvelope\bin\Debug\Nvelope.pdb
+C:\GitHub\Nvelope\src\Nvelope\obj\Debug\Nvelope.dll
+C:\GitHub\Nvelope\src\Nvelope\obj\Debug\Nvelope.pdb

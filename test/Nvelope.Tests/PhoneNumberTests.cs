@@ -48,8 +48,8 @@ namespace Nvelope.Tests
             Assert.AreEqual("4656767", number.Local);
             // testing robustness
             number = new PhoneNumber("+ 31-774656767");
-            Assert.AreEqual("31", number.Country);
-            Assert.AreEqual("", number.Area);
+            Assert.AreEqual("", number.Country);
+            Assert.AreEqual("31", number.Area);
             Assert.AreEqual("774656767", number.Local);
             // a number I found in our data
             number = new PhoneNumber("(604)7627111");
