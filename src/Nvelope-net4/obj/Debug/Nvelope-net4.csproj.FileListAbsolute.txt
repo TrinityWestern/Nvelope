@@ -1,4 +1,0 @@
-C:\GitHub\Nvelope\src\Nvelope-net4\bin\Debug\Nvelope.dll
-C:\GitHub\Nvelope\src\Nvelope-net4\bin\Debug\Nvelope.pdb
-C:\GitHub\Nvelope\src\Nvelope-net4\obj\Debug\Nvelope.dll
-C:\GitHub\Nvelope\src\Nvelope-net4\obj\Debug\Nvelope.pdb
