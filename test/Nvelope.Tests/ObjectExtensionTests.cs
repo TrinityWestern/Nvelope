@@ -21,6 +21,16 @@ namespace Nvelope.Tests
         }
 
         [Test]
+        public void LazyEq()
+        {
+            object a = 1;
+            object b = 1;
+            Assert.True(a.LazyEq(b));
+            b = "1";
+            Assert.True(a.LazyEq(b));
+        }
+
+        [Test]
         public void Neq()
         {
             object a = 1;
@@ -34,7 +44,7 @@ namespace Nvelope.Tests
             Assert.False(a.Neq(b));
             Assert.False(b.Neq(a));
         }
-               
+
         [Test]
         public void PrintDecimalWorksPolymorphically()
         {
@@ -46,8 +56,8 @@ namespace Nvelope.Tests
             // still call the decimal version of print, not the
             // generic object ToString version. If we call decimal.ToString(),
             // we'll get "1.0000"
-            Assert.AreNotEqual("1.0000", obj.Print(), 
-                "Print was not called polymorphically. You probably changed the object.Print() extension " + 
+            Assert.AreNotEqual("1.0000", obj.Print(),
+                "Print was not called polymorphically. You probably changed the object.Print() extension " +
                 " method in a way you shouldn't have");
             Assert.AreEqual("1", obj.Print());
         }

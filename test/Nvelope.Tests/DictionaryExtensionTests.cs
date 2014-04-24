@@ -314,6 +314,63 @@ namespace Nvelope.Tests
         }
 
         [Test]
+        public void IsSameAsDifferentTypes()
+        {
+            var a = new Dictionary<string, object>();
+            var b = new Dictionary<string, object>();
+            a.Add("A", 1);
+            b.Add("A", "1");
+            Assert.False(a.IsSameAs(b));
+            Assert.True(a.IsSameAs(b, a.Keys, ObjectExtensions.LazyEq));
+        }
+
+        [Test(Description="When a comparer is passed in, we should be able to conflate values")]
+        public void IsSameAsWithComparer()
+        {
+            var a = new Dictionary<string, object>();
+            var b = new Dictionary<string, object>();
+            var c = new Dictionary<string, object>();
+            a.Add("A", null);
+            b.Add("A", DBNull.Value);
+            c.Add("A", "");
+            Assert.False(a.IsSameAs(b));
+            Assert.False(a.IsSameAs(b, a.Keys, ObjectExtensions.LazyEq));
+            Assert.False(a.IsSameAs(c));
+            Assert.False(a.IsSameAs(c, a.Keys, ObjectExtensions.LazyEq));
+
+            // Conflate null and DBNull.
+            Func<object, object, bool> Comparer = (x, y) =>
+            {
+                x = (x == DBNull.Value ? null : x);
+                y = (y == DBNull.Value ? null : y);
+                if (x == null && y != null)
+                    return false;
+                else if (x != null && y == null)
+                    return false;
+                else if (x.Neq(y))
+                    return false;
+                return true;
+            };
+            Assert.True(a.IsSameAs(b, a.Keys, Comparer));
+            Assert.False(a.IsSameAs(c, a.Keys, Comparer));
+
+            // Conflate null and DBNull and "".
+            Comparer = (x, y) =>
+            {
+                x = (x == DBNull.Value || (string)x == "" ? null : x);
+                y = (y == DBNull.Value || (string)y == "" ? null : y);
+                if (x == null && y != null)
+                    return false;
+                else if (x != null && y == null)
+                    return false;
+                else if (x.Neq(y))
+                    return false;
+                return true;
+            };
+            Assert.True(a.IsSameAs(c, a.Keys, Comparer));
+        }
+
+        [Test]
         public void Diff()
         {
             var a = new Dictionary<string, int>() { { "A", 1 }, { "B", 2 }, {"C", 3}};
@@ -357,7 +414,6 @@ namespace Nvelope.Tests
                 Assert.AreEqual(x, v);
                 x = x + 2;
             }
-
         }
 
          [Test]
@@ -408,6 +464,16 @@ namespace Nvelope.Tests
             var dict = new Dictionary<int, string>() { { 1, "one" }, { 2, "two" } };
             var ints = new HashSet<int> { 1, 2 };
             Assert.IsTrue(dict.Keys.ToSet().SetEquals(ints));
+        }
+
+        [Test]
+        public void ToList()
+        {
+            var dict = new Dictionary<int, string>() { { 1, "one" }, { 2, "two" } };
+            var res = dict.ToList((i, str) => i + " is " + str);
+            Assert.AreEqual(typeof(List<string>), res.GetType());
+            Assert.AreEqual("(1 is one,2 is two)", res.Print());
+            
         }
 
         private IEnumerable<KeyValuePair<string, string>> kvp(string key, string value)

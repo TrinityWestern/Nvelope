@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections;
 
 namespace Nvelope
 {
@@ -109,6 +110,19 @@ namespace Nvelope
             return source.Except(items as IEnumerable<T>);
         }
 
+        public static IEnumerable<T> ExceptIndicies<T>(this IEnumerable<T> source, params int[] indicies)
+        {
+            return ExceptIndicies(source, indicies.ToSet());
+        }
+
+        public static IEnumerable<T> ExceptIndicies<T>(this IEnumerable<T> source, IEnumerable<int> indicies)
+        {
+            int cur = 0;
+            foreach (T item in source)
+                if (!indicies.Contains(cur++))
+                    yield return item;
+        }
+
         /// <summary>
         /// Returns only those items in source that are in allowed
         /// </summary>
@@ -137,10 +151,29 @@ namespace Nvelope
         }
 
         /// <summary>
+        /// Gets all the distinct elements (as chosen by selector) from the sequence.
+        /// Shorthand for source.Select(selector).Distinct() - this is a bit more concise
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="U"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="selector"></param>
+        /// <returns></returns>
+        public static IEnumerable<U> Distinct<T, U>(this IEnumerable<T> source, Func<T, U> selector)
+        {
+            return source.Select(selector).Distinct();
+        }
+
+        /// <summary>
         /// Add one list to the end of another
         /// </summary>
         public static IEnumerable<T> And<T>(this IEnumerable<T> source, IEnumerable<T> other)
         {
+            if (source == null)
+                return other;
+            if (other == null)
+                return source;
+
             return source.Concat(other);
         }
 
@@ -171,6 +204,22 @@ namespace Nvelope
         }
         
         #region Numerical stuff
+        /// <summary>
+        /// Returns the single item in the list or the alternate. If the list
+        /// contains more than one item, throw an exception
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="alternate"></param>
+        /// <returns></returns>
+        public static T SingleOr<T>(this IEnumerable<T> list, T alternate)
+        {
+            if (list.Any())
+                return list.Single();
+            else
+                return alternate;
+        }
+
         /// <summary>
         /// Returns the first item in the list, if there are any. If the list is empty,
         /// return the alternate item
@@ -823,6 +872,32 @@ namespace Nvelope
             return false;
         }
 
+        /// <summary>
+        /// Converts anything that is IEnumerable to IEnumberable of object
+        /// </summary>
+        /// <param name="coll"></param>
+        /// <returns></returns>
+        public static IEnumerable<object> ToIEnumerableObj(this IEnumerable coll)
+        {
+            foreach (var item in coll)
+                yield return item;
+        }
+
+        public static IEnumerable<T> SkipUntil<T>(this IEnumerable<T> list, Func<T, bool> predicate)
+        {
+            var found = false;
+            foreach(var item in list)
+            {
+                if(found)
+                    yield return item;
+                else if(predicate(item))
+                {
+                    found = true;
+                    yield return item;
+                }
+            }
+        }
+
         #region Infinite sequences
         /// <summary>
         /// Repeats the sequence forever. WARNING: Generates an infinite sequence - 
@@ -875,8 +950,9 @@ namespace Nvelope
         public static IEnumerable<T> And<T>(this T source, IEnumerable<T> items)
         {
             yield return source;
-            foreach (var i in items)
-                yield return i;
+            if(items != null)
+                foreach (var i in items)
+                    yield return i;
         }
 
         /// <summary>

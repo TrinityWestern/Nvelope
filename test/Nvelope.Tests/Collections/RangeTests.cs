@@ -60,7 +60,7 @@ namespace Nvelope.Tests.Collections
             Assert.AreEqual(nintynine, many.Flip().Second());
 
             var list = new List<object>();
-            foreach(var i in many)
+            foreach (var i in many)
                 list.Add(i);
             Assert.AreEqual(100, list.Count);
             Assert.IsTrue(list.Contains(many.First));
@@ -71,7 +71,7 @@ namespace Nvelope.Tests.Collections
         [Test]
         public void OrderedIntHashCode()
         {
-            foreach(var i in one_zero)
+            foreach (var i in one_zero)
             {
                 Assert.IsTrue(i.ToInt().GetHashCode() == i.GetHashCode());
             }

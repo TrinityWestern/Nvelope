@@ -4,6 +4,7 @@
     using System.Linq;
     using NUnit.Framework;
     using Nvelope;
+    using Nvelope.Reading;
 
     [TestFixture]
     public class ListExtensionTests
@@ -71,6 +72,13 @@
         {
             Assert.AreEqual("(a,b,d)", "abcd".Except('c').Print());
             Assert.AreEqual("(a,b,c)", "abc".Except('z').Print());
+        }
+
+        [Test]
+        public void ExceptIndicies()
+        {
+            Assert.AreEqual("(a,b,d)", "abcd".ExceptIndicies(2).Print());
+            Assert.AreEqual("(a,b)", "abcd".ExceptIndicies(2, 3).Print());
         }
 
         [Test]
@@ -163,7 +171,7 @@
             idx.Add('b', null);
             idx.Add('c', null);
 
-            "abc".Chars().For((i, c) => idx[c] = i);
+            "abc".For((i, c) => idx[c] = i);
             Assert.AreEqual("([a,0],[b,1],[c,2])", idx.Print());
         }
 
@@ -187,6 +195,17 @@
         }
 
         [Test]
+        public void SingleOr()
+        {
+            var list = 1.List();
+            Assert.AreEqual(1, list.SingleOr(42));
+            list = new int[]{};
+            Assert.AreEqual(42, list.SingleOr(42));
+            list = 1.And(2);
+            Assert.Throws<InvalidOperationException>(() => list.SingleOr(42));
+        }
+
+        [Test]
         public void FirstOr()
         {
             var list = new string[] { "a", "b" };
@@ -197,6 +216,14 @@
             list = new string[] { "aa", "b", "a", "bb" };
             Assert.AreEqual("b", list.FirstOr(s => s.StartsWith("b"), "z"));
             Assert.AreEqual("z", list.FirstOr(s => s.StartsWith("c"), "z"));
+        }
+
+        [Test]
+        public void ElementOr()
+        {
+            var list = new int[] { 1, 2, 3 };
+            Assert.AreEqual(3, list.ElementOr(2, 42));
+            Assert.AreEqual(42, list.ElementOr(3, 42));
         }
 
         [Test]
@@ -492,6 +519,30 @@
             Assert.IsTrue(1.In(1, 2, 3));
             Assert.IsTrue(3.In(1, 2, 3));
             Assert.IsFalse(4.In(1, 2, 3));
+        }
+
+        [Test]
+        public void Distinct()
+        {
+            var objs = new { A = 1, B = 2 }
+                .And(new { A = 1, B = 42 });
+
+            Assert.AreEqual("(2,42)", objs.Distinct(o => o.B).Print());
+            Assert.AreEqual("(1)", objs.Distinct(o => o.A).Print());
+
+        }
+
+        [TestCase("(a,b,|,d,e)", Result="(|,d,e)")]
+        [TestCase("(a,b,|)", Result = "(|)")]
+        [TestCase("(|,d,e)", Result = "(|,d,e)")]
+        [TestCase("(|)", Result = "(|)")]
+        [TestCase("()", Result = "()")]
+        [TestCase("(a)", Result = "()")]
+        [TestCase("(a,b)", Result = "()")]
+        public string SkipUntil(string inputStr)
+        {
+            var input = Read.List(inputStr);
+            return input.SkipUntil(s => s == "|").Print();
         }
     }
 }

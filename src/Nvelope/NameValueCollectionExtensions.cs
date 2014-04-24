@@ -44,8 +44,8 @@ namespace Nvelope
             {
                 if (item.Length != 0)
                 {
-                    string[] itemdata = item.SplitPair(keyValueSeparator);
-                    res.Add(itemdata.First(), itemdata.Last());
+                    string[] itemdata = item.Split(keyValueSeparator);
+                    res.Add(itemdata.First(), itemdata.Second());
                 }
             }
 

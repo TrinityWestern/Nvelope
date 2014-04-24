@@ -2,18 +2,51 @@
 using System.Collections.Generic;
 using System.Linq;
 using Nvelope.Reflection;
+using System.Collections;
 
 namespace Nvelope
 {
     public static class DictionaryExtensions
     {
         /// <summary>
+        /// Converts to a user-friendly representation
+        /// </summary>
+        public static string PrintDict(this IDictionary dict)
+        {
+            if (dict == null)
+                return "";
+
+            IEnumerable<DictionaryEntry> orderedDict = dict.ToIEnumerableDictEntry().ToList();
+            if (orderedDict.Any())
+            {
+                // We'll assume that if the first key is IComparable, all the other ones
+                // will be as well. Of course, if our keys are some supertype, there's no assurance
+                var asIComp = orderedDict.First().Key as IComparable;
+                if (asIComp != null) // If we can't convert to IComparable, we can't sort
+                    orderedDict = orderedDict.OrderBy(kv => kv.Key as IComparable);
+            }
+
+            return orderedDict.Select(kv => "[" + kv.Key.Print() + "," + kv.Value.Print() + "]").Print();
+        }
+
+        /// <summary>
+        /// Converts any IDictionary to a list of DictionaryEntry
+        /// </summary>
+        /// <param name="dict"></param>
+        /// <returns></returns>
+        public static IEnumerable<DictionaryEntry> ToIEnumerableDictEntry(this IDictionary dict)
+        {
+            foreach (var kv in dict)
+                yield return (DictionaryEntry)kv;
+        }
+
+        /// <summary>
         /// Combines two dictionaries - if both dictionaries define the same key, second one wins
         /// </summary>
         public static Dictionary<TKey, TValue> Union<TKey, TValue>(this Dictionary<TKey, TValue> dict, Dictionary<TKey, TValue> other)
         {
             if (other.Count == 0)
-                return dict;
+                return dict.Copy();
 
             Dictionary<TKey, TValue> res = new Dictionary<TKey, TValue>(dict);
             foreach (TKey key in other.Keys)
@@ -110,7 +143,7 @@ namespace Nvelope
         /// <returns></returns>
         public static bool IsSameAs<TKey, TValue>(this IDictionary<TKey, TValue> dict, IDictionary<TKey, TValue> other)
         {
-            return IsSameAs(dict, other, dict.Keys);
+            return IsSameAs(dict, other, dict.Keys, null);
         }
 
         /// <summary>
@@ -156,7 +189,8 @@ namespace Nvelope
         /// <param name="other"></param>
         /// <param name="comparisonKeys"></param>
         /// <returns></returns>
-        public static bool IsSameAs<TKey, TValue>(this IDictionary<TKey, TValue> dict, IDictionary<TKey, TValue> other, IEnumerable<TKey> comparisonKeys)
+        public static bool IsSameAs<TKey, TValue>(this IDictionary<TKey, TValue> dict, IDictionary<TKey, TValue> other, 
+            IEnumerable<TKey> comparisonKeys, Func<TValue,TValue,bool> comparer = null)
         {
             var myKeys = dict.Keys.Where(k => comparisonKeys.Contains(k));
             var otherKeys = other.Keys.Where(k => comparisonKeys.Contains(k));
@@ -170,11 +204,16 @@ namespace Nvelope
                     return false;
                 else if (!myKeys.Contains(key))
                     return false;
+                else if (comparer != null)
+                {
+                    if(!comparer(dict[key], other[key]))
+                        return false;
+                }
                 else if (dict[key] == null && other[key] != null)
                     return false;
                 else if (dict[key] != null && other[key] == null)
                     return false;
-                else if (!dict[key].Eq(other[key]))
+                else if(dict[key].Neq(other[key]))
                     return false;
 
             return true;
@@ -189,9 +228,9 @@ namespace Nvelope
         /// <param name="other"></param>
         /// <param name="comparisonKeys"></param>
         /// <returns></returns>
-        public static bool IsSameAs<TKey, TValue>(this IDictionary<TKey, TValue> dict, IDictionary<TKey, TValue> other, params string[] comparisonKeys)
+        public static bool IsSameAs<TKey, TValue>(this IDictionary<TKey, TValue> dict, IDictionary<TKey, TValue> other, params TKey[] comparisonKeys)
         {
-            return IsSameAs(dict, other, comparisonKeys as IEnumerable<TKey>);
+            return IsSameAs(dict, other, comparisonKeys as IEnumerable<TKey>, null);
         }
 
 
@@ -446,6 +485,23 @@ namespace Nvelope
             this Dictionary<TKey, TValue>.KeyCollection keys)
         {
             return new HashSet<TKey>(keys);
+        }
+
+        /// <summary>
+        /// Calls selector with each key-value pair to produce the resulting list
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <typeparam name="TRes"></typeparam>
+        /// <param name="dict"></param>
+        /// <param name="selector"></param>
+        /// <returns></returns>
+        public static List<TRes> ToList<TKey, TValue, TRes>(this Dictionary<TKey, TValue> dict, Func<TKey, TValue, TRes> selector)
+        {
+            var res = new List<TRes>();
+            foreach (var kv in dict)
+                res.Add(selector(kv.Key, kv.Value));
+            return res;
         }
     }
 }

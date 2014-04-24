@@ -132,7 +132,7 @@ namespace Nvelope.Tests
             // and the date of the month when the date is in the current year. During the first few weeks of January this
             // date will be in the previous year and be printed out differently
             d = DateTime.Now.AddDays(-20);
-            if(d.Year == DateTime.Now.Year)
+            if (d.Year == DateTime.Now.Year)
                 Assert.AreEqual(d.ToString("m"), d.ToFriendlyDate());
         }
 
@@ -207,7 +207,7 @@ namespace Nvelope.Tests
             DateTime d = DateTime.Now;
             var time = d.TimeOfDay;
             var militaryHours = d.ToString("HH");
-            if(militaryHours[0] == '0')
+            if (militaryHours[0] == '0')
             {
                 militaryHours = militaryHours.Substring(1) + " Hrs";
             }

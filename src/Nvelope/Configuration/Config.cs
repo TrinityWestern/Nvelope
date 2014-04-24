@@ -7,10 +7,6 @@ namespace Nvelope.Configuration
 {
     public static class Config
     {
-        // TODO: Remove this
-        // In order to do so, you need to add a DeploymentLocation environment variable to production
-        private const string PRODUCTION_MACHINE_CONFIG_SETTING_NAME = "IsTwuProduction";
-
         public const string DeploymentEnvironmentVariable = "DeploymentLocation";
 
         public static bool HasSetting(string name)
@@ -36,13 +32,6 @@ namespace Nvelope.Configuration
             // Check the machine.config for the setting
             // that indicates whether this machine is a production machine
 
-            // TODO: Deprecated. This setting is set to true on the machine.config on the production machines
-            // Instead, we should just use the DEPLOYMENT_ENV_VAR environment variable to set it instead
-            var isProduction = ConfigurationManager.AppSettings[PRODUCTION_MACHINE_CONFIG_SETTING_NAME].ConvertTo<bool?>() ?? false;                
-
-            if (isProduction)
-                return DeploymentLocation.Live;
-
             var loc = Environment.GetEnvironmentVariable(DeploymentEnvironmentVariable);
             if (loc.CanConvertTo<DeploymentLocation>())
                 return loc.ConvertTo<DeploymentLocation>();
@@ -66,8 +55,23 @@ namespace Nvelope.Configuration
                 .FirstOr(defaultValue);
 
             if (throwIfMissing && res == null)
-                throw new ConfigurationException("The setting '" + name + "' was not found in the config file!");
+                throw new ConfigurationErrorsException("The setting '" + name + "' was not found in the config file!");
 
+            return res;
+        }
+
+        public static IEnumerable<string> ConnectionStrings()
+        {
+            var allConnStrs = new List<string>();
+            foreach (ConnectionStringSettings cs in ConfigurationManager.ConnectionStrings)
+                allConnStrs.Add(cs.Name);
+
+            // Filter out anything that is just another version of the same connection string
+            // ie, if we've got sync-live, sync-dev, sync-cassini, we only want to return sync
+            // These are all the versions we want to dump
+            var locationized = allConnStrs.SelectMany(cs => GetLocationizedNames(cs).Except(cs));
+
+            var res = allConnStrs.Except(locationized);
             return res;
         }
 
@@ -107,6 +111,21 @@ namespace Nvelope.Configuration
                 yield return name + "-dev";
             }
             yield return name;
+        }
+
+        /// <summary>
+        /// Get a list of the possible names that the setting could have in the config file, regardless
+        /// of the deployment location
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        private static IEnumerable<string> GetLocationizedNames(string name)
+        {
+            var locs = Enum.GetNames(typeof(DeploymentLocation)).Select(l => l.ConvertTo<DeploymentLocation>());
+            var allVals = locs.SelectMany(l => GetLocationizedNames(l, name));
+            var res = allVals.Distinct();
+
+            return res;
         }
     }
 }

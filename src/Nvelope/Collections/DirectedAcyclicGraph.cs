@@ -97,7 +97,6 @@ namespace Nvelope.Collections
         /// <summary>
         /// Checks to see if a decendent has the following value
         /// </summary>
-        [Obsolete("I'm not sure this is a good thing to use, just do the select yourself")]
         public bool Contains(T value)
         {
             return this.Traverse().Select(n => n.Value).Contains(value);

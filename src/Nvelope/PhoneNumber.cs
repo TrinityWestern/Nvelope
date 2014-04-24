@@ -31,6 +31,12 @@ namespace Nvelope
             Area = match.Groups["area"].Value;
             Local = match.Groups["local"].Value;
             Extension = match.Groups["extension"].Value;
+
+            if (Area.IsNullOrEmpty() && !Country.IsNullOrEmpty())
+            {
+                Area = Country;
+                Country = "";
+            }
         }
 
         /// <summary>
@@ -77,19 +83,29 @@ namespace Nvelope
         /// <returns>string of integers formated like a phone number</returns>
         public static string FormatPhoneNumber(string str)
         {
-            var strn = StringExtensions.RetrieveIntFromAString(str);
-            int len = strn.Length;
+            // Bit of a hack - remove any non-numeric characters
+            str = Regex.Replace(str, "[^0-9]", "");
+            int len = str.Length;
             if (len == 11)
             {
-                return Convert.ToInt64(strn).ToString("#-###-###-####");
+                return String.Format("{0}-{1}-{2}-{3}", 
+                    str.Substring(0, 1), 
+                    str.Substring(1, 3), 
+                    str.Substring(4, 3), 
+                    str.Substring(7, 4));
             }
             if (len == 10)
             {
-                return Convert.ToInt64(strn).ToString("###-###-####");
+                return String.Format("{0}-{1}-{2}",
+                    str.Substring(0, 3),
+                    str.Substring(3, 3),
+                    str.Substring(6, 4));
             }
             if (len == 7)
             {
-                return Convert.ToInt64(strn).ToString("###-####");
+                return String.Format("{0}-{1}",
+                    str.Substring(0, 3),
+                    str.Substring(3, 4));
             }
             else
                 return str;

@@ -21,8 +21,11 @@ namespace Nvelope.Reading
         /// <returns></returns>
         public static Dictionary<TKey, TValue> Dict<TKey, TValue>(string printedDict)
         {
+            if (printedDict == null)
+                return new Dictionary<TKey, TValue>();
+
             var str = printedDict.ChopStart("(").ChopEnd(")");
-            var pairs = str.Tokenize("^\\s*,?\\s*\\[([^\\]]*)\\]\\s*");
+            var pairs = str.Tokenize("^\\s*,?\\s*\\[(((?<BR>\\[)|(?<-BR>\\])|[^\\]\\[])+)\\]\\s*");
             var parsedPairs = pairs.Select(s => splitKeyValue(s));
 
             return parsedPairs.ToDictionary(t => t.Item1.ConvertTo<TKey>(), t => t.Item2.ConvertTo<TValue>());
@@ -37,6 +40,13 @@ namespace Nvelope.Reading
                 return Tuple.Create(parts.First(), parts.Rest().Join(","));
         }
 
+        public static Dictionary<string, object> ConvertDict(string printedDict)
+        {
+            var strDict = Dict(printedDict);
+            var res = strDict.SelectVals(v => v.ConvertTo(TypeConversion.GuessType(v)));
+            return res;
+        }
+
         public static List<string> List(string printedList)
         {
             return List<string>(printedList);
@@ -44,6 +54,9 @@ namespace Nvelope.Reading
 
         public static List<T> List<T>(string printedList)
         {
+            if (printedList == null)
+                return new List<T>();
+
             var parts = printedList.ChopStart("(").ChopEnd(")")
                 .Split(new char[]{','}, StringSplitOptions.RemoveEmptyEntries);
 

@@ -57,6 +57,18 @@ namespace Nvelope.Tests
             Assert.AreEqual("604", number.Area);
             Assert.AreEqual("7627111", number.Local);
         }
+        
+        [Test]
+        public void BrokenNumberToFix()
+        {
+            // a number I found in our data
+            // TOOD: this is currently broken
+            var number = new PhoneNumber("604 783 8072");
+            Assert.AreEqual("", number.Country);
+            Assert.AreEqual("604", number.Area);
+            Assert.AreEqual("783 8072", number.Local);
+        }
+
 
         [Test]
         public void InvalidNumbers()
@@ -125,6 +137,7 @@ namespace Nvelope.Tests
             number = "778 994 9199";
             Assert.AreEqual("778-994-9199", PhoneNumber.FormatPhoneNumber(number));
 
+            // Bit of a hack - should we really support this?
             number = "778adsas994 dadad9199";
             Assert.AreEqual("778-994-9199", PhoneNumber.FormatPhoneNumber(number));
         }

@@ -6,6 +6,8 @@ using Nvelope.Exceptions;
 
 namespace Nvelope.Reflection
 {
+    // TODO: Rename a bunch of these methods to make them CLS compliant.
+    [CLSCompliant(false)]
     public static class ReflectionExtensions
     {
         /// <summary>
@@ -16,11 +18,16 @@ namespace Nvelope.Reflection
         /// <returns></returns>
         public static Type GetNonGenericType(this Type type)
         {
-            if (type.IsGenericType && type.GetGenericTypeDefinition().Name == "Nullable`1")
+            if (type.IsNullable())
                 // try to convert to the underlying base type instead
                 type = type.GetGenericArguments()[0];
 
             return type;
+        }
+
+        public static bool IsNullable(this Type type)
+        {
+            return type.IsGenericType && type.GetGenericTypeDefinition().Name == "Nullable`1";
         }
 
 
@@ -44,21 +51,27 @@ namespace Nvelope.Reflection
 
             Type type = source.GetType();
             var members = type.GetMember(fieldName, bindingFlags);
-            if (members.Count() == 0) {
+            if (members.Count() == 0)
+            {
                 throw new FieldNotFoundException("Missing field '" + fieldName + "'");
             }
-            if (members.Count() > 1) {
+            if (members.Count() > 1)
+            {
                 // TODO: test this
                 throw new Exception("Too many members found. Don't know what this means");
             }
             var member = members[0];
             var property = member as PropertyInfo;
-            if (property != null) {
+            if (property != null)
+            {
                 if (property.GetIndexParameters().Count() != 0)
                     throw new ArgumentException("Can't handle parameters with indexies");
-                try {
+                try
+                {
                     return property.GetValue(source, null);
-                } catch (TargetInvocationException) {
+                }
+                catch (TargetInvocationException)
+                {
                     // TODO: I don't think catching this exception
                     // is something I should be doing, but I'm just doing
                     // it because of invalid objects in the
@@ -69,9 +82,12 @@ namespace Nvelope.Reflection
             var field = member as FieldInfo;
             if (field != null)
             {
-                try {
+                try
+                {
                     return field.GetValue(source);
-                } catch (TargetInvocationException) {
+                }
+                catch (TargetInvocationException)
+                {
                     return null;
                 }
             }
@@ -129,10 +145,14 @@ namespace Nvelope.Reflection
         public static IEnumerable<MemberInfo> RemoveReadOnly(
             this IEnumerable<MemberInfo> members)
         {
-            foreach (var member in members) {
-                if (member is FieldInfo) {
+            foreach (var member in members)
+            {
+                if (member is FieldInfo)
+                {
                     yield return member;
-                } else if (member is PropertyInfo) {
+                }
+                else if (member is PropertyInfo)
+                {
                     if (((PropertyInfo)member).CanWrite)
                         yield return member;
                 }
@@ -155,7 +175,8 @@ namespace Nvelope.Reflection
             this IEnumerable<MemberInfo> members)
         {
             var dict = new Dictionary<string, Type>();
-            foreach (var member in members) {
+            foreach (var member in members)
+            {
                 if (member.Fieldlike())
                 {
                     dict.Add(member.Name, member.ReturnType());
@@ -253,7 +274,8 @@ namespace Nvelope.Reflection
 
             var members = source._GetMembers(include).Where(m => m.Fieldlike());
 
-            if (attributeType != null) {
+            if (attributeType != null)
+            {
                 var mi = typeof(ReflectionExtensions).GetMethod("FilterAttributeType");
                 var filterRef = mi.MakeGenericMethod(attributeType);
                 var args = new object[] { includeInheritedAttributes };
@@ -288,16 +310,38 @@ namespace Nvelope.Reflection
         }
 
         /// <summary>
+        /// These are the properties that exist on Dictionary - when we're doing certain things
+        /// we like to be able to ignore these
+        /// </summary>
+        private static IEnumerable<string> _dictionaryProperties = new Dictionary<string, object>()._GetMembers().Names().ToSet();
+
+        /// <summary>
         /// Get the names of the fields of the object, or the keys if it's a dictionary
         /// </summary>
+        /// <remarks>If the class derives from Dictionary, any properties that are not in Dictionary base class will also be included</remarks>
         /// <param name="source"></param>
         /// <returns></returns>
         public static IEnumerable<string> _Fields(this object source)
         {
-            if (source is Dictionary<string, object>)
-                return (source as Dictionary<string, object>).Keys;
+            var members = source._GetMembers().Names();
 
-            return source._GetMembers().Names();
+            // If it's a dictionary, include the keys, and only include the properties
+            // that don't come from Dictionary base class
+            if (source is Dictionary<string, object>)
+                return (source as Dictionary<string,object>).Keys
+                    .Union(members.Except(_dictionaryProperties)).ToList();
+
+            return members;
+        }
+
+        /// <summary>
+        /// Shortcut method to access the structure of objects
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static Dictionary<string, Type> _FieldTypes(this object source)
+        {
+            return source._GetMembers().FieldDeclarations();
         }
 
         public static T _ToObject<T>(this Dictionary<string, object> dict, ObjectReader reader = null)
@@ -319,13 +363,16 @@ namespace Nvelope.Reflection
 
             var property = type.GetProperty(fieldName);
 
-            if (property != null) {
+            if (property != null)
+            {
                 if (value.CanConvertTo(property.PropertyType))
                     property.SetValue(source, value.ConvertTo(property.PropertyType), null);
                 else
                     throw new ConversionException("Error setting property '" + fieldName + "' - cannot convert to type '" + property.PropertyType.Name + "' from value '"
                         + (value == null ? "<null>" : value.ToString()) + "'");
-            } else { // Try a field
+            }
+            else
+            { // Try a field
                 var field = type.GetField(fieldName);
                 if (field != null)
                     if (value.CanConvertTo(field.FieldType))
@@ -335,7 +382,8 @@ namespace Nvelope.Reflection
                         (value == null ? "<null>" : value.ToString()) + "'");
 
 
-                else {
+                else
+                {
                     throw new FieldNotFoundException(
                         "Missing field '" + fieldName + "' in " + source.Print());
                 }
@@ -385,7 +433,9 @@ namespace Nvelope.Reflection
             if (dataDict != null)
             {
                 dataDict = dataDict.WhereKeys(f => fields.Contains(f));
-            } else {
+            }
+            else
+            {
                 dataDict = data._AsDictionary();
             }
 
@@ -427,7 +477,8 @@ namespace Nvelope.Reflection
             // Filter down to just the fields we were told to include
             if (caseSensitive)
                 data = data.WhereKeys(k => fields.Contains(k));
-            else {
+            else
+            {
                 // Use a lower-case comparison
                 fields = fields.Select(s => f(s));
                 data = data.WhereKeys(k => fields.Contains(f(k)));
@@ -452,6 +503,15 @@ namespace Nvelope.Reflection
             foreach (var field in dataFields.Keys.Intersect(sourceFields.Keys))
                 source._Set(sourceFields[field], data[dataFields[field]]);
 
+            // Special case - if the object we're setting derives from Dictionary<string, object>,
+            // we'll add any extra keys that aren't properties on source
+            if (source is Dictionary<string, object>)
+            {
+                var dict = source as Dictionary<string, object>;
+                foreach (var field in dataFields.Keys.Except(sourceFields.Keys))
+                    dict[field] = data[dataFields[field]];
+            }
+
             return source;
         }
 
@@ -463,7 +523,7 @@ namespace Nvelope.Reflection
             IEnumerable<string> fieldNames = null)
         {
             if (fieldNames == null) fieldNames = source._GetMembers().Names();
-            return source._AsDictionary(true).IsSameAs(other._AsDictionary(true), fieldNames);
+            return source._AsDictionary(true).IsSameAs(other._AsDictionary(true), fieldNames, null);
         }
 
         /// <summary>
@@ -518,6 +578,53 @@ namespace Nvelope.Reflection
         {
             var func = source as Func<object>;
             return func == null ? source : func();
+        }
+
+        /// <summary>
+        /// Returns the type of the object. If it is already a Type, returns itself
+        /// </summary>
+        /// <param name="o"></param>
+        /// <returns></returns>
+        public static Type _AsType(this object o)
+        {
+            if (o is Type)
+                return o as Type;
+            return o.GetType();
+        }
+
+        /// <summary>
+        /// Returns true if type implements the interface
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="interfaceType"></param>
+        /// <returns></returns>
+        public static bool Implements(this Type type, Type interfaceType)
+        {
+            // Because this is a potentially expensive operation, to be called
+            // potentially many times with a small number of possible parameters,
+            // this is an excellent candidate for caching. We use a memoized pointer
+            // to the underlying function to drastically improve performance, at the
+            // cost of some memory usage
+            return _implements(type, interfaceType);
+        }
+
+        private static Func<Type, Type, bool> _implements = 
+            new Func<Type, Type, bool>(_s_implements).Memoize();
+
+        private static bool _s_implements(Type type, Type interfaceType)
+        {
+            return type.GetInterfaces().Contains(interfaceType);
+        }
+
+        /// <summary>
+        /// Returns true if type implements the interface
+        /// </summary>
+        /// <typeparam name="TInterface"></typeparam>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static bool Implements<TInterface>(this Type type)
+        {
+            return Implements(type, typeof(TInterface));
         }
     }
 }

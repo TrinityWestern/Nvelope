@@ -171,6 +171,8 @@ namespace Nvelope.Tests
         [Test]
         public void Cache()
         {
+            // TODO: This test relies on thread timing, and might fail randomly. Find a better way to write this
+
             // The function just returns the current time
             Func<int, DateTime> f = i => DateTime.Now;
 
@@ -256,6 +258,16 @@ namespace Nvelope.Tests
 
             var time = fn.Benchmark(data.Repeat(50));
             Assert.AreNotEqual(int.MinValue, time);
+        }
+
+        [Test]
+        public void HasBeenCalledNTimesIn()
+        {
+            var fn = FunctionExtensions.HasBeenCalledNTimesIn(3, TimeSpan.FromDays(100));
+            Assert.False(fn());
+            Assert.False(fn());
+            Assert.False(fn());
+            Assert.True(fn());
         }
 
     }

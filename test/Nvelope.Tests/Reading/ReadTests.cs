@@ -63,5 +63,48 @@ namespace Nvelope.Tests.Reading
                 [ccc,3]");
             Assert.AreEqual("([a,1],[bb,2],[ccc,3])", res.Print());
         }
+
+        [Test]
+        public void NestedDicts()
+        {
+            var res = Read.Dict("([A,1],[B,([Id,1])])");
+            Assert.AreEqual("1", res["A"]);
+            Assert.AreEqual("([Id,1])", res["B"]);
+            
+            res = Read.Dict("([A,1],[B,([Id,1])],[C,3])");
+            Assert.AreEqual("1", res["A"]);
+            Assert.AreEqual("([Id,1])", res["B"]);
+            Assert.AreEqual("3", res["C"]);
+
+            res = Read.Dict("([A,1],[B,([Id,1],[Name,test])],[C,3])");
+            Assert.AreEqual("1", res["A"]);
+            Assert.AreEqual("([Id,1],[Name,test])", res["B"]);
+            Assert.AreEqual("3", res["C"]);
+        }
+
+        [Test]
+        public void DoesntBreakOnBadNestedDicts()
+        {
+            var res = Read.Dict("([A,1],[B,([Id,1])");
+            Assert.AreEqual("1", res["A"]);
+            Assert.AreEqual("([Id,1", res["B"]);
+        }
+
+        [Test]
+        public void ConvertDict()
+        {
+            var res = Read.ConvertDict("([A,1],[B,false],[C,asdf])");
+            Assert.AreEqual(1, res["A"]);
+            Assert.AreEqual(false, res["B"]);
+            Assert.AreEqual("asdf", res["C"]);
+        }
+
+        [Test]
+        public void ConvertDictWorksOnNull()
+        {
+            var res = Read.ConvertDict("([A,NULL])");
+            Assert.AreEqual(null, res["A"]);
+        }
+
     }
 }

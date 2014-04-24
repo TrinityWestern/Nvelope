@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
@@ -42,6 +43,15 @@ namespace Nvelope.Tests.Reflection
             var fields = allmembers.FieldDeclarations();
             Assert.AreEqual("([Paint,System.Drawing.Color],[Rooms,System.String[]],[Size,System.Int32],[Spam,System.String])",
                 fields.Print());
+        }
+
+        [Test]
+        public void FieldTypes()
+        {
+            var dh = new DollHouse();
+            var ft = dh._FieldTypes();
+            Assert.AreEqual("([Paint,System.Drawing.Color],[Rooms,System.String[]],[Size,System.Int32],[Spam,System.String])",
+                ft.Print());
         }
 
         [Test]
@@ -177,6 +187,22 @@ namespace Nvelope.Tests.Reflection
 
             var diff = a._Diff(b);
             Assert.AreEqual("([A,(1, )],[B,(, 2)])", diff.Print());
+        }
+
+        [Test]
+        public void _AsType()
+        {
+            object o = typeof(int);
+            Assert.AreEqual(typeof(int), o._AsType());
+            o = 1;
+            Assert.AreEqual(typeof(int), o._AsType());
+        }
+
+        [Test]
+        public void Implements()
+        {
+            Assert.True(typeof(Dictionary<string, object>).Implements<IDictionary>());
+            Assert.False(typeof(int).Implements<IDictionary>());
         }
     }
 

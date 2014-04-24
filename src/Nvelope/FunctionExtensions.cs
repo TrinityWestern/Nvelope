@@ -1,11 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Nvelope.Collections;
 
 namespace Nvelope
 {
     public static class FunctionExtensions
     {
+        /// <summary>
+        /// Return a new function that will cache the results of the function, so subsequent invocations don't
+        /// have to re-execute the original function
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="func"></param>
+        /// <returns></returns>
+        public static Func<TResult> Memoize<TResult>(this Func<TResult> func)
+        {
+            bool hasVal = false;
+            TResult val = default(TResult);
+            return () =>
+                {
+                    if (!hasVal)
+                    {
+                        val = func();
+                        hasVal = true;
+                    }
+                    return val;
+                };
+        }
+
         /// <summary>
         /// Return a new function that will cache the results of each call, so subsequent invocations don't
         /// have to re-execute the original function
@@ -18,6 +41,28 @@ namespace Nvelope
                     if (!results.ContainsKey(t))
                         results.Add(t, func(t));
                     return results[t];
+                };
+        }
+
+        /// <summary>
+        /// Return a new function that will cache the results of each call, so subsequent invocations don't
+        /// have to re-execute the original function
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="U"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="func"></param>
+        /// <returns></returns>
+        public static Func<T, U, TResult> Memoize<T, U, TResult>(this Func<T, U, TResult> func)
+        {
+            Dictionary<T, Dictionary<U, TResult>> results = new Dictionary<T, Dictionary<U, TResult>>();
+            return (t, u) =>
+                {
+                    if (!results.ContainsKey(t))
+                        results.Add(t, new Dictionary<U, TResult>());
+                    if (!results[t].ContainsKey(u))
+                        results[t].Add(u, func(t, u));
+                    return results[t][u];
                 };
         }
 
@@ -54,25 +99,58 @@ namespace Nvelope
         /// out of the cache</param>
         public static Func<T, TResult> Memoize<T, TResult>(this Func<T, TResult> func, TimeSpan duration)
         {
-            Dictionary<T, DateTime> firstRan = new Dictionary<T, DateTime>();
-            return func.Memoize(t =>
+            return func.Memoize(HasBeenCalledIn<T>(duration));
+        }
+
+        /// <summary>
+        /// Used by Memoize to implement TimeSpan caching. Returns a function that returns true if it was
+        /// called with a given value since duration ago
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="duration"></param>
+        /// <returns></returns>
+        public static Func<T, bool> HasBeenCalledIn<T>(TimeSpan duration)
+        {
+            Dictionary<T,DateTime> cacheDte = new Dictionary<T,DateTime>();
+            return t =>
                 {
-                    if (!firstRan.ContainsKey(t))
-                    {
-                        firstRan.Add(t, DateTime.Now);
-                        return true; // doesnt' really matter what we return, since
-                        // Memoize isn't going to have it in the cache anyways
-                    }
-                    else
-                    {
-                        if (firstRan[t].Add(duration) < DateTime.Now) // cache expired
-                        {
-                            firstRan[t] = DateTime.Now;
-                            return false;
-                        }
-                        return true; // cache not expired
-                    }
-                });
+                    // Get either the last time we loaded the cache for the supplied value, or DateTime.MinValue
+                    var curVal = cacheDte.Val(t, DateTime.MinValue);
+                    // See if the cache has expired.
+                    // Note: if the duration is set to some very long value (greater than DateTime.Now.Minus(DateTime.MinValue)
+                    // then this function will falsely return true (indicating that the cached value should be used) even
+                    // if the cache doesn't contain this value yet. However, this shouldn't be a problem, because Memoize will
+                    // check it's own cache internally, recognize that it doesn't have the value, and run the underlying func anyways
+                    var isValid = curVal.Add(duration) > DateTime.Now;
+                    // If we haven't previously cached the value, or the value has expired,
+                    // Set the new cache time to Now, because we'll tell Memoize to rerun the
+                    // function and store Now as the last time we loaded the cache
+                    if (!isValid)
+                        cacheDte.Ensure(t, DateTime.Now);
+
+                    return isValid;
+                };
+        }
+
+        /// <summary>
+        /// Returns a function that returns true if the function has been called n times in the last duration
+        /// </summary>
+        /// <param name="n"></param>
+        /// <param name="duration"></param>
+        /// <returns></returns>
+        public static Func<bool> HasBeenCalledNTimesIn(int n, TimeSpan duration)
+        {
+            var queue = new FixedSizeQueue<DateTime>(n);
+            return () =>
+                {
+                    var now = DateTime.Now;
+                    var before = now.Subtract(duration);
+                    if (queue.Count == n && queue.All(dt => dt > before))
+                        return true;
+
+                    queue.Enqueue(now);
+                    return false;
+                };
         }
 
         /// <summary>

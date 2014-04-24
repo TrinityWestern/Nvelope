@@ -158,7 +158,7 @@ namespace Nvelope
             return Math.Abs(number - other) < precision;
         }
 
-        public static string Print(this decimal o)
+        public static string PrintDecimal(this decimal o)
         {
             // Decimals don't do ToString in a reasonable way
             // It's really irritating

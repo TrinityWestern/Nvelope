@@ -101,6 +101,7 @@ namespace Nvelope
         public static DateTime? ToDateTimeNullable(this string source)
         {
             DateTime res = DateTime.MinValue;
+
             if (DateTime.TryParse(
                 source,
                 CultureInfo.CurrentCulture,
@@ -118,13 +119,17 @@ namespace Nvelope
                 // otherwise, default to dd/mm/yyyy
                 var a = match.Groups[1].Value.ConvertTo<int>();
                 var b = match.Groups[2].Value.ConvertTo<int>();
-                if (b > 12) {
-                    day = b;
-                    month = a;
-                } else {
+                if (a > 12)
+                {
                     day = a;
                     month = b;
                 }
+                else
+                {
+                    day = b;
+                    month = a;
+                }
+
                 // Group 3 is year
                 year = match.Groups[3].Value.ConvertTo<int>();
                 if (year < 100)
@@ -238,13 +243,36 @@ namespace Nvelope
         /// </summary>
         /// <remarks>Throws an exception if the string isn't well-formed. If you're unsure, use
         /// IsXml to check</remarks>
-        [Obsolete("This method assumes that xmlString isn't actually valid XML, but doesn't properly escape it")]
         public static XmlDocument ToXml(this string xmlString)
         {
+            // TODO: This method assumes that xmlString isn't actually valid XML, but doesn't properly escape it
+
             var doc = new XmlDocument();
             // Only replace & - if there's anything else malformed in the string, we're screwed
             doc.LoadXml(xmlString.ChopStart(Environment.NewLine).Replace("&", "&amp;"));
             return doc;
+        }
+
+        public static object TryEnum(Type type, object source)
+        {
+            if (!type.IsEnum)
+                return null;
+
+            object res;
+            if (Enum.GetUnderlyingType(type) == typeof(int) && source.CanConvertTo<int>())
+                res = Enum.ToObject(type, source.ConvertTo<int>());
+            else
+                if (type == typeof(Month))
+                    return source.ToStringN().ToMonth();
+                else
+                    res = Enum.Parse(type, source.ToStringN());
+
+            if (Enum.IsDefined(type, res))
+                return res;
+            else
+                throw new ConversionException("Tried to convert '" + source.ToStringN() + "' to type '" + type.Name +
+                            "', but there was no value in " + type.Name + " matching that value.");
+            
         }
 
         /// <summary>
@@ -254,6 +282,9 @@ namespace Nvelope
         /// <exception cref="ConversionException">The conversion somehow failed.</exception>
         public static object ConvertTo(this object source, Type type)
         {
+            if (type == null && (source == null || (source as string) == "NULL"))
+                return null;
+
             Type sourceType = null;
 
             // Maybe it's already the correct type
@@ -271,11 +302,10 @@ namespace Nvelope
             if (type == typeof(object))
                 return source;
 
-
             var sourceString = source as string;
 
             // Handle nullable types
-            if (type.IsGenericType && type.GetGenericTypeDefinition().Name == "Nullable`1")
+            if (Reflection.ReflectionExtensions.IsNullable(type))
             {
                 // If we're trying to set to null, perfect!
                 if (source == null)
@@ -308,6 +338,10 @@ namespace Nvelope
                 else
                     return source.ToString().ToBoolFriendly();
             }
+
+            var enumRes = TryEnum(type, source);
+            if (enumRes != null)
+                return enumRes;
 
             if (sourceString != null)
             {
@@ -372,6 +406,10 @@ namespace Nvelope
             catch (OverflowException) { }
             catch (ArgumentNullException) { }
 
+            // If the type is assignable, we can just do a cast
+            if (type.IsAssignableFrom(sourceType))
+                return source;
+
             // Last ditch effort - look at the constructors for the class, and see if there's a 
             // constructor that takes our input type
             ConstructorInfo constructor = null;
@@ -404,7 +442,6 @@ namespace Nvelope
         /// <summary>
         /// Can we convert this value to some other type?
         /// </summary>
-        [Obsolete("Use the generic version instead")]
         public static bool CanConvertTo(this object source, Type type)
         {
             try {
@@ -456,6 +493,25 @@ namespace Nvelope
             {
             }
             return result;
+        }
+
+        /// <summary>
+        /// Like ConvertTo, but returns null on failure instead of throwing
+        /// an exception. Like the 'as' keyword.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static object ConvertAs(this object source, Type type)
+        {
+            try
+            {
+                return ConvertTo(source, type);
+            }
+            catch (ConversionException)
+            {
+                return null;
+            }
         }
 
         /// <summary>
