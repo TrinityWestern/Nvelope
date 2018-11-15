@@ -3,6 +3,12 @@ using System.Collections.Generic;
 
 namespace Nvelope.Combinatorics
 {
+    /// <summary>
+    /// Provides methods for working with mathematical combinations.
+    /// A combination is a way of selecting items from a collection,
+    /// such that (unlike permutations) the order of selection does
+    /// not matter.
+    /// </summary>
     public class Combination
     {
         // This class was adapted from one written and published by Dr. James McCaffrey on the following websites:
@@ -95,6 +101,11 @@ namespace Nvelope.Combinatorics
         private long k = 0;
         private long[] data;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Combination"/> class.
+        /// </summary>
+        /// <param name="n">The number of elements in the set as n.</param>
+        /// <param name="k">The number of distinct elements to select as k.</param>
         public Combination(long n, long k)
         {
             Validate(n, k);
@@ -110,9 +121,9 @@ namespace Nvelope.Combinatorics
         /// Creates a combination whose data values are set to input array a. Objects created using this constructor might have
         /// non-lexicographic data and fail IsValid(), so don't call Successor() method if that is the case.
         /// </summary>
-        /// <param name="n"></param>
-        /// <param name="k"></param>
-        /// <param name="a"></param>
+        /// <param name="n">The number of elements in the set as n.</param>
+        /// <param name="k">The number of distinct elements to select as k.</param>
+        /// <param name="a">An array of values to use as the set elements as a.</param>
         public Combination(long n, long k, long[] a) // Combination from a[]
         {
             this.n = n;
@@ -134,9 +145,10 @@ namespace Nvelope.Combinatorics
         /// New way: generate a random combination element number between 0 and Choose(n,k)-1 and return that element
         /// Combinations generated in this manner will be in lexicographic order.
         /// </summary>
-        /// <param name="n"></param>
-        /// <param name="k"></param>
-        /// <param name="rand"></param>
+        /// <param name="n">The number of elements in the set as n.</param>
+        /// <param name="k">The number of distinct elements to select as k.</param>
+        /// <param name="rand">A <see cref="System.Random" /> pseudo-random number generator as rand.</param>
+        /// <param name="oldWay">if set to <c>true</c> use the old way algorithm.</param>
         public Combination(long n, long k, Random rand, bool oldWay = false)
         {
             Validate(n, k);
@@ -167,8 +179,10 @@ namespace Nvelope.Combinatorics
 
         /// <summary>
         /// Copy constructor.
+        /// Initializes a new instance of the <see cref="Combination"/> class from an existing instance.
         /// </summary>
-        /// <param name="c"></param>
+        /// <param name="c">The combination to copy.</param>
+        /// <exception cref="System.Exception">Attempt to copy invalid Combination object</exception>
         public Combination(Combination c)
         {
             if (!c.IsValid())
@@ -179,6 +193,12 @@ namespace Nvelope.Combinatorics
             Array.Copy(c.data, this.data, c.data.Length);
         }
 
+        /// <summary>
+        /// Validate combination parameters.
+        /// </summary>
+        /// <param name="n">The n parameter.</param>
+        /// <param name="k">The k parameter.</param>
+        /// <exception cref="System.Exception">N and/or K is negative</exception>
         private void Validate(long n, long k)
         {
             if (!IsValid(n, k)) // normally n >= k
@@ -188,12 +208,22 @@ namespace Nvelope.Combinatorics
         /// <summary>
         /// Returns false if either n or k are negative, and true otherwise
         /// </summary>
-        /// <returns></returns>
+        /// <param name="n">The n parameter.</param>
+        /// <param name="k">The k parameter.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified n and k parameters are valid; otherwise, <c>false</c>.
+        /// </returns>
         private bool IsValid(long n, long k)
         {
             return (n < 0 || k < 0) ? false : true;
         }
 
+        /// <summary>
+        /// Returns true if the combination is valid.
+        /// </summary>
+        /// <returns>
+        ///   <c>true</c> if this instance is valid; otherwise, <c>false</c>.
+        /// </returns>
         public bool IsValid()
         {
             if (!IsValid(this.n, this.k))
@@ -215,11 +245,21 @@ namespace Nvelope.Combinatorics
             return true;
         } // IsValid()
 
+        /// <summary>
+        /// Gets the combination data.
+        /// </summary>
+        /// <returns></returns>
         public long[] GetData()
         {
             return data;
         }
 
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String" /> that represents this instance.
+        /// </returns>
         public override string ToString()
         {
             string s = String.Empty;
@@ -228,6 +268,11 @@ namespace Nvelope.Combinatorics
             return s;
         } // ToString()
 
+        /// <summary>
+        /// Use Successor to iterate over all possible combinations.
+        /// </summary>
+        /// <returns>The next combination in the sequence</returns>
+        /// <exception cref="System.Exception">Calling Successor() on invalid combination object</exception>
         public Combination Successor()
         {
             if (!this.IsValid())
@@ -261,6 +306,9 @@ namespace Nvelope.Combinatorics
         /// TODO: Change this random method to just pick one random combination element between 1 and Choose(n,k) and
         /// return that element (once we have a random function that works well for longs)
         /// </summary>
+        /// <param name="n">The number of elements in the set as n.</param>
+        /// <param name="k">The number of distinct elements to select as k.</param>
+        /// <param name="rand">A <see cref="System.Random" /> pseudo-random number generator as rand.</param>
         /// <returns></returns>
         private long[] Random(int n, int k, Random rand)
         {
@@ -286,13 +334,12 @@ namespace Nvelope.Combinatorics
 
             return ans;
         } // Random()
-        
+
         /// <summary>
         /// Returns a random Int64.
         /// </summary>
-        /// <param name="rnd"></param>
-        /// <param name="min"></param>
-        /// <param name="max"></param>
+        /// <param name="rnd">A <see cref="System.Random" /> pseudo-random number generator as rnd.</param>
+        /// <param name="positive">if set to <c>true</c> return only positive values.</param>
         /// <returns></returns>
         public static long RandomInt64(Random rnd, bool positive = false)
         {
@@ -306,12 +353,13 @@ namespace Nvelope.Combinatorics
         /// <summary>
         /// Converts oldValue in the old range to a new value in the new range, maintaining ratio
         /// </summary>
-        /// <param name="oldValue"></param>
-        /// <param name="oldMin"></param>
-        /// <param name="oldMax"></param>
-        /// <param name="newMin"></param>
-        /// <param name="newMax"></param>
+        /// <param name="oldValueL">The old value.</param>
+        /// <param name="oldMinL">The old minimum value.</param>
+        /// <param name="oldMaxL">The old maximum value.</param>
+        /// <param name="newMinL">The new minimum value.</param>
+        /// <param name="newMaxL">The new maximum value.</param>
         /// <returns></returns>
+        /// <exception cref="System.Exception">oldValue out of range when converting between ranges</exception>
         public static long ConvertBetweenRanges(long oldValueL, long oldMinL, long oldMaxL, long newMinL, long newMaxL)
         {
             // This method is based on the solution at http://stackoverflow.com/questions/929103/convert-a-number-range-to-another-range-maintaining-ratio
@@ -329,6 +377,13 @@ namespace Nvelope.Combinatorics
             return (long)Math.Round(d, 0);
         }
 
+        /// <summary>
+        /// Choose.
+        /// </summary>
+        /// <param name="n">The number of elements in the set as n.</param>
+        /// <param name="k">The number of distinct elements to select as k.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Exception">Invalid negative parameter in Choose()</exception>
         public static long Choose(long n, long k)
         {
             if (n < 0 || k < 0)
@@ -361,7 +416,14 @@ namespace Nvelope.Combinatorics
             return ans;
         } // Choose()
 
-        // return the mth lexicographic element of combination C(n,k)
+        /// <summary>
+        /// Return the mth lexicographic element of combination C(n,k)
+        /// </summary>
+        /// <param name="n">The number of elements in the set as n.</param>
+        /// <param name="k">The number of distinct elements to select as k.</param>
+        /// <param name="m">The index of the combination's lexicographic elements to select as m.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Exception">Bad value from array</exception>
         public static long[] Element(long n, long k, long m)
         {
             long[] ans = new long[k];
@@ -372,7 +434,7 @@ namespace Nvelope.Combinatorics
 
             for (long i = 0; i < k; ++i)
             {
-                ans[i] = LargestV(a, b, x); // largest value v, where v < a and vCb < x    
+                ans[i] = LargestV(a, b, x); // largest value v, where v < a and vCb < x
                 x = x - Choose(ans[i], b);
                 a = ans[i];
                 b = b - 1;
@@ -389,7 +451,13 @@ namespace Nvelope.Combinatorics
             return c.data;
         } // Element()
 
-        // return largest value v where v < a and  Choose(v,b) <= x
+        /// <summary>
+        /// Return the largest value v where v less than a and Choose(v,b) less than or equal to x.
+        /// </summary>
+        /// <param name="a">The a.</param>
+        /// <param name="b">The b.</param>
+        /// <param name="x">The x.</param>
+        /// <returns></returns>
         private static long LargestV(long a, long b, long x)
         {
             long v = a - 1;
@@ -400,7 +468,11 @@ namespace Nvelope.Combinatorics
             return v;
         } // LargestV()
 
-        // maps the current element (this) onto the input STRING array and returns it
+        /// <summary>
+        /// Maps the current element (this) onto the input string array and returns it
+        /// </summary>
+        /// <param name="strarr">The string array.</param>
+        /// <returns></returns>
         public string[] ApplyTo(string[] strarr)
         {
             ValidateArrayLength(strarr.Length);
@@ -413,7 +485,11 @@ namespace Nvelope.Combinatorics
             return result;
         } // ApplyTo
 
-        // maps the current combination (this) onto the input INT array and returns it
+        /// <summary>
+        /// Maps the current combination (this) onto the input integer array and returns it
+        /// </summary>
+        /// <param name="intarr">The int array.</param>
+        /// <returns></returns>
         public long[] ApplyTo(int[] intarr)
         {
             ValidateArrayLength(intarr.Length);
@@ -430,7 +506,7 @@ namespace Nvelope.Combinatorics
         /// Modifies THIS combination data by mapping it onto the input array using the existing combination data as indices.
         /// After calling this method, the object might fail IsValid(), so don't call Successor() method if that is the case.
         /// </summary>
-        /// <param name="intarr"></param>
+        /// <param name="intarr">The int array.</param>
         public void MapTo(int[] intarr)
         {
             ValidateArrayLength(intarr.Length);
@@ -439,6 +515,11 @@ namespace Nvelope.Combinatorics
                 this.data[i] = intarr[this.data[i]];
         }
 
+        /// <summary>
+        /// Validates the length of the array.
+        /// </summary>
+        /// <param name="arrayLength">Length of the array.</param>
+        /// <exception cref="System.Exception">Bad array size</exception>
         private void ValidateArrayLength(int arrayLength)
         {
             if (arrayLength < this.n)

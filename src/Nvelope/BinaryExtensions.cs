@@ -2,13 +2,16 @@
 
 namespace Nvelope
 {
+    /// <summary>
+    /// Provides extensions for working with binary values
+    /// </summary>
     public static class BinaryExtensions
     {
         /// <summary>
         /// Print an array of bytes to a hexidecimal string
         /// </summary>
-        /// <param name="bytes"></param>
-        /// <returns></returns>
+        /// <param name="values">The binary value as a byte array.</param>
+        /// <returns>A hexidecimal <see cref="System.String" /> that represents the binary value.</returns>
         public static string ToHexString(this byte[] values)
         {
             char[] lookup = new char[] { '0', '1', '2', '3', '4', '5', '6',
@@ -30,6 +33,8 @@ namespace Nvelope
         /// <summary>
         /// Interpret an array of bytes as a UTF32 string
         /// </summary>
+        /// <param name="values">The binary value as a byte array.</param>
+        /// <returns>A UTF8 <see cref="System.String" /> that represents the binary value.</returns>
         public static string ToUtf8String(this byte[] values)
         {
             return Encoding.UTF8.GetString(values);
