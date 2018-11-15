@@ -7,11 +7,10 @@ namespace Nvelope.Collections
     /// Say you had CheckBoxes and CalendarTags: given any checkbox
     /// you could find the associated tag; given any tag, you could
     /// find the assoicated checkbox.
-    /// 
     /// Technically: y(f(x)) = x
     /// </summary>
-    /// <typeparam name="TKey"></typeparam>
-    /// <typeparam name="TValue"></typeparam>
+    /// <typeparam name="TFirst">The first type.</typeparam>
+    /// <typeparam name="TSecond">The second type.</typeparam>
     public class DictionaryMirror<TFirst, TSecond>
     {
         private Dictionary<TFirst, TSecond> mapOne = new Dictionary<TFirst, TSecond>();
@@ -19,6 +18,11 @@ namespace Nvelope.Collections
         private HashSet<TFirst> SetOne = new HashSet<TFirst>();
         private HashSet<TSecond> SetTwo = new HashSet<TSecond>();
 
+        /// <summary>
+        /// Adds an association of one value to another into the one-to-one mapping.
+        /// </summary>
+        /// <param name="valueOne">A value of the first type.</param>
+        /// <param name="valueTwo">A value of the second type.</param>
         public void Add(TFirst valueOne, TSecond valueTwo)
         {
             mapOne.Add(valueOne, valueTwo);
@@ -27,6 +31,14 @@ namespace Nvelope.Collections
             SetTwo.Add(valueTwo);
         }
 
+        /// <summary>
+        /// Gets the <see cref="TFirst"/> having the specified <see cref="TSecond"/> value.
+        /// </summary>
+        /// <value>
+        /// The <see cref="TFirst"/>.
+        /// </value>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
         public TFirst this[TSecond value]
         {
             get { return mapTwo[value]; }
